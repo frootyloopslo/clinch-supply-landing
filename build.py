@@ -3,11 +3,7 @@ import re, pathlib
 root = pathlib.Path(__file__).parent
 src = root / 'src'
 page = (src / 'page.html').read_text()
-mod = re.sub(r'^export ', '', (src / 'clinch3d.js').read_text(), flags=re.M) + (src / 'app3d.js').read_text()
-ui = (src / 'ui.js').read_text()
-body = page.replace('/*__MODULE__*/', mod).replace(
-    '<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>',
-    '<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>\n<script>\n' + ui + '</script>')
+body = page.replace('/*__APP__*/', (src / 'app.js').read_text())
 head = '''<!doctype html>
 <html lang="pt-BR">
 <head>
@@ -16,7 +12,15 @@ head = '''<!doctype html>
 <meta name="description" content="Sapatilhas Nike e Adidas e luvas Cleto Reyes e Rival originais, importadas dos EUA. Pré-venda aberta.">
 <meta property="og:title" content="Clinch Supply">
 <meta property="og:description" content="Equipamento de boxe de quem treina sério. Pré-venda de sapatilhas aberta.">
-<meta name="theme-color" content="#0a0a0a">
+<meta property="og:image" content="fotos/hyperko-branca-dourada.webp">
+<meta name="theme-color" content="#000000">
+<script>
+// esconde o topo até a abertura animada começar; se algo falhar, mostra depois de 3 s
+if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  document.documentElement.classList.add('js-anim');
+  setTimeout(function () { document.documentElement.classList.remove('js-anim'); }, 3000);
+}
+</script>
 '''
 # título e links de fonte vão para o <head>; o resto vai para o <body>
 m = re.match(r'(<title>.*?</title>\s*(?:<link[^>]*>\s*)*)(<style>.*?</style>)', body, re.S)
