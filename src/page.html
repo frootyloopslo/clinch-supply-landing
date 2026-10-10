@@ -1,0 +1,431 @@
+<title>Clinch Supply</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Hanken+Grotesk:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: a boutique showroom at night. The brand's own flyer language (black, a wide-tracked serif wordmark, gold hairlines) becomes a stage: every product sits on a lit 3D turntable you can spin, and the copy stays quiet around it. Left-aligned text, the 3D object always gets the larger column. */
+:root {
+  --ink: #0a0a0a;        /* preto dos flyers da loja */
+  --ink-2: #131211;      /* faixa alternada */
+  --ink-3: #1a1816;      /* superfícies */
+  --line: #2a2724;
+  --gold: #c9a66b;       /* dourado do "SUPPLY" e dos preços */
+  --gold-dim: #8d7550;
+  --fg: #f2eee7;
+  --fg-dim: #a39c92;
+  --f-serif: "Cormorant Garamond", "Times New Roman", Georgia, serif;
+  --f-sans: "Hanken Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --ease: cubic-bezier(.2, .7, .1, 1);
+  color-scheme: dark;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--ink); color: var(--fg); font-family: var(--f-sans); font-size: 17px; line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+a { color: inherit; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { animation: none !important; transition: none !important; } }
+.wrap { max-width: 1240px; margin-inline: auto; padding-inline: clamp(16px, 4vw, 44px); }
+h1, h2, h3 { font-family: var(--f-serif); font-weight: 600; line-height: 1; margin: 0; text-wrap: balance; }
+h2 { font-size: clamp(44px, 6.4vw, 84px); letter-spacing: -.01em; }
+p { margin: 0; }
+section.block { padding-block: clamp(80px, 11vw, 140px); }
+.alt { background: var(--ink-2); }
+.lede { color: var(--fg-dim); max-width: 34em; font-size: 18px; }
+.sec-head { display: grid; grid-template-columns: 1.1fr 1fr; gap: 24px 48px; align-items: end; margin-bottom: clamp(36px, 5vw, 60px); }
+@media (max-width: 860px) { .sec-head { grid-template-columns: 1fr; } }
+
+.btn { position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 10px; font-weight: 600; font-size: 15px; text-decoration: none; padding: 16px 28px; border: 1px solid var(--gold); border-radius: 999px; cursor: pointer; background: transparent; transition: background .25s var(--ease), color .25s var(--ease), border-color .25s var(--ease); will-change: transform; }
+.btn-solid { background: var(--gold); color: var(--ink); }
+.btn-solid:hover { background: var(--fg); border-color: var(--fg); }
+.btn-ghost:hover { background: var(--gold); color: var(--ink); }
+
+/* Wordmark fiel aos flyers */
+.mark { display: inline-flex; flex-direction: column; align-items: center; text-decoration: none; line-height: 1; }
+.mark b { font-family: var(--f-serif); font-weight: 500; font-size: 26px; letter-spacing: .42em; margin-right: -.42em; }
+.mark i { font-style: normal; font-size: 9px; font-weight: 500; letter-spacing: .62em; margin-right: -.62em; color: var(--gold); margin-top: 6px; }
+
+/* NAV */
+.nav { position: fixed; inset: 0 0 auto 0; z-index: 30; padding-top: env(safe-area-inset-top, 0px); transition: background .3s, border-color .3s; border-bottom: 1px solid transparent; }
+.nav.solid { background: color-mix(in srgb, var(--ink) 86%, transparent); backdrop-filter: blur(12px); border-color: var(--line); }
+.nav .wrap { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding-block: 16px; }
+.nav ul { display: flex; gap: 32px; list-style: none; margin: 0; padding: 0; font-size: 15px; }
+.nav ul a { text-decoration: none; color: var(--fg-dim); transition: color .2s; }
+.nav ul a:hover { color: var(--fg); }
+.nav .btn { padding: 10px 18px; font-size: 14px; }
+@media (max-width: 900px) { .nav ul { display: none; } }
+@media (max-width: 440px) { .nav .btn { display: none; } }
+
+/* 3D stage shared */
+.stage { position: relative; min-width: 0; }
+.stage canvas { display: block; width: 100%; height: 100%; cursor: grab; }
+.stage canvas:active { cursor: grabbing; }
+.stage .glow { position: absolute; inset: 8% 10% 4%; border-radius: 50%; background: radial-gradient(closest-side, color-mix(in srgb, var(--gold) 16%, transparent), transparent 72%); pointer-events: none; }
+.stage .hint { position: absolute; left: 0; right: 0; bottom: 6px; text-align: center; font-size: 13px; color: var(--fg-dim); pointer-events: none; }
+.stage .fallback { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; color: var(--fg-dim); padding: 24px; }
+
+/* HERO */
+.hero { position: relative; padding-top: calc(env(safe-area-inset-top, 0px) + 88px); padding-bottom: clamp(24px, 4vw, 48px); overflow: hidden; }
+.hero-grid { display: grid; grid-template-columns: 1fr 1.1fr; gap: clamp(16px, 4vw, 56px); align-items: center; min-height: min(760px, 88vh); }
+.chip { display: inline-flex; align-items: center; gap: 10px; font-size: 14px; color: var(--fg-dim); padding: 8px 14px 8px 12px; border: 1px solid var(--line); border-radius: 999px; }
+.chip::before { content: ""; flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 0 0 color-mix(in srgb, var(--gold) 60%, transparent); animation: ping 2.2s infinite; }
+@keyframes ping { 70% { box-shadow: 0 0 0 9px transparent; } 100% { box-shadow: 0 0 0 0 transparent; } }
+.hero h1 { font-size: clamp(56px, 7.6vw, 116px); line-height: .92; margin-top: 26px; letter-spacing: -.015em; }
+.hero h1 .ln { display: block; overflow: hidden; padding-bottom: .06em; }
+.hero h1 .ln > span { display: inline-block; }
+.hero .lede { margin-top: 28px; }
+.hero .ctas { margin-top: 36px; display: flex; flex-wrap: wrap; gap: 12px; }
+.hero .stage { height: clamp(420px, 62vw, 720px); }
+@media (max-width: 900px) { .hero-grid { grid-template-columns: 1fr; min-height: 0; } .hero .stage { height: 110vw; max-height: 560px; order: -1; margin-top: -10px; } }
+.shock { position: fixed; z-index: 40; width: 40px; height: 40px; margin: -20px 0 0 -20px; border-radius: 50%; border: 2px solid var(--gold); pointer-events: none; }
+
+/* Marcas */
+.brands { border-block: 1px solid var(--line); overflow: hidden; padding-block: 22px; }
+.brands .track { display: flex; width: max-content; will-change: transform; }
+.brands .set { display: flex; align-items: center; gap: 56px; padding-right: 56px; }
+.brands span { font-family: var(--f-serif); font-weight: 600; font-size: clamp(26px, 3.2vw, 40px); letter-spacing: .1em; text-transform: uppercase; color: var(--fg-dim); white-space: nowrap; }
+.brands i { width: 7px; height: 7px; background: var(--gold); transform: rotate(45deg); flex: none; }
+
+/* Configurador de sapatilhas */
+.config { display: grid; grid-template-columns: 1.35fr 1fr; gap: clamp(24px, 4vw, 56px); align-items: start; }
+.config .stage { position: sticky; top: 80px; height: min(78vh, 680px); background: radial-gradient(120% 80% at 50% 100%, #1d1a16 0%, var(--ink) 60%); border: 1px solid var(--line); border-radius: 20px; overflow: hidden; }
+.tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.tab { text-align: left; background: var(--ink-3); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; cursor: pointer; transition: border-color .25s, background .25s, transform .25s var(--ease); }
+.tab:hover { border-color: var(--gold-dim); transform: translateY(-2px); }
+.tab[aria-selected=true] { border-color: var(--gold); background: color-mix(in srgb, var(--gold) 10%, var(--ink-3)); }
+.tab b { display: block; white-space: nowrap; font-family: var(--f-serif); font-size: 21px; font-weight: 600; line-height: 1.1; }
+.tab small { color: var(--fg-dim); font-size: 14px; }
+.panel { margin-top: 28px; display: grid; gap: 20px; }
+.panel .brand { color: var(--gold); font-size: 15px; font-weight: 500; }
+.panel h3 { font-size: clamp(48px, 5.6vw, 72px); }
+.price { font-family: var(--f-serif); font-weight: 600; color: var(--gold); font-variant-numeric: lining-nums tabular-nums; line-height: 1; }
+.panel .price { font-size: 44px; }
+.price small { font-size: .55em; margin-right: 6px; }
+.panel .desc { color: var(--fg-dim); max-width: 32em; }
+.colors { display: grid; gap: 12px; }
+.colors .now { font-size: 15px; color: var(--fg-dim); }
+.colors .now strong { color: var(--fg); font-weight: 600; }
+.swatches { display: flex; flex-wrap: wrap; gap: 10px; }
+.sw { width: 46px; height: 46px; border-radius: 50%; border: 1px solid var(--line); padding: 4px; background: transparent; cursor: pointer; transition: transform .2s var(--ease), border-color .2s; }
+.sw span { display: block; width: 100%; height: 100%; border-radius: 50%; background: linear-gradient(135deg, var(--u) 0 58%, var(--s) 58% 100%); position: relative; }
+.sw span::after { content: ""; position: absolute; right: 18%; top: 22%; width: 26%; height: 26%; border-radius: 50%; background: var(--l); box-shadow: 0 0 0 1px rgba(0,0,0,.25); }
+.sw:hover { transform: scale(1.08); }
+.sw[aria-pressed=true] { border-color: var(--gold); box-shadow: 0 0 0 1px var(--gold); }
+.specs { display: grid; grid-template-columns: auto 1fr; margin: 0; border-top: 1px solid var(--line); }
+.specs dt, .specs dd { margin: 0; padding: 12px 0; border-bottom: 1px solid var(--line); }
+.specs dt { color: var(--fg-dim); padding-right: 20px; }
+.specs dd { text-align: right; font-weight: 500; }
+.panel .btn { justify-self: start; }
+.note { font-size: 13.5px; color: var(--fg-dim); }
+.hot { position: absolute; left: 0; top: 0; z-index: 2; display: flex; align-items: center; gap: 10px; padding: 0; border: 0; background: none; cursor: pointer; transition: opacity .25s; }
+.hot .dot { position: relative; width: 22px; height: 22px; border-radius: 50%; background: color-mix(in srgb, var(--ink) 40%, transparent); border: 2px solid var(--gold); flex: none; }
+.hot .dot::after { content: ""; position: absolute; inset: 5px; border-radius: 50%; background: var(--gold); animation: pulse 2s infinite; }
+@keyframes pulse { 50% { transform: scale(.55); opacity: .6; } }
+.hot .lbl { font-size: 13.5px; font-weight: 600; background: var(--fg); color: var(--ink); padding: 7px 12px; border-radius: 999px; white-space: nowrap; opacity: 0; transform: translateX(-6px); transition: opacity .25s var(--ease), transform .25s var(--ease); pointer-events: none; }
+.hot:hover .lbl, .hot:focus-visible .lbl, .hot.open .lbl { opacity: 1; transform: none; }
+.hot.away { opacity: 0; pointer-events: none; }
+.hot.flip { flex-direction: row-reverse; }
+.hot.flip .lbl { transform: translateX(6px); }
+.hot.flip:hover .lbl, .hot.flip.open .lbl { transform: none; }
+@media (max-width: 960px) { .config { grid-template-columns: 1fr; } .config .stage { position: relative; top: 0; height: 92vw; max-height: 560px; } }
+@media (max-width: 520px) { .tabs { grid-template-columns: 1fr; } .tab { display: flex; justify-content: space-between; align-items: baseline; } }
+
+/* Luvas */
+.gloves { display: grid; grid-template-columns: 1fr 1.1fr; gap: clamp(24px, 4vw, 56px); align-items: start; }
+.glove-list { display: grid; gap: 36px; min-width: 0; }
+.glove-list h3 { font-size: 34px; letter-spacing: .06em; text-transform: uppercase; padding-bottom: 14px; border-bottom: 1px solid var(--gold-dim); display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.glove-list h3 small { font-family: var(--f-sans); font-size: 14px; letter-spacing: 0; text-transform: none; color: var(--fg-dim); font-weight: 400; }
+.gl { width: 100%; display: grid; grid-template-columns: 1fr auto; gap: 2px 20px; text-align: left; padding: 18px 16px; margin-inline: -16px; width: calc(100% + 32px); background: none; border: 0; border-bottom: 1px solid var(--line); border-radius: 12px; cursor: pointer; transition: background .25s; }
+.gl:hover { background: var(--ink-3); }
+.gl[aria-pressed=true] { background: color-mix(in srgb, var(--gold) 9%, var(--ink-3)); }
+.gl b { font-weight: 600; font-size: 18px; }
+.gl .use { color: var(--fg-dim); font-size: 14.5px; grid-column: 1; }
+.gl .price { font-size: 30px; grid-row: 1 / span 2; grid-column: 2; align-self: center; }
+.gloves .stage-wrap { position: sticky; top: 80px; }
+.gloves .stage { height: min(70vh, 600px); background: radial-gradient(110% 70% at 50% 100%, #1d1a16 0%, var(--ink-2) 62%); border: 1px solid var(--line); border-radius: 20px; overflow: hidden; }
+.glove-now { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; margin-top: 18px; }
+.glove-now b { font-family: var(--f-serif); font-size: 30px; font-weight: 600; line-height: 1.1; }
+.glove-now .price { font-size: 38px; white-space: nowrap; }
+.gloves .note { margin-top: 10px; }
+@media (max-width: 960px) { .gloves { grid-template-columns: 1fr; } .gloves .stage-wrap { position: relative; top: 0; order: -1; } .gloves .stage { height: 86vw; max-height: 520px; } }
+
+/* Cleto ou Rival */
+.pick { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+.corner { text-align: left; padding: clamp(20px, 3vw, 32px); border-radius: 18px; border: 1px solid var(--line); background: var(--ink-3); cursor: pointer; transition: border-color .3s, background .3s, transform .3s var(--ease); }
+.corner:hover { transform: translateY(-3px); }
+.corner .who { font-family: var(--f-serif); font-size: clamp(32px, 4vw, 52px); font-weight: 600; line-height: 1; display: block; }
+.corner .why { display: block; margin-top: 10px; color: var(--fg-dim); }
+.corner[aria-pressed=true] { border-color: var(--gold); background: color-mix(in srgb, var(--gold) 10%, var(--ink-3)); }
+.tape { border: 1px solid var(--line); border-radius: 18px; overflow: hidden; }
+.tape .row { display: grid; grid-template-columns: 1fr minmax(110px, 170px) 1fr; border-bottom: 1px solid var(--line); }
+.tape .row:last-child { border-bottom: 0; }
+.tape .row > div { padding: 16px clamp(14px, 3vw, 32px); min-width: 0; transition: color .3s, background .3s; }
+.tape .k { text-align: center; color: var(--gold); font-size: 14px; font-weight: 600; border-inline: 1px solid var(--line); display: flex; align-items: center; justify-content: center; }
+.tape .r { text-align: right; }
+.tape[data-side=cleto] .l, .tape[data-side=rival] .r { background: color-mix(in srgb, var(--gold) 8%, transparent); color: var(--fg); }
+.tape[data-side=cleto] .r, .tape[data-side=rival] .l { color: var(--fg-dim); }
+.verdict { margin-top: 24px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px 32px; }
+.verdict p { max-width: 40em; color: var(--fg-dim); }
+.verdict strong { color: var(--fg); }
+@media (max-width: 680px) {
+  .pick { grid-template-columns: 1fr; }
+  .tape .row { grid-template-columns: 1fr 1fr; }
+  .tape .k { grid-column: 1 / -1; order: -1; border-inline: 0; border-bottom: 1px solid var(--line); padding-block: 8px; }
+}
+
+/* Guia de onças */
+.guide { display: grid; grid-template-columns: 1fr 1.1fr; gap: clamp(32px, 5vw, 72px); align-items: center; }
+.calc { background: var(--ink-3); border: 1px solid var(--line); border-radius: 20px; padding: clamp(22px, 3vw, 34px); }
+.field { display: grid; gap: 10px; margin-bottom: 26px; }
+.field label, .field .lbl { font-size: 15px; color: var(--fg-dim); }
+.field output { font-family: var(--f-serif); font-weight: 600; font-size: 34px; line-height: 1; }
+input[type=range] { width: 100%; accent-color: var(--gold); }
+.seg { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; background: var(--ink); padding: 5px; border-radius: 999px; border: 1px solid var(--line); position: relative; }
+.seg button { position: relative; z-index: 1; padding: 11px 6px; background: none; border: 0; border-radius: 999px; cursor: pointer; font-weight: 600; font-size: 14.5px; transition: color .25s; }
+.seg button[aria-pressed=true] { color: var(--ink); }
+.seg .pill { position: absolute; z-index: 0; top: 5px; bottom: 5px; left: 5px; border-radius: 999px; background: var(--gold); transition: transform .4s var(--ease), width .4s var(--ease); }
+.result { display: flex; align-items: end; justify-content: space-between; gap: 16px; padding-top: 24px; border-top: 1px solid var(--line); }
+.result .oz { font-family: var(--f-serif); font-weight: 700; font-size: clamp(84px, 11vw, 128px); line-height: .8; font-variant-numeric: lining-nums tabular-nums; }
+.result .oz small { font-size: .32em; margin-left: 8px; color: var(--gold); }
+.result p { font-size: 15px; color: var(--fg-dim); max-width: 18em; text-align: right; }
+.scale { margin-top: 26px; position: relative; display: grid; grid-template-columns: repeat(5, 1fr); font-size: 13px; color: var(--fg-dim); text-align: center; }
+.scale::before { content: ""; position: absolute; left: 0; right: 0; top: -12px; height: 4px; border-radius: 4px; background: var(--line); }
+.scale .fill { position: absolute; left: 0; top: -12px; height: 4px; border-radius: 4px; background: var(--gold); width: 100%; transition: width .5s var(--ease); }
+@media (max-width: 860px) { .guide { grid-template-columns: 1fr; } }
+
+/* Compra */
+.steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 20px; overflow: hidden; counter-reset: s; }
+.steps li { background: var(--ink); padding: clamp(24px, 3vw, 38px); display: grid; gap: 12px; align-content: start; counter-increment: s; }
+.steps li::before { content: counter(s); font-family: var(--f-serif); font-size: 54px; line-height: 1; color: var(--gold); }
+.steps h3 { font-size: 32px; }
+.steps p { color: var(--fg-dim); font-size: 16px; }
+@media (max-width: 820px) { .steps { grid-template-columns: 1fr; } }
+
+/* Fechamento */
+.closer { padding-block: clamp(100px, 13vw, 170px); text-align: center; border-top: 1px solid var(--line); overflow: hidden; }
+.closer .mark b { font-size: clamp(44px, 9vw, 112px); letter-spacing: var(--track, .42em); margin-right: calc(-1 * var(--track, .42em)); }
+.closer .mark i { font-size: clamp(11px, 1.5vw, 16px); margin-top: 16px; }
+.closer .rule { width: min(560px, 80%); height: 1px; background: var(--gold-dim); margin: 40px auto; transform-origin: center; }
+.closer h2 { font-size: clamp(38px, 5vw, 60px); }
+.closer p { margin: 18px auto 0; color: var(--fg-dim); max-width: 32em; }
+.closer .ctas { margin-top: 36px; display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+
+footer { border-top: 1px solid var(--line); }
+footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; padding-block: 28px; font-size: 14px; color: var(--fg-dim); }
+
+/* Cursor de arrastar sobre os palcos 3D */
+.cursor { position: fixed; left: 0; top: 0; z-index: 50; width: 0; height: 0; pointer-events: none; }
+.cursor span { position: absolute; left: -38px; top: -38px; width: 76px; height: 76px; border-radius: 50%; border: 1px solid var(--gold); display: grid; place-items: center; font-size: 12.5px; font-weight: 600; color: var(--fg); background: color-mix(in srgb, var(--ink) 35%, transparent); backdrop-filter: blur(3px); opacity: 0; transform: scale(.4); transition: opacity .25s, transform .3s var(--ease); }
+.cursor.on span { opacity: 1; transform: scale(1); }
+.cursor.on.down span { transform: scale(.78); }
+@media (hover: none), (pointer: coarse) { .cursor { display: none; } }
+</style>
+
+<nav class="nav" id="nav" aria-label="Principal">
+  <div class="wrap">
+    <a class="mark" href="#topo" aria-label="Clinch Supply" id="navMark"><b>CLINCH</b><i>SUPPLY</i></a>
+    <ul>
+      <li><a href="#sapatilhas">Sapatilhas</a></li>
+      <li><a href="#luvas">Luvas</a></li>
+      <li><a href="#comparativo">Cleto ou Rival</a></li>
+      <li><a href="#guia">Guia de onças</a></li>
+    </ul>
+    <a class="btn btn-ghost" href="https://www.instagram.com/clinchsupply/" target="_blank" rel="noopener">Falar com a loja</a>
+  </div>
+</nav>
+
+<header class="hero" id="topo">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <span class="chip">Pré-venda aberta. Sapatilhas chegam em novembro.</span>
+      <h1><span class="ln"><span>Equipamento</span></span><span class="ln"><span>de quem treina</span></span><span class="ln"><span>sério.</span></span></h1>
+      <p class="lede">Sapatilhas Nike e Adidas, luvas Cleto Reyes e Rival. Originais, importados dos Estados Unidos, para quem treina toda semana e quer o mesmo material dos profissionais.</p>
+      <div class="ctas">
+        <a class="btn btn-solid magnet" href="#sapatilhas">Escolher minha sapatilha</a>
+        <a class="btn btn-ghost magnet" href="#luvas">Ver luvas</a>
+      </div>
+    </div>
+    <div class="stage" id="heroStage" data-cursor="Arraste">
+      <div class="glow" aria-hidden="true"></div>
+      <canvas id="heroCanvas" aria-label="Luva de boxe em 3D. Arraste para girar."></canvas>
+      <p class="hint">Arraste para girar. Clique na luva para dar um jab.</p>
+    </div>
+  </div>
+</header>
+
+<div class="brands" aria-label="Marcas: Cleto Reyes, Rival, Nike Boxing, Adidas Boxing">
+  <div class="track" id="marquee" aria-hidden="true">
+    <div class="set"><span>Cleto Reyes</span><i></i><span>Rival</span><i></i><span>Nike Boxing</span><i></i><span>Adidas Boxing</span><i></i></div>
+    <div class="set"><span>Cleto Reyes</span><i></i><span>Rival</span><i></i><span>Nike Boxing</span><i></i><span>Adidas Boxing</span><i></i></div>
+    <div class="set"><span>Cleto Reyes</span><i></i><span>Rival</span><i></i><span>Nike Boxing</span><i></i><span>Adidas Boxing</span><i></i></div>
+    <div class="set"><span>Cleto Reyes</span><i></i><span>Rival</span><i></i><span>Nike Boxing</span><i></i><span>Adidas Boxing</span><i></i></div>
+  </div>
+</div>
+
+<section class="block" id="sapatilhas">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Escolha o modelo.<br>Gire. Troque a cor.</h2>
+      <p class="lede">Três sapatilhas em pré-venda, todas originais e importadas dos Estados Unidos. Numeração do 38 ao 46 BR, chegada em novembro.</p>
+    </div>
+    <div class="config">
+      <div class="stage" id="shoeStage" data-cursor="Arraste">
+        <canvas id="shoeCanvas" aria-label="Sapatilha em 3D. Arraste para girar."></canvas>
+        <div id="hots"></div>
+        <p class="hint">Arraste para girar. Toque nos pontos dourados para ver os detalhes.</p>
+      </div>
+      <div>
+        <div class="tabs" role="tablist" aria-label="Modelos">
+          <button class="tab" role="tab" id="tab-hyperko" data-model="hyperko" aria-selected="true"><b>HyperKO 3</b><small>R$ 1.900</small></button>
+          <button class="tab" role="tab" id="tab-boxhog" data-model="boxhog" aria-selected="false"><b>Box Hog 4</b><small>R$ 1.500</small></button>
+          <button class="tab" role="tab" id="tab-machomai" data-model="machomai" aria-selected="false"><b>Machomai 3</b><small>R$ 1.100</small></button>
+        </div>
+        <div class="panel" role="tabpanel" aria-live="polite">
+          <span class="brand" id="pBrand">Nike, topo de linha</span>
+          <h3 id="pName">HyperKO 3</h3>
+          <div class="price"><small>R$</small><span id="pPrice">1.900</span></div>
+          <p class="desc" id="pDesc">A sapatilha mais leve que a Nike já produziu. Cano alto com suporte total de tornozelo e sistema de amarração dupla para máxima estabilidade no ringue.</p>
+          <div class="colors">
+            <span class="now">Cor: <strong id="pColor">Preta</strong></span>
+            <div class="swatches" id="swatches" role="group" aria-label="Cores"></div>
+          </div>
+          <dl class="specs">
+            <dt>Numeração</dt><dd>38 ao 46 BR</dd>
+            <dt>Chegada</dt><dd>Novembro</dd>
+            <dt>Procedência</dt><dd>Original, importado dos EUA</dd>
+          </dl>
+          <a class="btn btn-solid magnet" id="pCta" href="https://www.instagram.com/clinchsupply/" target="_blank" rel="noopener">Reservar pelo Instagram</a>
+          <p class="note">O modelo 3D é ilustrativo e mostra formato e cores. As cores são as disponíveis na pré-venda.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="block alt" id="luvas">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Cinco luvas,<br>duas escolas.</h2>
+      <p class="lede">A tradição mexicana da Cleto Reyes e a engenharia de proteção da Rival. Toque em uma luva para ver em 3D.</p>
+    </div>
+    <div class="gloves">
+      <div class="glove-list" id="gloveList">
+        <div>
+          <h3>Cleto Reyes <small>Cidade do México</small></h3>
+          <button class="gl" id="gl-cleto-velcro" data-glove="cleto-velcro" aria-pressed="true"><b>Traditional Training, velcro</b><span class="use">Treino diário. Calça e tira sozinho.</span><span class="price"><small>R$</small>2.400</span></button>
+          <button class="gl" id="gl-cleto-lace" data-glove="cleto-lace" aria-pressed="false"><b>Traditional Training, cadarço</b><span class="use">Treino e sparring, punho mais firme.</span><span class="price"><small>R$</small>2.250</span></button>
+        </div>
+        <div>
+          <h3>Rival <small>Montreal, Canadá</small></h3>
+          <button class="gl" id="gl-rival-rs1" data-glove="rival-rs1" aria-pressed="false"><b>RS1 Ultra Sparring 2.0</b><span class="use">Sparring pesado, máxima proteção.</span><span class="price"><small>R$</small>2.100</span></button>
+          <button class="gl" id="gl-rival-rs2v" data-glove="rival-rs2v" aria-pressed="false"><b>RS2V Super Sparring 2.0</b><span class="use">Sparring com fechamento em velcro.</span><span class="price"><small>R$</small>1.900</span></button>
+          <button class="gl" id="gl-rival-rb10" data-glove="rival-rb10" aria-pressed="false"><b>RB10 Intelli-Shock Bag</b><span class="use">Saco e manopla, absorve o impacto.</span><span class="price"><small>R$</small>2.250</span></button>
+        </div>
+      </div>
+      <div class="stage-wrap">
+        <div class="stage" id="gloveStage" data-cursor="Arraste">
+          <canvas id="gloveCanvas" aria-label="Luva selecionada em 3D. Arraste para girar."></canvas>
+          <p class="hint">Arraste para girar</p>
+        </div>
+        <div class="glove-now"><b id="gName">Cleto Reyes Traditional Training, velcro</b><span class="price"><small>R$</small><span id="gPrice">2.400</span></span></div>
+        <p class="note">Modelo 3D e cores ilustrativos. Pesos, cores e prazo das luvas sob consulta pelo Instagram.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="comparativo">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Cleto Reyes<br>ou Rival?</h2>
+      <p class="lede">As duas estão nas mãos de campeões. Escolha o que você quer sentir quando o soco entra.</p>
+    </div>
+    <div class="pick">
+      <button class="corner" id="side-cleto" data-side="cleto" aria-pressed="true"><span class="who">Cleto Reyes</span><span class="why">Quero sentir cada golpe conectar</span></button>
+      <button class="corner" id="side-rival" data-side="rival" aria-pressed="false"><span class="who">Rival</span><span class="why">Quero proteger a mão e o parceiro</span></button>
+    </div>
+    <div class="tape" id="tape" data-side="cleto">
+      <div class="row"><div class="l">Compacta, punho firme</div><div class="k">Formato</div><div class="r">Anatômica, mais acolchoada</div></div>
+      <div class="row"><div class="l">Mais seca, você sente o alvo</div><div class="k">Sensação</div><div class="r">Mais macia, protege a mão</div></div>
+      <div class="row"><div class="l">Velcro ou cadarço</div><div class="k">Fechamento</div><div class="r">Velcro ou cadarço</div></div>
+      <div class="row"><div class="l">Saco, manopla e pegada</div><div class="k">Melhor para</div><div class="r">Sparring pesado</div></div>
+    </div>
+    <div class="verdict">
+      <p id="verdict"><strong>Cleto Reyes</strong> é para quem bate em saco e manopla quase todo dia e quer sentir o golpe entrar.</p>
+      <a class="btn btn-ghost" id="verdictCta" href="#luvas" data-glove="cleto-velcro">Ver luvas Cleto Reyes</a>
+    </div>
+  </div>
+</section>
+
+<section class="block alt" id="guia">
+  <div class="wrap guide">
+    <div>
+      <h2>Qual peso<br>de luva?</h2>
+      <p class="lede" style="margin-top:22px">Luva leve demais machuca o parceiro. Pesada demais tira velocidade do treino de saco. Use a régua como ponto de partida e confirme com a loja antes de fechar.</p>
+    </div>
+    <div class="calc">
+      <div class="field">
+        <label for="peso">Seu peso</label>
+        <output id="pesoOut" for="peso">80 kg</output>
+        <input id="peso" type="range" min="45" max="120" step="1" value="80">
+      </div>
+      <div class="field">
+        <span class="lbl" id="usoLbl">Uso principal</span>
+        <div class="seg" role="group" aria-labelledby="usoLbl" id="seg">
+          <span class="pill" aria-hidden="true"></span>
+          <button type="button" id="uso-saco" data-uso="saco" aria-pressed="false">Saco e manopla</button>
+          <button type="button" id="uso-sparring" data-uso="sparring" aria-pressed="true">Sparring</button>
+          <button type="button" id="uso-luta" data-uso="luta" aria-pressed="false">Luta</button>
+        </div>
+      </div>
+      <div class="result">
+        <div class="oz"><span id="ozOut">16</span><small>oz</small></div>
+        <p id="ozNote">Padrão para sparring acima de 70 kg. Mais proteção para você e para o parceiro.</p>
+      </div>
+      <div class="scale" aria-hidden="true"><span class="fill" id="ozFill"></span><span>8</span><span>10</span><span>12</span><span>14</span><span>16</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="compra">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Como funciona<br>a compra</h2>
+      <p class="lede">Você fala direto com a loja, tira as dúvidas de tamanho e garante a sua peça antes de o lote esgotar.</p>
+    </div>
+    <ol class="steps">
+      <li><h3>Conversa</h3><p>Conte como você treina e o que já usa. A loja indica o modelo e o tamanho certos.</p></li>
+      <li><h3>Reserva</h3><p>As importações chegam em lotes pequenos. Na pré-venda, seu número e sua cor ficam garantidos.</p></li>
+      <li><h3>Entrega</h3><p>Produto original importado dos Estados Unidos, entregue a você em novembro.</p></li>
+    </ol>
+  </div>
+</section>
+
+<section class="closer" id="closer">
+  <div class="wrap">
+    <span class="mark" aria-hidden="true" id="closerMark"><b>CLINCH</b><i>SUPPLY</i></span>
+    <div class="rule" id="closerRule"></div>
+    <h2>Garanta o seu antes de novembro.</h2>
+    <p>Mande uma mensagem com o modelo, a cor e o seu número. A loja responde com a disponibilidade do lote.</p>
+    <div class="ctas">
+      <a class="btn btn-solid magnet" href="https://www.instagram.com/clinchsupply/" target="_blank" rel="noopener">Chamar no Instagram</a>
+      <a class="btn btn-ghost magnet" href="#sapatilhas">Rever sapatilhas</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Clinch Supply. Produtos originais importados dos EUA.</span>
+    <a href="https://www.instagram.com/clinchsupply/" target="_blank" rel="noopener">@clinchsupply</a>
+  </div>
+</footer>
+
+<div class="cursor" id="cursor" aria-hidden="true"><span>Arraste</span></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script type="importmap">{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }</script>
+<script type="module">
+/*__MODULE__*/
+</script>

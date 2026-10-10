@@ -1,0 +1,1322 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Sapatilhas Nike e Adidas e luvas Cleto Reyes e Rival originais, importadas dos EUA. Pré-venda aberta.">
+<meta property="og:title" content="Clinch Supply">
+<meta property="og:description" content="Equipamento de boxe de quem treina sério. Pré-venda de sapatilhas aberta.">
+<meta name="theme-color" content="#0a0a0a">
+<title>Clinch Supply</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Hanken+Grotesk:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: a boutique showroom at night. The brand's own flyer language (black, a wide-tracked serif wordmark, gold hairlines) becomes a stage: every product sits on a lit 3D turntable you can spin, and the copy stays quiet around it. Left-aligned text, the 3D object always gets the larger column. */
+:root {
+  --ink: #0a0a0a;        /* preto dos flyers da loja */
+  --ink-2: #131211;      /* faixa alternada */
+  --ink-3: #1a1816;      /* superfícies */
+  --line: #2a2724;
+  --gold: #c9a66b;       /* dourado do "SUPPLY" e dos preços */
+  --gold-dim: #8d7550;
+  --fg: #f2eee7;
+  --fg-dim: #a39c92;
+  --f-serif: "Cormorant Garamond", "Times New Roman", Georgia, serif;
+  --f-sans: "Hanken Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --ease: cubic-bezier(.2, .7, .1, 1);
+  color-scheme: dark;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--ink); color: var(--fg); font-family: var(--f-sans); font-size: 17px; line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+a { color: inherit; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { animation: none !important; transition: none !important; } }
+.wrap { max-width: 1240px; margin-inline: auto; padding-inline: clamp(16px, 4vw, 44px); }
+h1, h2, h3 { font-family: var(--f-serif); font-weight: 600; line-height: 1; margin: 0; text-wrap: balance; }
+h2 { font-size: clamp(44px, 6.4vw, 84px); letter-spacing: -.01em; }
+p { margin: 0; }
+section.block { padding-block: clamp(80px, 11vw, 140px); }
+.alt { background: var(--ink-2); }
+.lede { color: var(--fg-dim); max-width: 34em; font-size: 18px; }
+.sec-head { display: grid; grid-template-columns: 1.1fr 1fr; gap: 24px 48px; align-items: end; margin-bottom: clamp(36px, 5vw, 60px); }
+@media (max-width: 860px) { .sec-head { grid-template-columns: 1fr; } }
+
+.btn { position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 10px; font-weight: 600; font-size: 15px; text-decoration: none; padding: 16px 28px; border: 1px solid var(--gold); border-radius: 999px; cursor: pointer; background: transparent; transition: background .25s var(--ease), color .25s var(--ease), border-color .25s var(--ease); will-change: transform; }
+.btn-solid { background: var(--gold); color: var(--ink); }
+.btn-solid:hover { background: var(--fg); border-color: var(--fg); }
+.btn-ghost:hover { background: var(--gold); color: var(--ink); }
+
+/* Wordmark fiel aos flyers */
+.mark { display: inline-flex; flex-direction: column; align-items: center; text-decoration: none; line-height: 1; }
+.mark b { font-family: var(--f-serif); font-weight: 500; font-size: 26px; letter-spacing: .42em; margin-right: -.42em; }
+.mark i { font-style: normal; font-size: 9px; font-weight: 500; letter-spacing: .62em; margin-right: -.62em; color: var(--gold); margin-top: 6px; }
+
+/* NAV */
+.nav { position: fixed; inset: 0 0 auto 0; z-index: 30; padding-top: env(safe-area-inset-top, 0px); transition: background .3s, border-color .3s; border-bottom: 1px solid transparent; }
+.nav.solid { background: color-mix(in srgb, var(--ink) 86%, transparent); backdrop-filter: blur(12px); border-color: var(--line); }
+.nav .wrap { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding-block: 16px; }
+.nav ul { display: flex; gap: 32px; list-style: none; margin: 0; padding: 0; font-size: 15px; }
+.nav ul a { text-decoration: none; color: var(--fg-dim); transition: color .2s; }
+.nav ul a:hover { color: var(--fg); }
+.nav .btn { padding: 10px 18px; font-size: 14px; }
+@media (max-width: 900px) { .nav ul { display: none; } }
+@media (max-width: 440px) { .nav .btn { display: none; } }
+
+/* 3D stage shared */
+.stage { position: relative; min-width: 0; }
+.stage canvas { display: block; width: 100%; height: 100%; cursor: grab; }
+.stage canvas:active { cursor: grabbing; }
+.stage .glow { position: absolute; inset: 8% 10% 4%; border-radius: 50%; background: radial-gradient(closest-side, color-mix(in srgb, var(--gold) 16%, transparent), transparent 72%); pointer-events: none; }
+.stage .hint { position: absolute; left: 0; right: 0; bottom: 6px; text-align: center; font-size: 13px; color: var(--fg-dim); pointer-events: none; }
+.stage .fallback { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; color: var(--fg-dim); padding: 24px; }
+
+/* HERO */
+.hero { position: relative; padding-top: calc(env(safe-area-inset-top, 0px) + 88px); padding-bottom: clamp(24px, 4vw, 48px); overflow: hidden; }
+.hero-grid { display: grid; grid-template-columns: 1fr 1.1fr; gap: clamp(16px, 4vw, 56px); align-items: center; min-height: min(760px, 88vh); }
+.chip { display: inline-flex; align-items: center; gap: 10px; font-size: 14px; color: var(--fg-dim); padding: 8px 14px 8px 12px; border: 1px solid var(--line); border-radius: 999px; }
+.chip::before { content: ""; flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 0 0 color-mix(in srgb, var(--gold) 60%, transparent); animation: ping 2.2s infinite; }
+@keyframes ping { 70% { box-shadow: 0 0 0 9px transparent; } 100% { box-shadow: 0 0 0 0 transparent; } }
+.hero h1 { font-size: clamp(56px, 7.6vw, 116px); line-height: .92; margin-top: 26px; letter-spacing: -.015em; }
+.hero h1 .ln { display: block; overflow: hidden; padding-bottom: .06em; }
+.hero h1 .ln > span { display: inline-block; }
+.hero .lede { margin-top: 28px; }
+.hero .ctas { margin-top: 36px; display: flex; flex-wrap: wrap; gap: 12px; }
+.hero .stage { height: clamp(420px, 62vw, 720px); }
+@media (max-width: 900px) { .hero-grid { grid-template-columns: 1fr; min-height: 0; } .hero .stage { height: 110vw; max-height: 560px; order: -1; margin-top: -10px; } }
+.shock { position: fixed; z-index: 40; width: 40px; height: 40px; margin: -20px 0 0 -20px; border-radius: 50%; border: 2px solid var(--gold); pointer-events: none; }
+
+/* Marcas */
+.brands { border-block: 1px solid var(--line); overflow: hidden; padding-block: 22px; }
+.brands .track { display: flex; width: max-content; will-change: transform; }
+.brands .set { display: flex; align-items: center; gap: 56px; padding-right: 56px; }
+.brands span { font-family: var(--f-serif); font-weight: 600; font-size: clamp(26px, 3.2vw, 40px); letter-spacing: .1em; text-transform: uppercase; color: var(--fg-dim); white-space: nowrap; }
+.brands i { width: 7px; height: 7px; background: var(--gold); transform: rotate(45deg); flex: none; }
+
+/* Configurador de sapatilhas */
+.config { display: grid; grid-template-columns: 1.35fr 1fr; gap: clamp(24px, 4vw, 56px); align-items: start; }
+.config .stage { position: sticky; top: 80px; height: min(78vh, 680px); background: radial-gradient(120% 80% at 50% 100%, #1d1a16 0%, var(--ink) 60%); border: 1px solid var(--line); border-radius: 20px; overflow: hidden; }
+.tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.tab { text-align: left; background: var(--ink-3); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; cursor: pointer; transition: border-color .25s, background .25s, transform .25s var(--ease); }
+.tab:hover { border-color: var(--gold-dim); transform: translateY(-2px); }
+.tab[aria-selected=true] { border-color: var(--gold); background: color-mix(in srgb, var(--gold) 10%, var(--ink-3)); }
+.tab b { display: block; white-space: nowrap; font-family: var(--f-serif); font-size: 21px; font-weight: 600; line-height: 1.1; }
+.tab small { color: var(--fg-dim); font-size: 14px; }
+.panel { margin-top: 28px; display: grid; gap: 20px; }
+.panel .brand { color: var(--gold); font-size: 15px; font-weight: 500; }
+.panel h3 { font-size: clamp(48px, 5.6vw, 72px); }
+.price { font-family: var(--f-serif); font-weight: 600; color: var(--gold); font-variant-numeric: lining-nums tabular-nums; line-height: 1; }
+.panel .price { font-size: 44px; }
+.price small { font-size: .55em; margin-right: 6px; }
+.panel .desc { color: var(--fg-dim); max-width: 32em; }
+.colors { display: grid; gap: 12px; }
+.colors .now { font-size: 15px; color: var(--fg-dim); }
+.colors .now strong { color: var(--fg); font-weight: 600; }
+.swatches { display: flex; flex-wrap: wrap; gap: 10px; }
+.sw { width: 46px; height: 46px; border-radius: 50%; border: 1px solid var(--line); padding: 4px; background: transparent; cursor: pointer; transition: transform .2s var(--ease), border-color .2s; }
+.sw span { display: block; width: 100%; height: 100%; border-radius: 50%; background: linear-gradient(135deg, var(--u) 0 58%, var(--s) 58% 100%); position: relative; }
+.sw span::after { content: ""; position: absolute; right: 18%; top: 22%; width: 26%; height: 26%; border-radius: 50%; background: var(--l); box-shadow: 0 0 0 1px rgba(0,0,0,.25); }
+.sw:hover { transform: scale(1.08); }
+.sw[aria-pressed=true] { border-color: var(--gold); box-shadow: 0 0 0 1px var(--gold); }
+.specs { display: grid; grid-template-columns: auto 1fr; margin: 0; border-top: 1px solid var(--line); }
+.specs dt, .specs dd { margin: 0; padding: 12px 0; border-bottom: 1px solid var(--line); }
+.specs dt { color: var(--fg-dim); padding-right: 20px; }
+.specs dd { text-align: right; font-weight: 500; }
+.panel .btn { justify-self: start; }
+.note { font-size: 13.5px; color: var(--fg-dim); }
+.hot { position: absolute; left: 0; top: 0; z-index: 2; display: flex; align-items: center; gap: 10px; padding: 0; border: 0; background: none; cursor: pointer; transition: opacity .25s; }
+.hot .dot { position: relative; width: 22px; height: 22px; border-radius: 50%; background: color-mix(in srgb, var(--ink) 40%, transparent); border: 2px solid var(--gold); flex: none; }
+.hot .dot::after { content: ""; position: absolute; inset: 5px; border-radius: 50%; background: var(--gold); animation: pulse 2s infinite; }
+@keyframes pulse { 50% { transform: scale(.55); opacity: .6; } }
+.hot .lbl { font-size: 13.5px; font-weight: 600; background: var(--fg); color: var(--ink); padding: 7px 12px; border-radius: 999px; white-space: nowrap; opacity: 0; transform: translateX(-6px); transition: opacity .25s var(--ease), transform .25s var(--ease); pointer-events: none; }
+.hot:hover .lbl, .hot:focus-visible .lbl, .hot.open .lbl { opacity: 1; transform: none; }
+.hot.away { opacity: 0; pointer-events: none; }
+.hot.flip { flex-direction: row-reverse; }
+.hot.flip .lbl { transform: translateX(6px); }
+.hot.flip:hover .lbl, .hot.flip.open .lbl { transform: none; }
+@media (max-width: 960px) { .config { grid-template-columns: 1fr; } .config .stage { position: relative; top: 0; height: 92vw; max-height: 560px; } }
+@media (max-width: 520px) { .tabs { grid-template-columns: 1fr; } .tab { display: flex; justify-content: space-between; align-items: baseline; } }
+
+/* Luvas */
+.gloves { display: grid; grid-template-columns: 1fr 1.1fr; gap: clamp(24px, 4vw, 56px); align-items: start; }
+.glove-list { display: grid; gap: 36px; min-width: 0; }
+.glove-list h3 { font-size: 34px; letter-spacing: .06em; text-transform: uppercase; padding-bottom: 14px; border-bottom: 1px solid var(--gold-dim); display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.glove-list h3 small { font-family: var(--f-sans); font-size: 14px; letter-spacing: 0; text-transform: none; color: var(--fg-dim); font-weight: 400; }
+.gl { width: 100%; display: grid; grid-template-columns: 1fr auto; gap: 2px 20px; text-align: left; padding: 18px 16px; margin-inline: -16px; width: calc(100% + 32px); background: none; border: 0; border-bottom: 1px solid var(--line); border-radius: 12px; cursor: pointer; transition: background .25s; }
+.gl:hover { background: var(--ink-3); }
+.gl[aria-pressed=true] { background: color-mix(in srgb, var(--gold) 9%, var(--ink-3)); }
+.gl b { font-weight: 600; font-size: 18px; }
+.gl .use { color: var(--fg-dim); font-size: 14.5px; grid-column: 1; }
+.gl .price { font-size: 30px; grid-row: 1 / span 2; grid-column: 2; align-self: center; }
+.gloves .stage-wrap { position: sticky; top: 80px; }
+.gloves .stage { height: min(70vh, 600px); background: radial-gradient(110% 70% at 50% 100%, #1d1a16 0%, var(--ink-2) 62%); border: 1px solid var(--line); border-radius: 20px; overflow: hidden; }
+.glove-now { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; margin-top: 18px; }
+.glove-now b { font-family: var(--f-serif); font-size: 30px; font-weight: 600; line-height: 1.1; }
+.glove-now .price { font-size: 38px; white-space: nowrap; }
+.gloves .note { margin-top: 10px; }
+@media (max-width: 960px) { .gloves { grid-template-columns: 1fr; } .gloves .stage-wrap { position: relative; top: 0; order: -1; } .gloves .stage { height: 86vw; max-height: 520px; } }
+
+/* Cleto ou Rival */
+.pick { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+.corner { text-align: left; padding: clamp(20px, 3vw, 32px); border-radius: 18px; border: 1px solid var(--line); background: var(--ink-3); cursor: pointer; transition: border-color .3s, background .3s, transform .3s var(--ease); }
+.corner:hover { transform: translateY(-3px); }
+.corner .who { font-family: var(--f-serif); font-size: clamp(32px, 4vw, 52px); font-weight: 600; line-height: 1; display: block; }
+.corner .why { display: block; margin-top: 10px; color: var(--fg-dim); }
+.corner[aria-pressed=true] { border-color: var(--gold); background: color-mix(in srgb, var(--gold) 10%, var(--ink-3)); }
+.tape { border: 1px solid var(--line); border-radius: 18px; overflow: hidden; }
+.tape .row { display: grid; grid-template-columns: 1fr minmax(110px, 170px) 1fr; border-bottom: 1px solid var(--line); }
+.tape .row:last-child { border-bottom: 0; }
+.tape .row > div { padding: 16px clamp(14px, 3vw, 32px); min-width: 0; transition: color .3s, background .3s; }
+.tape .k { text-align: center; color: var(--gold); font-size: 14px; font-weight: 600; border-inline: 1px solid var(--line); display: flex; align-items: center; justify-content: center; }
+.tape .r { text-align: right; }
+.tape[data-side=cleto] .l, .tape[data-side=rival] .r { background: color-mix(in srgb, var(--gold) 8%, transparent); color: var(--fg); }
+.tape[data-side=cleto] .r, .tape[data-side=rival] .l { color: var(--fg-dim); }
+.verdict { margin-top: 24px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px 32px; }
+.verdict p { max-width: 40em; color: var(--fg-dim); }
+.verdict strong { color: var(--fg); }
+@media (max-width: 680px) {
+  .pick { grid-template-columns: 1fr; }
+  .tape .row { grid-template-columns: 1fr 1fr; }
+  .tape .k { grid-column: 1 / -1; order: -1; border-inline: 0; border-bottom: 1px solid var(--line); padding-block: 8px; }
+}
+
+/* Guia de onças */
+.guide { display: grid; grid-template-columns: 1fr 1.1fr; gap: clamp(32px, 5vw, 72px); align-items: center; }
+.calc { background: var(--ink-3); border: 1px solid var(--line); border-radius: 20px; padding: clamp(22px, 3vw, 34px); }
+.field { display: grid; gap: 10px; margin-bottom: 26px; }
+.field label, .field .lbl { font-size: 15px; color: var(--fg-dim); }
+.field output { font-family: var(--f-serif); font-weight: 600; font-size: 34px; line-height: 1; }
+input[type=range] { width: 100%; accent-color: var(--gold); }
+.seg { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; background: var(--ink); padding: 5px; border-radius: 999px; border: 1px solid var(--line); position: relative; }
+.seg button { position: relative; z-index: 1; padding: 11px 6px; background: none; border: 0; border-radius: 999px; cursor: pointer; font-weight: 600; font-size: 14.5px; transition: color .25s; }
+.seg button[aria-pressed=true] { color: var(--ink); }
+.seg .pill { position: absolute; z-index: 0; top: 5px; bottom: 5px; left: 5px; border-radius: 999px; background: var(--gold); transition: transform .4s var(--ease), width .4s var(--ease); }
+.result { display: flex; align-items: end; justify-content: space-between; gap: 16px; padding-top: 24px; border-top: 1px solid var(--line); }
+.result .oz { font-family: var(--f-serif); font-weight: 700; font-size: clamp(84px, 11vw, 128px); line-height: .8; font-variant-numeric: lining-nums tabular-nums; }
+.result .oz small { font-size: .32em; margin-left: 8px; color: var(--gold); }
+.result p { font-size: 15px; color: var(--fg-dim); max-width: 18em; text-align: right; }
+.scale { margin-top: 26px; position: relative; display: grid; grid-template-columns: repeat(5, 1fr); font-size: 13px; color: var(--fg-dim); text-align: center; }
+.scale::before { content: ""; position: absolute; left: 0; right: 0; top: -12px; height: 4px; border-radius: 4px; background: var(--line); }
+.scale .fill { position: absolute; left: 0; top: -12px; height: 4px; border-radius: 4px; background: var(--gold); width: 100%; transition: width .5s var(--ease); }
+@media (max-width: 860px) { .guide { grid-template-columns: 1fr; } }
+
+/* Compra */
+.steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 20px; overflow: hidden; counter-reset: s; }
+.steps li { background: var(--ink); padding: clamp(24px, 3vw, 38px); display: grid; gap: 12px; align-content: start; counter-increment: s; }
+.steps li::before { content: counter(s); font-family: var(--f-serif); font-size: 54px; line-height: 1; color: var(--gold); }
+.steps h3 { font-size: 32px; }
+.steps p { color: var(--fg-dim); font-size: 16px; }
+@media (max-width: 820px) { .steps { grid-template-columns: 1fr; } }
+
+/* Fechamento */
+.closer { padding-block: clamp(100px, 13vw, 170px); text-align: center; border-top: 1px solid var(--line); overflow: hidden; }
+.closer .mark b { font-size: clamp(44px, 9vw, 112px); letter-spacing: var(--track, .42em); margin-right: calc(-1 * var(--track, .42em)); }
+.closer .mark i { font-size: clamp(11px, 1.5vw, 16px); margin-top: 16px; }
+.closer .rule { width: min(560px, 80%); height: 1px; background: var(--gold-dim); margin: 40px auto; transform-origin: center; }
+.closer h2 { font-size: clamp(38px, 5vw, 60px); }
+.closer p { margin: 18px auto 0; color: var(--fg-dim); max-width: 32em; }
+.closer .ctas { margin-top: 36px; display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+
+footer { border-top: 1px solid var(--line); }
+footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; padding-block: 28px; font-size: 14px; color: var(--fg-dim); }
+
+/* Cursor de arrastar sobre os palcos 3D */
+.cursor { position: fixed; left: 0; top: 0; z-index: 50; width: 0; height: 0; pointer-events: none; }
+.cursor span { position: absolute; left: -38px; top: -38px; width: 76px; height: 76px; border-radius: 50%; border: 1px solid var(--gold); display: grid; place-items: center; font-size: 12.5px; font-weight: 600; color: var(--fg); background: color-mix(in srgb, var(--ink) 35%, transparent); backdrop-filter: blur(3px); opacity: 0; transform: scale(.4); transition: opacity .25s, transform .3s var(--ease); }
+.cursor.on span { opacity: 1; transform: scale(1); }
+.cursor.on.down span { transform: scale(.78); }
+@media (hover: none), (pointer: coarse) { .cursor { display: none; } }
+</style>
+</head>
+<body>
+
+
+<nav class="nav" id="nav" aria-label="Principal">
+  <div class="wrap">
+    <a class="mark" href="#topo" aria-label="Clinch Supply" id="navMark"><b>CLINCH</b><i>SUPPLY</i></a>
+    <ul>
+      <li><a href="#sapatilhas">Sapatilhas</a></li>
+      <li><a href="#luvas">Luvas</a></li>
+      <li><a href="#comparativo">Cleto ou Rival</a></li>
+      <li><a href="#guia">Guia de onças</a></li>
+    </ul>
+    <a class="btn btn-ghost" href="https://www.instagram.com/clinchsupply/" target="_blank" rel="noopener">Falar com a loja</a>
+  </div>
+</nav>
+
+<header class="hero" id="topo">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <span class="chip">Pré-venda aberta. Sapatilhas chegam em novembro.</span>
+      <h1><span class="ln"><span>Equipamento</span></span><span class="ln"><span>de quem treina</span></span><span class="ln"><span>sério.</span></span></h1>
+      <p class="lede">Sapatilhas Nike e Adidas, luvas Cleto Reyes e Rival. Originais, importados dos Estados Unidos, para quem treina toda semana e quer o mesmo material dos profissionais.</p>
+      <div class="ctas">
+        <a class="btn btn-solid magnet" href="#sapatilhas">Escolher minha sapatilha</a>
+        <a class="btn btn-ghost magnet" href="#luvas">Ver luvas</a>
+      </div>
+    </div>
+    <div class="stage" id="heroStage" data-cursor="Arraste">
+      <div class="glow" aria-hidden="true"></div>
+      <canvas id="heroCanvas" aria-label="Luva de boxe em 3D. Arraste para girar."></canvas>
+      <p class="hint">Arraste para girar. Clique na luva para dar um jab.</p>
+    </div>
+  </div>
+</header>
+
+<div class="brands" aria-label="Marcas: Cleto Reyes, Rival, Nike Boxing, Adidas Boxing">
+  <div class="track" id="marquee" aria-hidden="true">
+    <div class="set"><span>Cleto Reyes</span><i></i><span>Rival</span><i></i><span>Nike Boxing</span><i></i><span>Adidas Boxing</span><i></i></div>
+    <div class="set"><span>Cleto Reyes</span><i></i><span>Rival</span><i></i><span>Nike Boxing</span><i></i><span>Adidas Boxing</span><i></i></div>
+    <div class="set"><span>Cleto Reyes</span><i></i><span>Rival</span><i></i><span>Nike Boxing</span><i></i><span>Adidas Boxing</span><i></i></div>
+    <div class="set"><span>Cleto Reyes</span><i></i><span>Rival</span><i></i><span>Nike Boxing</span><i></i><span>Adidas Boxing</span><i></i></div>
+  </div>
+</div>
+
+<section class="block" id="sapatilhas">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Escolha o modelo.<br>Gire. Troque a cor.</h2>
+      <p class="lede">Três sapatilhas em pré-venda, todas originais e importadas dos Estados Unidos. Numeração do 38 ao 46 BR, chegada em novembro.</p>
+    </div>
+    <div class="config">
+      <div class="stage" id="shoeStage" data-cursor="Arraste">
+        <canvas id="shoeCanvas" aria-label="Sapatilha em 3D. Arraste para girar."></canvas>
+        <div id="hots"></div>
+        <p class="hint">Arraste para girar. Toque nos pontos dourados para ver os detalhes.</p>
+      </div>
+      <div>
+        <div class="tabs" role="tablist" aria-label="Modelos">
+          <button class="tab" role="tab" id="tab-hyperko" data-model="hyperko" aria-selected="true"><b>HyperKO 3</b><small>R$ 1.900</small></button>
+          <button class="tab" role="tab" id="tab-boxhog" data-model="boxhog" aria-selected="false"><b>Box Hog 4</b><small>R$ 1.500</small></button>
+          <button class="tab" role="tab" id="tab-machomai" data-model="machomai" aria-selected="false"><b>Machomai 3</b><small>R$ 1.100</small></button>
+        </div>
+        <div class="panel" role="tabpanel" aria-live="polite">
+          <span class="brand" id="pBrand">Nike, topo de linha</span>
+          <h3 id="pName">HyperKO 3</h3>
+          <div class="price"><small>R$</small><span id="pPrice">1.900</span></div>
+          <p class="desc" id="pDesc">A sapatilha mais leve que a Nike já produziu. Cano alto com suporte total de tornozelo e sistema de amarração dupla para máxima estabilidade no ringue.</p>
+          <div class="colors">
+            <span class="now">Cor: <strong id="pColor">Preta</strong></span>
+            <div class="swatches" id="swatches" role="group" aria-label="Cores"></div>
+          </div>
+          <dl class="specs">
+            <dt>Numeração</dt><dd>38 ao 46 BR</dd>
+            <dt>Chegada</dt><dd>Novembro</dd>
+            <dt>Procedência</dt><dd>Original, importado dos EUA</dd>
+          </dl>
+          <a class="btn btn-solid magnet" id="pCta" href="https://www.instagram.com/clinchsupply/" target="_blank" rel="noopener">Reservar pelo Instagram</a>
+          <p class="note">O modelo 3D é ilustrativo e mostra formato e cores. As cores são as disponíveis na pré-venda.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="block alt" id="luvas">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Cinco luvas,<br>duas escolas.</h2>
+      <p class="lede">A tradição mexicana da Cleto Reyes e a engenharia de proteção da Rival. Toque em uma luva para ver em 3D.</p>
+    </div>
+    <div class="gloves">
+      <div class="glove-list" id="gloveList">
+        <div>
+          <h3>Cleto Reyes <small>Cidade do México</small></h3>
+          <button class="gl" id="gl-cleto-velcro" data-glove="cleto-velcro" aria-pressed="true"><b>Traditional Training, velcro</b><span class="use">Treino diário. Calça e tira sozinho.</span><span class="price"><small>R$</small>2.400</span></button>
+          <button class="gl" id="gl-cleto-lace" data-glove="cleto-lace" aria-pressed="false"><b>Traditional Training, cadarço</b><span class="use">Treino e sparring, punho mais firme.</span><span class="price"><small>R$</small>2.250</span></button>
+        </div>
+        <div>
+          <h3>Rival <small>Montreal, Canadá</small></h3>
+          <button class="gl" id="gl-rival-rs1" data-glove="rival-rs1" aria-pressed="false"><b>RS1 Ultra Sparring 2.0</b><span class="use">Sparring pesado, máxima proteção.</span><span class="price"><small>R$</small>2.100</span></button>
+          <button class="gl" id="gl-rival-rs2v" data-glove="rival-rs2v" aria-pressed="false"><b>RS2V Super Sparring 2.0</b><span class="use">Sparring com fechamento em velcro.</span><span class="price"><small>R$</small>1.900</span></button>
+          <button class="gl" id="gl-rival-rb10" data-glove="rival-rb10" aria-pressed="false"><b>RB10 Intelli-Shock Bag</b><span class="use">Saco e manopla, absorve o impacto.</span><span class="price"><small>R$</small>2.250</span></button>
+        </div>
+      </div>
+      <div class="stage-wrap">
+        <div class="stage" id="gloveStage" data-cursor="Arraste">
+          <canvas id="gloveCanvas" aria-label="Luva selecionada em 3D. Arraste para girar."></canvas>
+          <p class="hint">Arraste para girar</p>
+        </div>
+        <div class="glove-now"><b id="gName">Cleto Reyes Traditional Training, velcro</b><span class="price"><small>R$</small><span id="gPrice">2.400</span></span></div>
+        <p class="note">Modelo 3D e cores ilustrativos. Pesos, cores e prazo das luvas sob consulta pelo Instagram.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="comparativo">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Cleto Reyes<br>ou Rival?</h2>
+      <p class="lede">As duas estão nas mãos de campeões. Escolha o que você quer sentir quando o soco entra.</p>
+    </div>
+    <div class="pick">
+      <button class="corner" id="side-cleto" data-side="cleto" aria-pressed="true"><span class="who">Cleto Reyes</span><span class="why">Quero sentir cada golpe conectar</span></button>
+      <button class="corner" id="side-rival" data-side="rival" aria-pressed="false"><span class="who">Rival</span><span class="why">Quero proteger a mão e o parceiro</span></button>
+    </div>
+    <div class="tape" id="tape" data-side="cleto">
+      <div class="row"><div class="l">Compacta, punho firme</div><div class="k">Formato</div><div class="r">Anatômica, mais acolchoada</div></div>
+      <div class="row"><div class="l">Mais seca, você sente o alvo</div><div class="k">Sensação</div><div class="r">Mais macia, protege a mão</div></div>
+      <div class="row"><div class="l">Velcro ou cadarço</div><div class="k">Fechamento</div><div class="r">Velcro ou cadarço</div></div>
+      <div class="row"><div class="l">Saco, manopla e pegada</div><div class="k">Melhor para</div><div class="r">Sparring pesado</div></div>
+    </div>
+    <div class="verdict">
+      <p id="verdict"><strong>Cleto Reyes</strong> é para quem bate em saco e manopla quase todo dia e quer sentir o golpe entrar.</p>
+      <a class="btn btn-ghost" id="verdictCta" href="#luvas" data-glove="cleto-velcro">Ver luvas Cleto Reyes</a>
+    </div>
+  </div>
+</section>
+
+<section class="block alt" id="guia">
+  <div class="wrap guide">
+    <div>
+      <h2>Qual peso<br>de luva?</h2>
+      <p class="lede" style="margin-top:22px">Luva leve demais machuca o parceiro. Pesada demais tira velocidade do treino de saco. Use a régua como ponto de partida e confirme com a loja antes de fechar.</p>
+    </div>
+    <div class="calc">
+      <div class="field">
+        <label for="peso">Seu peso</label>
+        <output id="pesoOut" for="peso">80 kg</output>
+        <input id="peso" type="range" min="45" max="120" step="1" value="80">
+      </div>
+      <div class="field">
+        <span class="lbl" id="usoLbl">Uso principal</span>
+        <div class="seg" role="group" aria-labelledby="usoLbl" id="seg">
+          <span class="pill" aria-hidden="true"></span>
+          <button type="button" id="uso-saco" data-uso="saco" aria-pressed="false">Saco e manopla</button>
+          <button type="button" id="uso-sparring" data-uso="sparring" aria-pressed="true">Sparring</button>
+          <button type="button" id="uso-luta" data-uso="luta" aria-pressed="false">Luta</button>
+        </div>
+      </div>
+      <div class="result">
+        <div class="oz"><span id="ozOut">16</span><small>oz</small></div>
+        <p id="ozNote">Padrão para sparring acima de 70 kg. Mais proteção para você e para o parceiro.</p>
+      </div>
+      <div class="scale" aria-hidden="true"><span class="fill" id="ozFill"></span><span>8</span><span>10</span><span>12</span><span>14</span><span>16</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="compra">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Como funciona<br>a compra</h2>
+      <p class="lede">Você fala direto com a loja, tira as dúvidas de tamanho e garante a sua peça antes de o lote esgotar.</p>
+    </div>
+    <ol class="steps">
+      <li><h3>Conversa</h3><p>Conte como você treina e o que já usa. A loja indica o modelo e o tamanho certos.</p></li>
+      <li><h3>Reserva</h3><p>As importações chegam em lotes pequenos. Na pré-venda, seu número e sua cor ficam garantidos.</p></li>
+      <li><h3>Entrega</h3><p>Produto original importado dos Estados Unidos, entregue a você em novembro.</p></li>
+    </ol>
+  </div>
+</section>
+
+<section class="closer" id="closer">
+  <div class="wrap">
+    <span class="mark" aria-hidden="true" id="closerMark"><b>CLINCH</b><i>SUPPLY</i></span>
+    <div class="rule" id="closerRule"></div>
+    <h2>Garanta o seu antes de novembro.</h2>
+    <p>Mande uma mensagem com o modelo, a cor e o seu número. A loja responde com a disponibilidade do lote.</p>
+    <div class="ctas">
+      <a class="btn btn-solid magnet" href="https://www.instagram.com/clinchsupply/" target="_blank" rel="noopener">Chamar no Instagram</a>
+      <a class="btn btn-ghost magnet" href="#sapatilhas">Rever sapatilhas</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Clinch Supply. Produtos originais importados dos EUA.</span>
+    <a href="https://www.instagram.com/clinchsupply/" target="_blank" rel="noopener">@clinchsupply</a>
+  </div>
+</footer>
+
+<div class="cursor" id="cursor" aria-hidden="true"><span>Arraste</span></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+(function () {
+  var REDUCE = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var FINE = matchMedia('(hover: hover) and (pointer: fine)').matches;
+  var G = window.gsap;
+  if (G && window.ScrollTrigger) G.registerPlugin(window.ScrollTrigger);
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+
+  var SHOES = {
+    hyperko: {
+      brand: 'Nike, topo de linha', name: 'HyperKO 3', price: 1900,
+      desc: 'A sapatilha mais leve que a Nike já produziu. Cano alto com suporte total de tornozelo e sistema de amarração dupla para máxima estabilidade no ringue.',
+      colors: [
+        { name: 'Preta', upper: '#161616', sole: '#121212', logo: '#f4f4f4', logoStyle: 'outline', lace: '#f2f2f2', trim: '#1c1c1c' },
+        { name: 'Branca', upper: '#eeeeee', sole: '#1b1b1b', logo: '#151515', logoStyle: 'outline', lace: '#f7f7f7', trim: '#eeeeee' },
+        { name: 'Branca e dourada', upper: '#f1efe9', sole: '#c9a14a', logo: '#c9a14a', lace: '#f6f6f6', trim: '#f1efe9' },
+        { name: 'Preta e vermelha', upper: '#141414', sole: '#c8202b', logo: '#d42a33', lace: '#151515', trim: '#c8202b' },
+        { name: 'Azul edição especial', upper: '#4f8fe0', sole: '#7fb6f0', logo: '#f2d40c', lace: '#e9f2fb', trim: '#2f63c9' },
+        { name: 'Preta e rosa', upper: '#161616', sole: '#f0a9d6', logo: '#f0a9d6', lace: '#161616', trim: '#f0a9d6' }
+      ]
+    },
+    boxhog: {
+      brand: 'Adidas, melhor custo-benefício', name: 'Box Hog 4', price: 1500,
+      desc: 'Cabedal em mesh respirável com reforços internos. Entressola EVA para estabilidade e solado multidirecional com ponto de pivô para footwork rápido.',
+      colors: [
+        { name: 'Preta', upper: '#171717', sole: '#141414', logo: '#f2f2f2', lace: '#171717', trim: '#171717' },
+        { name: 'Azul royal', upper: '#2343a8', sole: '#203c97', logo: '#f4f4f4', lace: '#2343a8', trim: '#2343a8' },
+        { name: 'Vermelha', upper: '#ea2a52', sole: '#e2264c', logo: '#f8c9d3', lace: '#ea2a52', trim: '#ea2a52' }
+      ]
+    },
+    machomai: {
+      brand: 'Nike, a mais versátil', name: 'Machomai 3', price: 1100,
+      desc: 'Sola fina para máximo contato com o solo. Leve, respirável e com tração equilibrada para pivotar sem travar o joelho.',
+      colors: [
+        { name: 'Preta', upper: '#151515', sole: '#1d1d1d', logo: '#f4f4f4', lace: '#151515', trim: '#151515' },
+        { name: 'Branca', upper: '#efefef', sole: '#1a1a1a', logo: '#141414', lace: '#efefef', trim: '#efefef' },
+        { name: 'Branca e dourada', upper: '#f2f0ea', sole: '#ece6d8', logo: '#c9a14a', lace: '#f2f0ea', trim: '#f2f0ea' },
+        { name: 'Azul royal', upper: '#1f4fc4', sole: '#f2f2f2', logo: '#f4f4f4', lace: '#f4f4f4', trim: '#1f4fc4' },
+        { name: 'Vermelha', upper: '#d61f27', sole: '#161616', logo: '#141414', lace: '#d61f27', trim: '#d61f27' }
+      ]
+    }
+  };
+  var GLOVES = {
+    'cleto-velcro': { name: 'Cleto Reyes Traditional Training, velcro', price: 2400, look: { color: '#9e0f18', trim: '#f3efe6', strap: '#9e0f18', closure: 'velcro', label: 'CLETO REYES', labelColor: '#f3efe6' } },
+    'cleto-lace': { name: 'Cleto Reyes Traditional Training, cadarço', price: 2250, look: { color: '#151515', trim: '#f3efe6', lace: '#f3efe6', closure: 'lace', label: 'CLETO REYES', labelColor: '#f3efe6' } },
+    'rival-rs1': { name: 'Rival RS1 Ultra Sparring 2.0', price: 2100, look: { color: '#ece7de', trim: '#141414', lace: '#141414', closure: 'lace', label: 'RIVAL', labelColor: '#141414', labelSize: 170, labelTrack: 24 } },
+    'rival-rs2v': { name: 'Rival RS2V Super Sparring 2.0', price: 1900, look: { color: '#1c2942', trim: '#ece7de', strap: '#1c2942', closure: 'velcro', label: 'RIVAL', labelColor: '#ece7de', labelSize: 170, labelTrack: 24 } },
+    'rival-rb10': { name: 'Rival RB10 Intelli-Shock Bag', price: 2250, look: { color: '#1a1a1a', trim: '#b3121b', strap: '#b3121b', closure: 'velcro', label: 'RIVAL', labelColor: '#f3efe6', labelSize: 170, labelTrack: 24 } }
+  };
+  var state = { model: 'hyperko', color: 0, glove: 'cleto-velcro' };
+  window.CLINCH = { SHOES: SHOES, GLOVES: GLOVES, state: state };
+  var emit = function (name, detail) { document.dispatchEvent(new CustomEvent(name, { detail: detail })); };
+
+  var fmt = function (n) { return n.toLocaleString('pt-BR'); };
+  function roll(el, to) {
+    var from = +(el.dataset.v || to); el.dataset.v = to;
+    if (!G || REDUCE || from === to) { el.textContent = fmt(to); return; }
+    var o = { v: from };
+    G.to(o, { v: to, duration: 0.8, ease: 'power3.out', onUpdate: function () { el.textContent = fmt(Math.round(o.v / 50) * 50); }, onComplete: function () { el.textContent = fmt(to); } });
+  }
+  function swap(els) {
+    if (!G || REDUCE) return;
+    G.fromTo(els, { y: 14, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: 'power3.out', stagger: 0.05, overwrite: true });
+  }
+
+  // ---------- configurador
+  var tabs = $$('.tab');
+  var sw = $('#swatches');
+  function renderSwatches() {
+    var m = SHOES[state.model];
+    sw.innerHTML = '';
+    m.colors.forEach(function (c, i) {
+      var b = document.createElement('button');
+      b.type = 'button'; b.className = 'sw'; b.id = 'sw-' + state.model + '-' + i;
+      b.setAttribute('aria-pressed', i === state.color ? 'true' : 'false');
+      b.setAttribute('aria-label', c.name);
+      b.title = c.name;
+      b.innerHTML = '<span style="--u:' + c.upper + ';--s:' + c.sole + ';--l:' + c.logo + '"></span>';
+      b.addEventListener('click', function () { setColor(i); });
+      sw.appendChild(b);
+    });
+    $('#pColor').textContent = m.colors[state.color].name;
+  }
+  function setColor(i) {
+    if (i === state.color) return;
+    state.color = i;
+    $$('.sw', sw).forEach(function (b, k) { b.setAttribute('aria-pressed', k === i ? 'true' : 'false'); });
+    $('#pColor').textContent = SHOES[state.model].colors[i].name;
+    emit('clinch:shoe', { model: state.model, cw: SHOES[state.model].colors[i], modelChanged: false });
+  }
+  function setModel(key) {
+    if (key === state.model) return;
+    state.model = key; state.color = 0;
+    var m = SHOES[key];
+    tabs.forEach(function (t) { t.setAttribute('aria-selected', t.dataset.model === key ? 'true' : 'false'); });
+    $('#pBrand').textContent = m.brand; $('#pName').textContent = m.name; $('#pDesc').textContent = m.desc;
+    roll($('#pPrice'), m.price);
+    renderSwatches();
+    swap(['#pBrand', '#pName', '#pDesc', '#swatches']);
+    emit('clinch:shoe', { model: key, cw: m.colors[0], modelChanged: true });
+  }
+  tabs.forEach(function (t) {
+    t.addEventListener('click', function () { setModel(t.dataset.model); });
+    t.addEventListener('keydown', function (e) {
+      var i = tabs.indexOf(t);
+      if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { var n = tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length]; n.focus(); setModel(n.dataset.model); }
+    });
+  });
+  $('#pPrice').dataset.v = 1900;
+  renderSwatches();
+
+  // ---------- luvas
+  var gls = $$('.gl');
+  function setGlove(key) {
+    if (key === state.glove) return;
+    state.glove = key;
+    gls.forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.glove === key ? 'true' : 'false'); });
+    $('#gName').textContent = GLOVES[key].name;
+    roll($('#gPrice'), GLOVES[key].price);
+    swap(['#gName']);
+    emit('clinch:glove', { key: key });
+  }
+  $('#gPrice').dataset.v = 2400;
+  gls.forEach(function (b) { b.addEventListener('click', function () { setGlove(b.dataset.glove); }); });
+
+  // ---------- Cleto ou Rival
+  var corners = $$('.corner');
+  var VERDICT = {
+    cleto: { html: '<strong>Cleto Reyes</strong> é para quem bate em saco e manopla quase todo dia e quer sentir o golpe entrar.', cta: 'Ver luvas Cleto Reyes', glove: 'cleto-velcro' },
+    rival: { html: '<strong>Rival</strong> é para quem faz muito sparring e quer proteger a própria mão e o parceiro.', cta: 'Ver luvas Rival', glove: 'rival-rs1' }
+  };
+  corners.forEach(function (c) {
+    c.addEventListener('click', function () {
+      var side = c.dataset.side;
+      corners.forEach(function (x) { x.setAttribute('aria-pressed', x === c ? 'true' : 'false'); });
+      $('#tape').dataset.side = side;
+      $('#verdict').innerHTML = VERDICT[side].html;
+      var cta = $('#verdictCta'); cta.textContent = VERDICT[side].cta; cta.dataset.glove = VERDICT[side].glove;
+      swap(['#verdict']);
+      if (G && !REDUCE) G.fromTo('#tape .row', { x: side === 'cleto' ? -10 : 10 }, { x: 0, duration: 0.5, ease: 'power3.out', stagger: 0.04 });
+    });
+  });
+  $('#verdictCta').addEventListener('click', function () { setGlove(this.dataset.glove); });
+
+  // ---------- guia de onças
+  var peso = $('#peso'), uso = 'sparring';
+  var OZ = [8, 10, 12, 14, 16];
+  function recommend(kg, u) {
+    if (u === 'luta') return kg <= 66.7 ? [8, 'Luvas de luta oficiais até o meio-médio (66,7 kg) costumam ser de 8 oz. Confirme com o regulamento do evento.'] : [10, 'Acima de 66,7 kg as luvas de luta passam a 10 oz na maioria das federações. Confirme com o regulamento do evento.'];
+    if (u === 'saco') return kg < 60 ? [10, 'Leve e rápida para saco e manopla. Boa para trabalhar velocidade e combinação.'] : kg < 80 ? [12, 'Equilíbrio entre velocidade e proteção para o trabalho de saco diário.'] : [14, 'Mais acolchoamento para quem bate pesado no saco todos os dias.'];
+    return kg < 57 ? [12, 'Para sparring abaixo de 57 kg, 12 oz já protege bem sem pesar no braço.'] : kg < 70 ? [14, 'Faixa intermediária de sparring. Muitas academias aceitam 14 oz até 70 kg.'] : [16, 'Padrão para sparring acima de 70 kg. Mais proteção para você e para o parceiro.'];
+  }
+  var ozEl = $('#ozOut');
+  function calc() {
+    var kg = +peso.value; $('#pesoOut').textContent = kg + ' kg';
+    var r = recommend(kg, uso);
+    $('#ozNote').textContent = r[1];
+    var cur = +ozEl.textContent;
+    if (cur !== r[0]) {
+      if (G && !REDUCE) { var o = { v: cur }; G.to(o, { v: r[0], duration: 0.5, ease: 'power2.out', onUpdate: function () { ozEl.textContent = Math.round(o.v); } }); G.fromTo(ozEl, { scale: 1.12 }, { scale: 1, duration: 0.5, ease: 'back.out(3)' }); }
+      else ozEl.textContent = r[0];
+    }
+    $('#ozFill').style.width = ((OZ.indexOf(r[0]) + 0.5) / 5 * 100) + '%';
+  }
+  var seg = $('#seg'), pill = $('.pill', seg), segBtns = $$('button', seg);
+  function placePill() { var b = segBtns.filter(function (x) { return x.getAttribute('aria-pressed') === 'true'; })[0]; pill.style.width = b.offsetWidth + 'px'; pill.style.transform = 'translateX(' + (b.offsetLeft - 5) + 'px)'; }
+  segBtns.forEach(function (b) { b.addEventListener('click', function () { uso = b.dataset.uso; segBtns.forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); }); placePill(); calc(); }); });
+  peso.addEventListener('input', calc);
+  window.addEventListener('resize', placePill);
+  placePill(); calc();
+
+  // ---------- nav
+  var nav = $('#nav');
+  var onScroll = function () { nav.classList.toggle('solid', window.scrollY > 30); };
+  window.addEventListener('scroll', onScroll, { passive: true }); onScroll();
+
+  // ---------- cursor de arrastar
+  if (FINE) {
+    var cur = $('#cursor');
+    var cx = G ? G.quickTo(cur, 'x', { duration: 0.35, ease: 'power3' }) : function (v) { cur.style.left = v + 'px'; };
+    var cy = G ? G.quickTo(cur, 'y', { duration: 0.35, ease: 'power3' }) : function (v) { cur.style.top = v + 'px'; };
+    window.addEventListener('pointermove', function (e) {
+      cx(e.clientX); cy(e.clientY);
+      var over = e.target.closest && e.target.closest('[data-cursor]');
+      var onHot = e.target.closest && e.target.closest('.hot');
+      cur.classList.toggle('on', !!over && !onHot);
+    }, { passive: true });
+    window.addEventListener('pointerdown', function () { cur.classList.add('down'); });
+    window.addEventListener('pointerup', function () { cur.classList.remove('down'); });
+  }
+
+  // ---------- botões magnéticos
+  if (FINE && G && !REDUCE) {
+    $$('.magnet').forEach(function (b) {
+      var qx = G.quickTo(b, 'x', { duration: 0.4, ease: 'power3' }), qy = G.quickTo(b, 'y', { duration: 0.4, ease: 'power3' });
+      b.addEventListener('pointermove', function (e) { var r = b.getBoundingClientRect(); qx((e.clientX - r.left - r.width / 2) * 0.28); qy((e.clientY - r.top - r.height / 2) * 0.35); });
+      b.addEventListener('pointerleave', function () { qx(0); qy(0); });
+    });
+  }
+
+  if (!G || REDUCE) return;
+
+  // ---------- abertura
+  var tl = G.timeline({ defaults: { ease: 'power4.out' } });
+  tl.from('#navMark b', { letterSpacing: '0.05em', duration: 1.4 }, 0)
+    .from('.hero h1 .ln > span', { yPercent: 105, duration: 1.1, stagger: 0.09 }, 0.1)
+    .from(['.hero .chip', '.hero .lede', '.hero .ctas'], { y: 18, opacity: 0, duration: 0.9, stagger: 0.08 }, 0.45)
+    .from('#heroStage .glow', { scale: 0.6, opacity: 0, duration: 1.4 }, 0.1);
+
+  // ---------- marcas reagem à velocidade do scroll
+  var mq = G.to('#marquee', { xPercent: -25, duration: 24, ease: 'none', repeat: -1 });
+  var dir = 1, settle;
+  ScrollTrigger.create({
+    onUpdate: function (self) {
+      var v = self.getVelocity();
+      dir = v < 0 ? -1 : 1;
+      var boost = Math.min(5, Math.abs(v) / 350);
+      G.to(mq, { timeScale: dir * (1 + boost), duration: 0.2, overwrite: true });
+      G.to('#marquee', { skewX: Math.max(-10, Math.min(10, -v / 320)), duration: 0.2, overwrite: true });
+      clearTimeout(settle);
+      settle = setTimeout(function () { G.to(mq, { timeScale: dir, duration: 1.2 }); G.to('#marquee', { skewX: 0, duration: 0.8, ease: 'elastic.out(1, 0.5)' }); }, 120);
+    }
+  });
+
+  // ---------- palcos crescem ao entrar
+  ['#shoeStage', '#gloveStage'].forEach(function (s) {
+    G.fromTo(s, { scale: 0.94 }, { scale: 1, ease: 'none', scrollTrigger: { trigger: s, start: 'top 95%', end: 'top 45%', scrub: true } });
+  });
+
+  // ---------- fechamento: a marca abre conforme você chega
+  G.fromTo('#closerMark', { '--track': '0.06em' }, { '--track': '0.42em', ease: 'none', scrollTrigger: { trigger: '#closer', start: 'top 90%', end: 'center 60%', scrub: true } });
+  G.fromTo('#closerRule', { scaleX: 0.15 }, { scaleX: 1, ease: 'none', scrollTrigger: { trigger: '#closer', start: 'top 85%', end: 'center 60%', scrub: true } });
+})();
+</script>
+<script type="importmap">{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }</script>
+<script type="module">
+// Clinch Supply 3D: procedural boxing boots and gloves, a turntable stage per canvas.
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { DecalGeometry } from 'three/addons/geometries/DecalGeometry.js';
+
+const REDUCE = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+const smooth = (a, b, v) => { const t = clamp((v - a) / (b - a), 0, 1); return t * t * (3 - 2 * t); };
+const lerp = (a, b, t) => a + (b - a) * t;
+
+function sampler(points) {
+  const curve = new THREE.SplineCurve(points.map(p => new THREE.Vector2(p[0], p[1])));
+  const pts = curve.getPoints(600);
+  return x => {
+    if (x <= pts[0].x) return pts[0].y;
+    let lo = 0, hi = pts.length - 1;
+    if (x >= pts[hi].x) return pts[hi].y;
+    while (hi - lo > 1) { const m = (lo + hi) >> 1; if (pts[m].x < x) lo = m; else hi = m; }
+    const a = pts[lo], b = pts[hi], t = (x - a.x) / ((b.x - a.x) || 1);
+    return a.y + (b.y - a.y) * t;
+  };
+}
+
+// ---------- textures (drawn once, shared)
+function canvasTex(w, h, draw, opts = {}) {
+  const c = document.createElement('canvas'); c.width = w; c.height = h;
+  draw(c.getContext('2d'), w, h);
+  const t = new THREE.CanvasTexture(c);
+  if (opts.repeat) { t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(opts.repeat[0], opts.repeat[1]); }
+  if (opts.flipX) { t.wrapS = THREE.RepeatWrapping; t.repeat.x = -1; t.offset.x = 1; }
+  if (opts.color) t.colorSpace = THREE.SRGBColorSpace;
+  t.anisotropy = 4;
+  return t;
+}
+const TEX = {};
+function bumpRibs() {
+  return TEX.ribs || (TEX.ribs = canvasTex(64, 64, (g, w, h) => {
+    const grd = g.createLinearGradient(0, 0, 0, h);
+    grd.addColorStop(0, '#000'); grd.addColorStop(0.5, '#fff'); grd.addColorStop(1, '#000');
+    g.fillStyle = grd; g.fillRect(0, 0, w, h);
+  }, { repeat: [1, 46] }));
+}
+function bumpMesh() {
+  return TEX.mesh || (TEX.mesh = canvasTex(128, 128, (g, w, h) => {
+    g.fillStyle = '#808080'; g.fillRect(0, 0, w, h);
+    g.strokeStyle = '#fff'; g.lineWidth = 6;
+    for (let i = -w; i < w * 2; i += 16) { g.beginPath(); g.moveTo(i, 0); g.lineTo(i + h, h); g.stroke(); }
+    g.strokeStyle = '#222'; g.lineWidth = 3;
+    for (let i = -w; i < w * 2; i += 16) { g.beginPath(); g.moveTo(i + h, 0); g.lineTo(i, h); g.stroke(); }
+  }, { repeat: [22, 44] }));
+}
+function bumpGrain() {
+  return TEX.grain || (TEX.grain = canvasTex(256, 256, (g, w, h) => {
+    const img = g.createImageData(w, h);
+    for (let i = 0; i < img.data.length; i += 4) { const v = 110 + Math.random() * 60; img.data[i] = img.data[i + 1] = img.data[i + 2] = v; img.data[i + 3] = 255; }
+    g.putImageData(img, 0, 0);
+  }, { repeat: [5, 10] }));
+}
+function shadowTex() {
+  return TEX.shadow || (TEX.shadow = canvasTex(256, 256, (g, w, h) => {
+    const grd = g.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, w / 2);
+    grd.addColorStop(0, 'rgba(0,0,0,0.75)'); grd.addColorStop(0.45, 'rgba(0,0,0,0.35)'); grd.addColorStop(1, 'rgba(0,0,0,0)');
+    g.fillStyle = grd; g.fillRect(0, 0, w, h);
+  }));
+}
+function swooshPath(g, w, h) {
+  const sx = w / 1000, sy = h / 500;
+  g.beginPath();
+  g.moveTo(20 * sx, 40 * sy);
+  g.bezierCurveTo(340 * sx, 300 * sy, 680 * sx, 470 * sy, 860 * sx, 455 * sy);
+  g.bezierCurveTo(990 * sx, 445 * sy, 985 * sx, 330 * sy, 880 * sx, 318 * sy);
+  g.bezierCurveTo(820 * sx, 330 * sy, 760 * sx, 345 * sy, 700 * sx, 345 * sy);
+  g.bezierCurveTo(470 * sx, 330 * sy, 240 * sx, 210 * sy, 20 * sx, 40 * sy);
+  g.closePath();
+}
+function logoTex(kind, flip) {
+  const key = kind + (flip ? '-f' : '');
+  if (TEX[key]) return TEX[key];
+  return (TEX[key] = canvasTex(1024, 512, (g, w, h) => {
+    g.fillStyle = '#fff'; g.strokeStyle = '#fff';
+    if (kind === 'swoosh') { swooshPath(g, w, h); g.fill(); }
+    else if (kind === 'swoosh-outline') { swooshPath(g, w, h); g.lineWidth = 26; g.lineJoin = 'round'; g.stroke(); }
+    else if (kind === 'stripes') {
+      for (let i = 0; i < 3; i++) {
+        const x0 = 250 + i * 150;
+        g.beginPath();
+        g.moveTo(x0, 500); g.lineTo(x0 + 86, 500); g.lineTo(x0 + 86 + 250, 0); g.lineTo(x0 + 250, 0); g.closePath(); g.fill();
+      }
+    }
+  }, { flipX: flip, color: true }));
+}
+function textTex(text, opts = {}) {
+  const key = 'txt-' + text + (opts.serif ? 's' : '');
+  if (TEX[key]) return TEX[key];
+  return (TEX[key] = canvasTex(1024, 256, (g, w, h) => {
+    g.fillStyle = '#fff'; g.textAlign = 'center'; g.textBaseline = 'middle';
+    const size = opts.size || 150;
+    g.font = (opts.serif ? '600 ' : '700 ') + size + 'px ' + (opts.serif ? '"Cormorant Garamond", Georgia, serif' : '"Hanken Grotesk", Arial, sans-serif');
+    if ('letterSpacing' in g) g.letterSpacing = (opts.track || 0) + 'px';
+    g.fillText(text, w / 2, h / 2 + 6);
+  }, { color: true }));
+}
+
+// ---------- materials
+function leather(color) {
+  return new THREE.MeshPhysicalMaterial({ color, roughness: 0.4, clearcoat: 0.7, clearcoatRoughness: 0.32, bumpMap: bumpGrain(), bumpScale: 0.6 });
+}
+function decalMat(tex, color) {
+  return new THREE.MeshStandardMaterial({ map: tex, color, transparent: true, roughness: 0.45, metalness: 0.0, polygonOffset: true, polygonOffsetFactor: -6, depthWrite: false });
+}
+
+// ---------- loft (superellipse sections along x)
+function loft({ xmin, xmax, NU = 150, NV = 80, ys, yt, half, nTop, nBot, heelR, toeR }) {
+  const pos = [], uv = [], idx = [];
+  for (let i = 0; i <= NU; i++) {
+    const u = i / NU, x = lerp(xmin, xmax, u);
+    const h = clamp((x - xmin) / heelR, 0, 1), t = clamp((xmax - x) / toeR, 0, 1);
+    const fh = Math.sqrt(1 - (1 - h) * (1 - h)), ft = Math.sqrt(1 - (1 - t) * (1 - t));
+    const y0 = ys(x), y1 = y0 + (yt(x) - y0) * Math.pow(ft, 0.55);
+    const yc = (y0 + y1) / 2, b = (y1 - y0) / 2;
+    const nt = nTop(x), nb = nBot(x);
+    for (let j = 0; j <= NV; j++) {
+      const th = -Math.PI / 2 + (j / NV) * Math.PI * 2;
+      const c = Math.cos(th), s = Math.sin(th);
+      const n = s > 0 ? nt : nb;
+      const zc = Math.sign(c) * Math.pow(Math.abs(c), 2 / n);
+      const y = yc + b * Math.sign(s) * Math.pow(Math.abs(s), 2 / n);
+      pos.push(x, y, half(x, y) * fh * ft * zc);
+      uv.push(u, j / NV);
+    }
+  }
+  for (let i = 0; i < NU; i++) for (let j = 0; j < NV; j++) {
+    const a = i * (NV + 1) + j, b = a + NV + 1;
+    idx.push(a, b, a + 1, b, b + 1, a + 1);
+  }
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+  geo.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2));
+  geo.setIndex(idx);
+  geo.computeVertexNormals();
+  return geo;
+}
+
+function tubeAlong(points, radius, closed = false, seg = 120) {
+  const curve = new THREE.CatmullRomCurve3(points, closed, 'centripetal');
+  return new THREE.TubeGeometry(curve, seg, radius, 10, closed);
+}
+function ellipsePts(cx, cy, cz, rx, rz, n = 64) {
+  const out = [];
+  for (let i = 0; i < n; i++) { const a = (i / n) * Math.PI * 2; out.push(new THREE.Vector3(cx + Math.cos(a) * rx, cy, cz + Math.sin(a) * rz)); }
+  return out;
+}
+
+// ---------- boots
+const SHOE_MODELS = {
+  hyperko: { collar: 2.5, texture: 'ribs', logo: 'swoosh', logoBox: [-0.12, 0.92, 1.95, 0.98] },
+  boxhog: { collar: 2.36, texture: 'mesh', logo: 'stripes', logoBox: [0.02, 0.8, 1.45, 1.12] },
+  machomai: { collar: 1.78, texture: 'grain', logo: 'swoosh', logoBox: [-0.02, 0.78, 1.8, 0.9] },
+};
+
+function shoeShape(C) {
+  const ys = () => 0.2;
+  const yt = sampler([
+    [-1.42, C], [-1.0, C], [-0.5, C - 0.01], [-0.38, C - 0.1],
+    [-0.24, lerp(C, 1.45, 0.42)], [0.0, 1.45 + (C - 2.45) * 0.25],
+    [0.3, 1.1], [0.62, 0.9], [0.95, 0.74], [1.25, 0.6], [1.46, 0.45],
+  ]);
+  const W = sampler([[-1.42, 0.35], [-1.1, 0.375], [-0.6, 0.37], [0.0, 0.405], [0.6, 0.455], [1.0, 0.43], [1.46, 0.36]]);
+  const half = (x, y) => W(x) * (1 - 0.17 * smooth(0.9, 2.0, y));
+  const nTop = x => 2.3 + 5.2 * (1 - smooth(-0.62, -0.32, x));
+  return { xmin: -1.42, xmax: 1.46, ys, yt, half, W, nTop, nBot: () => 5, heelR: 0.34, toeR: 0.56 };
+}
+
+function createShoe(modelKey, cw) {
+  const group = new THREE.Group();
+  const mats = {
+    upper: new THREE.MeshPhysicalMaterial({ color: cw.upper, roughness: 0.55, sheen: 0.22, sheenRoughness: 0.6, sheenColor: new THREE.Color('#ffffff'), bumpScale: 1 }),
+    sole: new THREE.MeshStandardMaterial({ color: cw.sole, roughness: 0.75 }),
+    lace: new THREE.MeshStandardMaterial({ color: cw.lace || cw.upper, roughness: 0.6 }),
+    trim: new THREE.MeshStandardMaterial({ color: cw.trim || cw.upper, roughness: 0.5 }),
+    lining: new THREE.MeshStandardMaterial({ color: '#0c0c0c', roughness: 0.9 }),
+    logo: null, logoB: null,
+  };
+  let parts = [];
+  let current = null;
+
+  function build(key) {
+    parts.forEach(p => { p.geometry.dispose(); group.remove(p); });
+    parts = [];
+    const M = SHOE_MODELS[key];
+    const S = shoeShape(M.collar);
+    const C = M.collar;
+    const add = (geo, mat) => { const m = new THREE.Mesh(geo, mat); group.add(m); parts.push(m); return m; };
+
+    mats.upper.bumpMap = M.texture === 'ribs' ? bumpRibs() : M.texture === 'mesh' ? bumpMesh() : bumpGrain();
+    mats.upper.bumpScale = M.texture === 'ribs' ? 1.1 : M.texture === 'mesh' ? 0.5 : 0.6;
+    mats.upper.needsUpdate = true;
+
+    const ug = loft(S);
+    const up = ug.attributes.position;
+    for (let i = 0; i < up.count; i++) {
+      const x = up.getX(i), y = up.getY(i), w = 1 - smooth(-1.42, -0.85, x);
+      up.setX(i, x + w * (0.11 * smooth(0.7, 1.45, y) - 0.05 * smooth(1.8, 2.5, y)));
+    }
+    ug.computeVertexNormals();
+    const upper = add(ug, mats.upper);
+    add(loft({ ...S, xmin: -1.47, xmax: 1.52, ys: () => 0, yt: () => 0.27, half: (x) => S.W(x) * 1.08 + 0.012, nTop: () => 6, nBot: () => 9, heelR: 0.3, toeR: 0.48, NV: 48 }), mats.sole);
+
+    // collar ring + opening
+    const cx = -0.9, rz = S.half(cx, C) * 0.94, rx = 0.5;
+    add(tubeAlong(ellipsePts(cx, C + 0.02, 0, rx, rz), 0.085, true), mats.trim);
+    const disc = new THREE.Shape(); disc.absellipse(0, 0, rx - 0.04, rz - 0.04, 0, Math.PI * 2);
+    const dg = new THREE.ShapeGeometry(disc, 48); dg.rotateX(-Math.PI / 2); dg.translate(cx, C + 0.012, 0);
+    add(dg, mats.lining);
+
+    // lace line, sampled by arc length
+    const yAt = x => S.yt(x);
+    const line = []; for (let i = 0; i <= 200; i++) { const x = lerp(0.52, -0.37, i / 200); line.push(new THREE.Vector2(x, yAt(x))); }
+    const lens = [0]; for (let i = 1; i < line.length; i++) lens.push(lens[i - 1] + line[i].distanceTo(line[i - 1]));
+    const total = lens[lens.length - 1];
+    const rows = M.collar > 2 ? 9 : 7;
+    const eyeL = [], eyeR = [];
+    for (let r = 0; r < rows; r++) {
+      const target = (r + 0.5) / rows * total;
+      let k = lens.findIndex(l => l >= target); k = Math.max(1, k);
+      const p = line[k], q = line[k - 1];
+      const tan = new THREE.Vector2(p.x - q.x, p.y - q.y).normalize();
+      const nrm = new THREE.Vector3(tan.y, -tan.x, 0); if (nrm.y < 0) nrm.negate();
+      const a = S.half(p.x, p.y);
+      const base = new THREE.Vector3(p.x, p.y, 0).addScaledVector(nrm, 0.03);
+      for (const sgn of [1, -1]) {
+        const g = new THREE.CylinderGeometry(0.021, 0.021, a * 0.72, 8); g.rotateX(Math.PI / 2);
+        const m = add(g, mats.lace);
+        m.position.copy(base);
+        m.quaternion.setFromAxisAngle(nrm, sgn * 0.34);
+      }
+      const n = 2.3, q2 = 0.42, b = (p.y - 0.2) / 2;
+      const ySurf = (0.2 + b) + b * Math.pow(1 - Math.pow(q2, n), 1 / n);
+      const dy = ySurf - p.y;
+      eyeL.push(new THREE.Vector3(p.x, p.y + dy + 0.012, a * q2));
+      eyeR.push(new THREE.Vector3(p.x, p.y + dy + 0.012, -a * q2));
+    }
+    if (eyeL.length > 2) { add(tubeAlong(eyeL, 0.03), mats.trim); add(tubeAlong(eyeR, 0.03), mats.trim); }
+
+    // heel pull tab
+    const tab = add(new THREE.BoxGeometry(0.06, 0.34, 0.16), mats.trim);
+    tab.position.set(-1.38, C - 0.08, 0);
+
+    // logo decals on both sides
+    upper.updateMatrixWorld(true);
+    const [lx, ly, lw, lh] = M.logoBox;
+    const kind = M.logo === 'swoosh' && cw.logoStyle === 'outline' ? 'swoosh-outline' : M.logo;
+    if (!mats.logo) { mats.logo = decalMat(logoTex(kind, false), cw.logo); mats.logoB = decalMat(logoTex(kind, true), cw.logo); }
+    mats.logo.map = logoTex(kind, false); mats.logoB.map = logoTex(kind, true);
+    mats.logo.needsUpdate = mats.logoB.needsUpdate = true;
+    const saved = group.matrixWorld.clone();
+    group.matrixWorld.identity(); upper.matrixWorld.identity();
+    add(new DecalGeometry(upper, new THREE.Vector3(lx, ly, 0.6), new THREE.Euler(0, 0, 0), new THREE.Vector3(lw, lh, 0.7)), mats.logo);
+    add(new DecalGeometry(upper, new THREE.Vector3(lx, ly, -0.6), new THREE.Euler(0, Math.PI, 0), new THREE.Vector3(lw, lh, 0.7)), mats.logoB);
+    group.matrixWorld.copy(saved);
+    current = key;
+  }
+
+  function paint(c, animate) {
+    const to = { upper: c.upper, sole: c.sole, lace: c.lace || c.upper, trim: c.trim || c.upper, logo: c.logo };
+    for (const k of Object.keys(to)) {
+      const targets = k === 'logo' ? [mats.logo, mats.logoB] : [mats[k]];
+      targets.forEach(m => {
+        if (!m) return;
+        const col = new THREE.Color(to[k]);
+        if (!animate || REDUCE) { m.color.copy(col); return; }
+        const from = m.color.clone(); const t0 = performance.now();
+        const step = now => { const t = Math.min(1, (now - t0) / 420); m.color.copy(from).lerp(col, t * t * (3 - 2 * t)); if (t < 1) requestAnimationFrame(step); };
+        requestAnimationFrame(step);
+      });
+    }
+  }
+  function setColorway(c, animate = true) {
+    const needRebuild = SHOE_MODELS[current].logo === 'swoosh' && (c.logoStyle === 'outline') !== (cw.logoStyle === 'outline');
+    cw = c;
+    if (needRebuild) build(current);
+    paint(c, animate);
+  }
+  function show(key, c) { cw = c; build(key); paint(c, false); }
+
+  build(modelKey);
+  return { group, build, show, setColorway, get model() { return current; } };
+}
+
+// ---------- glove
+function loftY({ y0, y1, NU = 120, NV = 96, hx, hz, cz, n = () => 2.2, topR = 0.32, open = true }) {
+  const pos = [], uv = [], idx = [];
+  for (let i = 0; i <= NU; i++) {
+    const v = i / NU, y = lerp(y0, y1, v);
+    const tt = clamp((y1 - y) / topR, 0, 1), f = topR > 0 ? Math.sqrt(1 - (1 - tt) * (1 - tt)) : 1;
+    const ex = n(y);
+    for (let j = 0; j <= NV; j++) {
+      const th = (j / NV) * Math.PI * 2, c = Math.cos(th), s = Math.sin(th);
+      const x = hx(y) * f * Math.sign(c) * Math.pow(Math.abs(c), 2 / ex);
+      const z = cz(y) + hz(y) * f * Math.sign(s) * Math.pow(Math.abs(s), 2 / ex);
+      pos.push(x, y, z); uv.push(j / NV, v);
+    }
+  }
+  for (let i = 0; i < NU; i++) for (let j = 0; j < NV; j++) {
+    const a = i * (NV + 1) + j, b = a + NV + 1;
+    idx.push(a, b, a + 1, b, b + 1, a + 1);
+  }
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+  geo.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2));
+  geo.setIndex(idx); geo.computeVertexNormals();
+  return geo;
+}
+
+const GLOVE = (() => {
+  const H = 2.95;
+  const hx = sampler([[0, 0.62], [0.9, 0.62], [1.15, 0.67], [1.5, 0.8], [1.9, 0.88], [2.25, 0.9], [2.6, 0.84], [H, 0.62]]);
+  const hz = sampler([[0, 0.52], [0.9, 0.52], [1.15, 0.58], [1.5, 0.76], [1.95, 0.86], [2.35, 0.84], [2.7, 0.72], [H, 0.6]]);
+  const cz = sampler([[0, 0], [0.95, 0], [1.4, -0.08], [1.9, -0.16], [2.4, -0.2], [H, -0.2]]);
+  return { H, hx, hz, cz, topR: 0.62 };
+})();
+
+function createGlove(o) {
+  const group = new THREE.Group();
+  const mats = {
+    body: leather(o.color),
+    trim: new THREE.MeshStandardMaterial({ color: o.trim, roughness: 0.5 }),
+    strap: leather(o.strap || o.color),
+    lace: new THREE.MeshStandardMaterial({ color: o.lace || o.trim, roughness: 0.6 }),
+    dark: new THREE.MeshStandardMaterial({ color: '#0d0d0d', roughness: 0.9 }),
+    label: null, mark: null,
+  };
+  let parts = [];
+  const G = GLOVE;
+  const capF = y => { const tt = clamp((G.H - y) / G.topR, 0, 1); return Math.sqrt(1 - (1 - tt) * (1 - tt)); };
+
+  function build(opt) {
+    o = { ...o, ...opt };
+    parts.forEach(p => { p.geometry.dispose(); group.remove(p); });
+    parts = [];
+    const add = (geo, mat) => { const m = new THREE.Mesh(geo, mat); group.add(m); parts.push(m); return m; };
+    const body = add(loftY({ y0: 0, y1: G.H, hx: G.hx, hz: G.hz, cz: G.cz, topR: G.topR }), mats.body);
+
+    // thumb, pressed against the front-side of the fist
+    const thumbG = new THREE.CapsuleGeometry(0.29, 0.62, 16, 32);
+    thumbG.scale(0.78, 1, 1);
+    const thumb = add(thumbG, mats.body);
+    thumb.position.set(0.56, 1.72, -0.68); thumb.rotation.set(0.16, 0, 0.16);
+
+    // welt piping around the side seam
+    const seam = [];
+    for (let k = 0; k <= 60; k++) { const y = lerp(1.05, G.H - 0.002, k / 60); seam.push(new THREE.Vector3(G.hx(y) * capF(y) + 0.012, y, G.cz(y))); }
+    const seamPts = [...seam, ...seam.slice(0, -1).reverse().map(p => new THREE.Vector3(-p.x, p.y, p.z))];
+    add(tubeAlong(seamPts, 0.018, false, 200), mats.trim);
+
+    // cuff bottom piping and opening
+    add(tubeAlong(ellipsePts(0, 0.035, 0, 0.635, 0.535), 0.034, true), mats.trim);
+    const bottom = new THREE.CircleGeometry(1, 48); bottom.rotateX(Math.PI / 2); bottom.scale(0.6, 1, 0.5); bottom.translate(0, 0.004, 0);
+    add(bottom, mats.dark);
+
+    let labelTarget = body, labelY = 0.6;
+    if (o.closure === 'lace') {
+      const slit = add(new THREE.BoxGeometry(0.1, 0.84, 0.012), mats.dark);
+      slit.position.set(0, 0.56, -0.524);
+      for (let r = 0; r < 6; r++) {
+        const y = 0.2 + r * 0.14;
+        for (const sg of [1, -1]) {
+          const g = new THREE.CylinderGeometry(0.02, 0.02, 0.34, 8); g.rotateZ(Math.PI / 2);
+          const m = add(g, mats.lace); m.position.set(0, y + 0.03, -0.54); m.rotation.z = sg * 0.42;
+        }
+      }
+    } else {
+      const strap = add(loftY({ y0: 0.2, y1: 0.76, NU: 8, hx: () => 0.648, hz: () => 0.548, cz: () => 0, topR: 0 }), mats.strap);
+      labelTarget = strap; labelY = 0.48;
+      add(tubeAlong(ellipsePts(0, 0.215, 0, 0.652, 0.552), 0.016, true), mats.trim);
+      add(tubeAlong(ellipsePts(0, 0.745, 0, 0.652, 0.552), 0.016, true), mats.trim);
+    }
+
+    group.updateMatrixWorld(true);
+    const saved = group.matrixWorld.clone(); group.matrixWorld.identity();
+    group.children.forEach(c => c.updateMatrixWorld(true));
+    if (o.label) {
+      const tex = textTex(o.label, { serif: o.labelSerif, size: o.labelSize, track: o.labelTrack });
+      if (!mats.label) mats.label = decalMat(tex, o.labelColor);
+      mats.label.map = tex; mats.label.color.set(o.labelColor); mats.label.needsUpdate = true;
+      add(new DecalGeometry(labelTarget, new THREE.Vector3(0, labelY, 0.6), new THREE.Euler(0, 0, 0), new THREE.Vector3(1.0, 0.25, 0.4)), mats.label);
+    }
+    if (o.mark) {
+      if (!mats.mark) mats.mark = decalMat(textTex(o.mark, { serif: true, size: 170, track: 34 }), o.markColor);
+      add(new DecalGeometry(body, new THREE.Vector3(0, 2.0, 0.9), new THREE.Euler(-0.18, 0, 0), new THREE.Vector3(1.3, 0.33, 0.7)), mats.mark);
+    }
+    group.matrixWorld.copy(saved);
+  }
+
+  function setColors(c) {
+    const pairs = [[mats.body, c.color], [mats.strap, c.strap || c.color], [mats.trim, c.trim], [mats.lace, c.lace || c.trim]];
+    if (mats.label && c.labelColor) pairs.push([mats.label, c.labelColor]);
+    pairs.forEach(([m, hex]) => {
+      const col = new THREE.Color(hex);
+      if (REDUCE) { m.color.copy(col); return; }
+      const from = m.color.clone(); const t0 = performance.now();
+      const step = now => { const t = Math.min(1, (now - t0) / 420); m.color.copy(from).lerp(col, t * t * (3 - 2 * t)); if (t < 1) requestAnimationFrame(step); };
+      requestAnimationFrame(step);
+    });
+  }
+
+  build({});
+  return { group, build, setColors };
+}
+
+// ---------- stage
+function createStage(canvas, { target = [0, 1.2, 0], distance = 7.5, fov = 30, polar = [0.32, 0.5], azimuth = 0.6, autoRotate = 1.1, shadow = [3.4, 2] } = {}) {
+  let renderer;
+  try { renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'high-performance' }); }
+  catch (e) { return null; }
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.05;
+  const scene = new THREE.Scene();
+  const pmrem = new THREE.PMREMGenerator(renderer);
+  scene.environment = pmrem.fromScene(new RoomEnvironment(renderer), 0.04).texture;
+  scene.environmentIntensity = 0.85;
+  const key = new THREE.DirectionalLight('#fff4e4', 1.6); key.position.set(3, 6, 5); scene.add(key);
+  const rim = new THREE.DirectionalLight('#d9b37a', 2.4); rim.position.set(-5, 3, -4); scene.add(rim);
+  const fill = new THREE.DirectionalLight('#ffffff', 0.35); fill.position.set(-4, 1, 5); scene.add(fill);
+
+  const camera = new THREE.PerspectiveCamera(fov, 1, 0.1, 100);
+  const t = new THREE.Vector3(...target);
+  const pol = lerp(polar[0], polar[1], 0.5) * Math.PI;
+  camera.position.set(t.x + distance * Math.sin(pol) * Math.sin(azimuth), t.y + distance * Math.cos(pol), t.z + distance * Math.sin(pol) * Math.cos(azimuth));
+  const controls = new OrbitControls(camera, canvas);
+  controls.target.copy(t);
+  controls.enableZoom = false; controls.enablePan = false; controls.enableDamping = true; controls.dampingFactor = 0.08;
+  controls.minPolarAngle = polar[0] * Math.PI; controls.maxPolarAngle = polar[1] * Math.PI;
+  controls.autoRotate = !REDUCE && autoRotate > 0; controls.autoRotateSpeed = autoRotate;
+  controls.rotateSpeed = 0.8;
+  canvas.style.touchAction = 'pan-y';
+  controls.update();
+
+  const floor = new THREE.Mesh(new THREE.PlaneGeometry(shadow[0], shadow[1]), new THREE.MeshBasicMaterial({ map: shadowTex(), transparent: true, depthWrite: false }));
+  floor.rotation.x = -Math.PI / 2; floor.position.y = 0.002; scene.add(floor);
+
+  const ticks = [];
+  let visible = true, idleTimer = 0;
+  controls.addEventListener('start', () => { controls.autoRotate = false; clearTimeout(idleTimer); });
+  controls.addEventListener('end', () => { clearTimeout(idleTimer); idleTimer = setTimeout(() => { controls.autoRotate = !REDUCE && autoRotate > 0; }, 2600); });
+
+  function resize() {
+    const r = canvas.getBoundingClientRect();
+    const w = Math.max(1, r.width), h = Math.max(1, r.height);
+    renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix();
+  }
+  new ResizeObserver(resize).observe(canvas);
+  resize();
+  new IntersectionObserver(es => { visible = es[0].isIntersecting; }, { rootMargin: '120px' }).observe(canvas);
+
+  const clock = new THREE.Clock();
+  renderer.setAnimationLoop(() => {
+    const dt = Math.min(clock.getDelta(), 0.05);
+    if (!visible) return;
+    ticks.forEach(f => f(dt, clock.elapsedTime));
+    controls.update();
+    renderer.render(scene, camera);
+  });
+  return { scene, camera, controls, renderer, floor, onTick: f => ticks.push(f), resize };
+}
+
+// ---------- página: liga os palcos 3D à interface
+const GS = window.gsap;
+const C = window.CLINCH;
+const fontsReady = Promise.race([
+  Promise.all([
+    document.fonts.load('600 150px "Cormorant Garamond"'),
+    document.fonts.load('700 150px "Hanken Grotesk"'),
+  ]).catch(() => {}),
+  new Promise(r => setTimeout(r, 1800)),
+]);
+
+function fallback(stageEl) {
+  const d = document.createElement('div');
+  d.className = 'fallback';
+  d.textContent = 'O 3D não carregou neste navegador. Tente abrir a página no Chrome, Safari ou Edge atualizados.';
+  stageEl.appendChild(d);
+  const h = stageEl.querySelector('.hint'); if (h) h.hidden = true;
+}
+
+function tween(target, vars) { if (GS && !REDUCE) return GS.to(target, vars); Object.keys(vars).forEach(k => { if (k in target) target[k] = vars[k]; }); if (vars.onComplete) vars.onComplete(); }
+
+await fontsReady;
+
+// ---------- hero: luva da marca, gira, segue o mouse e dá jab
+(() => {
+  const el = document.getElementById('heroStage');
+  const stage = createStage(document.getElementById('heroCanvas'), { target: [0, 1.42, 0], distance: 8.6, polar: [0.38, 0.5], azimuth: 0.55, autoRotate: 1.5, shadow: [2.8, 2.4] });
+  if (!stage) return fallback(el);
+  const glove = createGlove({ color: '#a3121c', trim: '#f3efe6', strap: '#a3121c', closure: 'velcro', label: 'SUPPLY', labelSerif: true, labelSize: 140, labelTrack: 46, labelColor: '#d4b06f', mark: 'CLINCH', markColor: '#d4b06f' });
+  const tilt = new THREE.Group(), jab = new THREE.Group(), bob = new THREE.Group();
+  jab.add(glove.group); bob.add(jab); tilt.add(bob); stage.scene.add(tilt);
+
+  if (GS && !REDUCE) {
+    glove.group.rotation.y = -3.2; glove.group.scale.setScalar(0.72); bob.position.y = -0.5;
+    GS.to(glove.group.rotation, { y: 0, duration: 1.8, ease: 'power4.out', delay: 0.15 });
+    GS.to(glove.group.scale, { x: 1, y: 1, z: 1, duration: 1.6, ease: 'back.out(1.5)', delay: 0.15 });
+    GS.to(bob.position, { y: 0, duration: 1.4, ease: 'power3.out', delay: 0.15 });
+  }
+  let tx = 0, ty = 0, punching = false;
+  window.addEventListener('pointermove', e => {
+    const r = el.getBoundingClientRect();
+    if (r.bottom < 0 || r.top > innerHeight) return;
+    tx = ((e.clientY - r.top) / r.height - 0.5) * 0.22;
+    ty = ((e.clientX - r.left) / r.width - 0.5) * 0.5;
+  }, { passive: true });
+  stage.onTick((dt, t) => {
+    tilt.rotation.x += (tx - tilt.rotation.x) * 0.05;
+    tilt.rotation.z += (-ty * 0.3 - tilt.rotation.z) * 0.05;
+    if (!REDUCE && !punching) bob.position.y += (Math.sin(t * 1.3) * 0.05 - bob.position.y) * 0.08;
+  });
+
+  const canvas = stage.renderer.domElement;
+  let down = null;
+  canvas.addEventListener('pointerdown', e => { down = { x: e.clientX, y: e.clientY, t: performance.now() }; });
+  canvas.addEventListener('pointerup', e => {
+    if (!down) return;
+    const moved = Math.hypot(e.clientX - down.x, e.clientY - down.y), quick = performance.now() - down.t < 350;
+    down = null;
+    if (moved < 6 && quick) throwJab(e.clientX, e.clientY);
+  });
+  function throwJab(x, y) {
+    if (!GS || REDUCE || punching) return;
+    punching = true;
+    const dir = stage.camera.position.clone().sub(stage.controls.target).normalize();
+    GS.timeline({ onComplete: () => { punching = false; } })
+      .to(jab.position, { x: dir.x * 1.5, y: dir.y * 1.5 + 0.15, z: dir.z * 1.5, duration: 0.1, ease: 'power3.out' })
+      .to(jab.rotation, { x: -0.25, duration: 0.1, ease: 'power3.out' }, 0)
+      .to(jab.position, { x: 0, y: 0, z: 0, duration: 0.75, ease: 'elastic.out(1, 0.45)' })
+      .to(jab.rotation, { x: 0, duration: 0.75, ease: 'elastic.out(1, 0.45)' }, '<');
+    GS.fromTo(el, { x: -7 }, { x: 0, duration: 0.5, ease: 'elastic.out(1.2, 0.3)', delay: 0.08 });
+    const ring = document.createElement('span');
+    ring.className = 'shock'; ring.style.left = x + 'px'; ring.style.top = y + 'px';
+    document.body.appendChild(ring);
+    GS.fromTo(ring, { scale: 0.3, opacity: 1 }, { scale: 4, opacity: 0, duration: 0.7, ease: 'power2.out', delay: 0.06, onComplete: () => ring.remove() });
+  }
+})();
+
+// ---------- configurador de sapatilhas, com pontos de detalhe
+(() => {
+  const el = document.getElementById('shoeStage');
+  const stage = createStage(document.getElementById('shoeCanvas'), { target: [0, 1.1, 0], distance: 7.7, polar: [0.34, 0.5], azimuth: 0.6, autoRotate: 0.9, shadow: [4, 2.4] });
+  if (!stage) return fallback(el);
+  const s0 = C.state;
+  const shoe = createShoe(s0.model, C.SHOES[s0.model].colors[s0.color]);
+  const spin = new THREE.Group(); spin.add(shoe.group); stage.scene.add(spin);
+
+  const HOTS = {
+    hyperko: [
+      { p: [-0.95, 2.12, 0.34], n: [0, 0.2, 1], t: 'Cano alto, suporte total do tornozelo' },
+      { p: [0.05, 1.44, 0.1], n: [0.6, 0.8, 0], t: 'Amarração dupla' },
+      { p: [-0.32, 0.82, 0.42], n: [0, 0, 1], t: 'A mais leve que a Nike já fez' },
+    ],
+    boxhog: [
+      { p: [-0.7, 1.35, 0.36], n: [0, 0, 1], t: 'Cabedal em mesh respirável' },
+      { p: [0.55, 0.18, 0.52], n: [0, 0, 1], t: 'Entressola EVA para estabilidade' },
+      { p: [1.36, 0.1, 0.28], n: [1, 0, 0.5], t: 'Solado com ponto de pivô' },
+    ],
+    machomai: [
+      { p: [0.45, 0.13, 0.52], n: [0, 0, 1], t: 'Sola fina, contato máximo com o solo' },
+      { p: [-0.5, 1.05, 0.41], n: [0, 0, 1], t: 'Leve e respirável' },
+      { p: [1.22, 0.1, 0.36], n: [0.8, 0, 0.6], t: 'Tração para pivotar sem travar o joelho' },
+    ],
+  };
+  const host = document.getElementById('hots');
+  let hots = [];
+  function makeHots(model) {
+    host.innerHTML = '';
+    hots = HOTS[model].map((h, i) => {
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'hot'; b.id = 'hot-' + model + '-' + i;
+      b.innerHTML = '<span class="dot"></span><span class="lbl"></span>';
+      b.querySelector('.lbl').textContent = h.t;
+      b.setAttribute('aria-label', h.t);
+      b.addEventListener('click', () => { const open = !b.classList.contains('open'); hots.forEach(x => x.el.classList.remove('open')); b.classList.toggle('open', open); });
+      host.appendChild(b);
+      return { el: b, p: new THREE.Vector3(...h.p), n: new THREE.Vector3(...h.n).normalize() };
+    });
+  }
+  makeHots(s0.model);
+  const v = new THREE.Vector3(), nw = new THREE.Vector3(), cd = new THREE.Vector3();
+  stage.onTick(() => {
+    const r = el.getBoundingClientRect();
+    hots.forEach(h => {
+      v.copy(h.p); spin.localToWorld(v);
+      nw.copy(h.n).applyQuaternion(spin.quaternion);
+      cd.copy(stage.camera.position).sub(v).normalize();
+      const away = nw.dot(cd) < 0.18 || spin.scale.x < 0.98;
+      v.project(stage.camera);
+      const x = (v.x * 0.5 + 0.5) * r.width, y = (-v.y * 0.5 + 0.5) * r.height;
+      h.el.style.transform = 'translate(' + (x - 11).toFixed(1) + 'px,' + (y - 11).toFixed(1) + 'px)';
+      h.el.classList.toggle('away', away);
+      h.el.classList.toggle('flip', x > r.width * 0.58);
+      if (h.el.classList.contains('flip')) h.el.style.transform = 'translate(calc(' + (x + 11).toFixed(1) + 'px - 100%),' + (y - 11).toFixed(1) + 'px)';
+    });
+  });
+
+  let busy = null;
+  document.addEventListener('clinch:shoe', e => {
+    const { model, cw, modelChanged } = e.detail;
+    if (!modelChanged) { shoe.setColorway(cw); return; }
+    if (!GS || REDUCE) { shoe.show(model, cw); makeHots(model); return; }
+    if (busy) busy.kill();
+    busy = GS.timeline()
+      .to(spin.rotation, { y: '+=' + Math.PI, duration: 0.35, ease: 'power2.in' })
+      .to(spin.scale, { x: 0.8, y: 0.8, z: 0.8, duration: 0.35, ease: 'power2.in' }, 0)
+      .add(() => { shoe.show(model, cw); makeHots(model); })
+      .to(spin.rotation, { y: '+=' + Math.PI, duration: 0.7, ease: 'power3.out' })
+      .to(spin.scale, { x: 1, y: 1, z: 1, duration: 0.7, ease: 'back.out(1.7)' }, '<');
+  });
+})();
+
+// ---------- luvas
+(() => {
+  const el = document.getElementById('gloveStage');
+  const stage = createStage(document.getElementById('gloveCanvas'), { target: [0, 1.42, 0], distance: 8.8, polar: [0.36, 0.5], azimuth: 0.9, autoRotate: 1.2, shadow: [2.8, 2.4] });
+  if (!stage) return fallback(el);
+  const first = C.GLOVES[C.state.glove].look;
+  const glove = createGlove({ ...first });
+  const spin = new THREE.Group(); spin.add(glove.group); stage.scene.add(spin);
+  let busy = null;
+  document.addEventListener('clinch:glove', e => {
+    const look = C.GLOVES[e.detail.key].look;
+    const opts = { closure: look.closure, label: look.label, labelColor: look.labelColor, labelSize: look.labelSize, labelTrack: look.labelTrack };
+    if (!GS || REDUCE) { glove.build(opts); glove.setColors(look); return; }
+    if (busy) busy.kill();
+    busy = GS.timeline()
+      .to(spin.rotation, { y: '+=' + Math.PI, duration: 0.3, ease: 'power2.in' })
+      .to(spin.position, { y: -0.25, duration: 0.3, ease: 'power2.in' }, 0)
+      .add(() => { glove.build(opts); glove.setColors(look); })
+      .to(spin.rotation, { y: '+=' + Math.PI, duration: 0.8, ease: 'power3.out' })
+      .to(spin.position, { y: 0, duration: 0.8, ease: 'back.out(2)' }, '<');
+  });
+})();
+
+</script>
+
+</body>
+</html>
