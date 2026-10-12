@@ -3,230 +3,175 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Hanken+Grotesk:wght@400;500;600;700&display=swap">
 <style>
-/* Vitrine noturna. A linguagem dos flyers da loja (preto, wordmark serifado bem espaçado, fios e preços dourados)
-   vira uma vitrine: o produto é a foto, iluminada, e o texto fica quieto em volta.
-   O momento ousado é um só: a sala das sapatilhas, que corre na horizontal com o scroll. */
+/* O provador. A identidade dos flyers (preto, wordmark serifado espaçado, dourado nos preços) num lugar só:
+   uma tela, sem rolar. Quem entra escolhe categoria, modelo, cor e número e vê o produto mudar sob a luz.
+   O momento autoral é a troca de luz: o produto sai, o nome atrás dele muda e o próximo sobe para o foco.
+   Guia de onças e como comprar abrem em painéis por cima, sem tirar a pessoa da vitrine. */
 :root {
-  --ink: #000;            /* preto dos flyers */
+  --ink: #000;
   --ink-2: #0d0c0b;
   --ink-3: #171512;
   --line: #2a2724;
-  --gold: #c9a66b;        /* dourado do "SUPPLY" e dos preços */
+  --gold: #c9a66b;
   --gold-dim: #7d6848;
   --fg: #f2eee7;
   --fg-dim: #a39c92;
   --f-serif: "Cormorant Garamond", "Times New Roman", Georgia, serif;
   --f-sans: "Hanken Grotesk", "Helvetica Neue", Arial, sans-serif;
-  --ease: cubic-bezier(.2, .7, .1, 1);
-  --nav-h: 72px;
+  --ease: cubic-bezier(.16, 1, .3, 1);
+  --nav-h: 76px;
+  --foot-h: 52px;
   color-scheme: dark;
 }
 *, *::before, *::after { box-sizing: border-box; }
-html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
-body { margin: 0; background: var(--ink); color: var(--fg); font-family: var(--f-sans); font-size: 17px; line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: clip; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--ink); color: var(--fg); font-family: var(--f-sans); font-size: 16px; line-height: 1.55; -webkit-font-smoothing: antialiased; overflow-x: clip; }
+::selection { background: var(--gold); color: #000; }
 img { display: block; max-width: 100%; }
 a { color: inherit; }
-button { font: inherit; color: inherit; }
+button { font: inherit; color: inherit; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+.sheet, .panel, .rail { overscroll-behavior: contain; }
 :focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
-@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { animation: none !important; transition: none !important; } }
-.wrap { max-width: 1280px; margin-inline: auto; padding-inline: clamp(16px, 4vw, 48px); }
 h1, h2, h3 { font-family: var(--f-serif); font-weight: 600; line-height: 1; margin: 0; text-wrap: balance; }
-h2 { font-size: clamp(42px, 6vw, 80px); letter-spacing: -.01em; }
 p { margin: 0; text-wrap: pretty; }
 .price { font-family: var(--f-serif); font-weight: 600; color: var(--gold); font-variant-numeric: lining-nums tabular-nums; line-height: 1; white-space: nowrap; }
 .price small { font-size: .55em; margin-right: .25em; }
-.dim { color: var(--fg-dim); }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+* { scrollbar-width: thin; scrollbar-color: var(--line) transparent; }
 
 .btn { position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 10px; font-weight: 600; font-size: 15px; text-decoration: none; min-height: 48px; padding: 12px 26px; border: 1px solid var(--gold); border-radius: 999px; cursor: pointer; background: transparent; transition-property: background-color, color, border-color, scale; transition-duration: .25s; transition-timing-function: var(--ease); }
 .btn:active { scale: .96; }
 .btn-solid { background: var(--gold); color: #000; }
 .btn-solid:hover { background: var(--fg); border-color: var(--fg); }
 .btn-ghost:hover { background: var(--gold); color: #000; }
+.link { background: none; border: 0; padding: 0; cursor: pointer; color: var(--fg-dim); text-decoration: underline; text-decoration-color: var(--gold-dim); text-underline-offset: 4px; transition: color .2s; }
+.link:hover { color: var(--fg); text-decoration-color: var(--gold); }
 
-/* Wordmark fiel aos flyers */
+/* Wordmark dos flyers */
 .mark { display: inline-flex; flex-direction: column; align-items: center; text-decoration: none; line-height: 1; }
 .mark b { font-family: var(--f-serif); font-weight: 500; font-size: 24px; letter-spacing: .42em; margin-right: -.42em; }
 .mark i { font-style: normal; font-size: 8.5px; font-weight: 500; letter-spacing: .62em; margin-right: -.62em; color: var(--gold); margin-top: 6px; }
 
+/* ESTRUTURA: uma tela */
+.app { height: 100svh; min-height: 600px; display: grid; grid-template-rows: var(--nav-h) minmax(0, 1fr) var(--foot-h); }
+
 /* NAV */
-.nav { position: fixed; inset: 0 0 auto 0; z-index: 30; padding-top: env(safe-area-inset-top, 0px); transition: background-color .3s, border-color .3s, translate .4s var(--ease); border-bottom: 1px solid transparent; }
-.nav.solid { background: color-mix(in srgb, var(--ink) 82%, transparent); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-color: var(--line); }
-.nav .wrap { display: flex; align-items: center; justify-content: space-between; gap: 24px; height: var(--nav-h); }
-.nav ul { display: flex; gap: 32px; list-style: none; margin: 0; padding: 0; font-size: 15px; }
-.nav ul a { text-decoration: none; color: var(--fg-dim); transition: color .2s; padding-block: 10px; }
-.nav ul a:hover { color: var(--fg); }
-.nav .btn { min-height: 40px; padding: 8px 18px; font-size: 14px; }
-@media (max-width: 900px) { .nav ul { display: none; } }
+.nav { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 24px; padding: 0 clamp(16px, 3vw, 40px); padding-top: env(safe-area-inset-top, 0px); border-bottom: 1px solid var(--line); position: relative; z-index: 5; }
+.nav .mark { justify-self: start; }
+.nav .end { justify-self: end; display: flex; align-items: center; gap: 22px; }
+.nav .end .btn { min-height: 40px; padding: 8px 18px; font-size: 14px; }
+.cats { position: relative; display: grid; grid-template-columns: 1fr 1fr; padding: 4px; border: 1px solid var(--line); border-radius: 999px; background: var(--ink-2); }
+.cats button { position: relative; z-index: 1; min-height: 40px; padding: 6px 26px; background: none; border: 0; border-radius: 999px; cursor: pointer; font-weight: 600; font-size: 15px; color: var(--fg-dim); transition: color .3s; }
+.cats button[aria-pressed=true] { color: #000; }
+.cats .pill { position: absolute; z-index: 0; top: 4px; bottom: 4px; left: 4px; border-radius: 999px; background: var(--gold); transition: translate .5s var(--ease), width .5s var(--ease); }
 
-/* HERO: o flyer da loja, vivo */
-.hero { position: relative; min-height: 100svh; display: grid; grid-template-rows: 1fr auto; padding-top: calc(var(--nav-h) + env(safe-area-inset-top, 0px)); overflow: hidden; isolation: isolate; }
-.hero::before { content: ""; position: absolute; inset: auto -20% -30% -20%; height: 75%; z-index: -1; background: radial-gradient(50% 60% at 50% 70%, color-mix(in srgb, var(--gold) 13%, transparent), transparent 70%); pointer-events: none; }
-.hero-top { display: grid; justify-items: center; align-content: center; text-align: center; gap: 22px; padding-block: clamp(24px, 6vh, 64px) clamp(8px, 3vh, 32px); }
-.hero h1 { display: flex; flex-direction: column; align-items: center; font-weight: 500; }
-.hero h1 .w { font-size: clamp(54px, 11.5vw, 168px); letter-spacing: var(--track, .34em); margin-right: calc(-1 * var(--track, .34em)); line-height: .9; white-space: nowrap; }
-.hero h1 .s { font-family: var(--f-sans); font-size: clamp(11px, 1.35vw, 18px); font-weight: 500; letter-spacing: .9em; margin-right: -.9em; color: var(--gold); margin-top: clamp(10px, 1.6vw, 22px); }
-.hero .tag { font-size: clamp(16px, 1.6vw, 19px); color: var(--fg-dim); max-width: 34em; }
-.hero .tag strong { color: var(--fg); font-weight: 600; }
-.shelf { position: relative; width: 100%; display: grid; grid-template-columns: 1fr 1.25fr 1fr; align-items: end; gap: clamp(8px, 3vw, 48px); padding-bottom: clamp(28px, 5vh, 56px); }
-.boot { display: grid; justify-items: center; text-align: center; text-decoration: none; gap: 0; }
-.boot .pic { position: relative; width: 100%; aspect-ratio: 4 / 3; display: grid; align-items: end; justify-items: center; }
-.boot .pic::after { content: ""; position: absolute; left: -22%; right: -22%; bottom: 0; height: 1px; background: var(--gold-dim); transform-origin: center; scale: var(--shelf, 1) 1; }
-.boot:first-child .pic::after { left: -40%; background: linear-gradient(90deg, transparent, var(--gold-dim) 45%); }
-.boot:last-child .pic::after { right: -40%; background: linear-gradient(90deg, var(--gold-dim) 55%, transparent); }
-.boot .pic img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; object-position: 50% 100%; transition: translate .5s var(--ease); filter: drop-shadow(0 18px 24px rgba(0,0,0,.7)); }
-.boot .refl { position: relative; width: 100%; height: 40px; overflow: hidden; opacity: .16; pointer-events: none; }
-.boot .refl img { width: 100%; aspect-ratio: 4 / 3; object-fit: contain; object-position: 50% 100%; transform: scaleY(-1); transform-origin: 50% 0; -webkit-mask-image: linear-gradient(180deg, transparent 72%, #000 100%); mask-image: linear-gradient(180deg, transparent 72%, #000 100%); position: absolute; left: 0; bottom: 0; }
-.boot .name { font-family: var(--f-serif); font-weight: 600; font-size: clamp(17px, 2vw, 28px); line-height: 1.1; margin-top: 4px; }
-.boot .price { font-size: clamp(16px, 1.8vw, 24px); margin-top: 6px; }
-.boot:hover .pic img, .boot:focus-visible .pic img { translate: 0 -10px; }
-@media (max-width: 700px) {
-  .hero { min-height: 92svh; }
-  .shelf { grid-template-columns: 1fr 1.3fr 1fr; gap: 8px; padding-inline: 14px; }
-  .boot .pic { aspect-ratio: 1 / 1; }
-  .boot .refl { height: 22px; }
-}
+/* SALA: lista | foto | ficha */
+.room { display: grid; grid-template-columns: minmax(230px, 290px) minmax(0, 1fr) minmax(320px, 400px); min-height: 0; position: relative; }
 
-/* SAPATILHAS: sala que corre na horizontal */
-.show { position: relative; background: var(--ink); border-top: 1px solid var(--line); }
-.show-head { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 16px 40px; padding-top: clamp(40px, 6vw, 72px); }
-.show-head h2 { font-size: clamp(38px, 4.6vw, 64px); }
-.show-head p { color: var(--fg-dim); margin-top: 10px; }
-.models { display: flex; gap: 4px; list-style: none; margin: 0; padding: 0; }
-.models button { position: relative; background: none; border: 0; cursor: pointer; padding: 10px 14px 14px; font-family: var(--f-serif); font-weight: 600; font-size: 21px; color: var(--fg-dim); transition: color .25s; white-space: nowrap; }
-.models button::after { content: ""; position: absolute; left: 14px; right: 14px; bottom: 4px; height: 1px; background: var(--gold); transform-origin: left; scale: var(--p, 0) 1; }
-.models button[aria-current=true] { color: var(--fg); }
-.models button:hover { color: var(--fg); }
-.track { display: flex; }
-.panel { position: relative; flex: none; width: 100vw; display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(300px, 1fr); align-items: center; gap: clamp(20px, 4vw, 64px); padding: 0 max(clamp(16px, 4vw, 48px), calc((100vw - 1280px) / 2 + 48px)); overflow: hidden; }
-.ghost { position: absolute; left: 0; top: 50%; translate: 0 -58%; z-index: 0; font-family: var(--f-serif); font-weight: 600; font-size: 21vw; line-height: 1; letter-spacing: .08em; white-space: nowrap; color: transparent; -webkit-text-stroke: 1px color-mix(in srgb, var(--gold) 20%, transparent); pointer-events: none; user-select: none; padding-left: 3vw; }
-.pv { position: relative; z-index: 1; display: grid; gap: 20px; min-width: 0; }
-.photo { position: relative; display: block; width: 100%; aspect-ratio: 16 / 11; max-height: calc(100svh - var(--nav-h) - 300px); min-height: 260px; padding: 0; border: 0; background: none; cursor: zoom-in; perspective: 1100px; }
-.photo .tilt { position: absolute; inset: 0; transform-style: preserve-3d; transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); transition: transform .5s var(--ease); }
-.photo.live .tilt { transition: transform .12s linear; }
-.photo .layer { position: absolute; inset: 0; display: grid; place-items: center; }
-.photo .layer img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 30px 34px rgba(0,0,0,.75)); }
-.photo .sheen { position: absolute; inset: 0; pointer-events: none; -webkit-mask-size: contain; mask-size: contain; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; -webkit-mask-position: center; mask-position: center; background: radial-gradient(circle at var(--mx, 30%) var(--my, 20%), rgba(255, 240, 215, .32), transparent 38%); mix-blend-mode: soft-light; opacity: 0; transition: opacity .4s; }
-.photo.live .sheen { opacity: 1; }
-.photo .floor { position: absolute; left: 14%; right: 14%; bottom: 1%; height: 9%; border-radius: 50%; background: radial-gradient(closest-side, rgba(201, 166, 107, .22), transparent); transform: translateX(calc(var(--ry, 0deg) / 1deg * -3px)); transition: transform .5s var(--ease); }
-.thumbs { display: flex; flex-wrap: wrap; gap: 6px; }
-.th { position: relative; width: 74px; height: 54px; padding: 4px; border: 0; background: none; cursor: pointer; border-radius: 10px; transition: background-color .2s; }
-.th img { width: 100%; height: 100%; object-fit: contain; }
-.th::after { content: ""; position: absolute; left: 12px; right: 12px; bottom: -2px; height: 2px; border-radius: 2px; background: var(--gold); scale: 0 1; transition: scale .3s var(--ease); }
-.th:hover { background: var(--ink-3); }
-.th[aria-pressed=true]::after { scale: 1 1; }
-.info { position: relative; z-index: 1; display: grid; gap: 16px; align-content: center; min-width: 0; }
-.info .brand { color: var(--gold); font-size: 15px; font-weight: 500; }
-.info h3 { font-size: clamp(46px, 5.2vw, 76px); }
-.info .price { font-size: clamp(34px, 3.4vw, 46px); }
-.info .desc { color: var(--fg-dim); max-width: 30em; }
-.info .cor { font-size: 15px; color: var(--fg-dim); }
-.info .cor strong { color: var(--fg); font-weight: 600; }
-.sizes { display: flex; flex-wrap: wrap; gap: 6px; }
-.sizes button { min-width: 44px; height: 44px; padding: 0 8px; border-radius: 999px; border: 1px solid var(--line); background: none; cursor: pointer; font-variant-numeric: tabular-nums; font-size: 15px; transition: border-color .2s, background-color .2s, color .2s; }
-.sizes button:hover { border-color: var(--gold-dim); }
-.sizes button[aria-pressed=true] { background: var(--fg); border-color: var(--fg); color: #000; font-weight: 600; }
-.sizes-lbl { font-size: 15px; color: var(--fg-dim); }
-.info .btn { justify-self: start; margin-top: 6px; }
-.note { font-size: 13.5px; color: var(--fg-dim); }
-@media (min-width: 901px) {
-  .show.pinned { height: 100svh; display: grid; grid-template-rows: auto minmax(0, 1fr); grid-template-columns: minmax(0, 1fr); padding-top: var(--nav-h); overflow: hidden; }
-  .show.pinned .show-head { padding-top: clamp(14px, 2.4vh, 28px); }
-  .show.pinned .track { min-height: 0; }
-  .show.pinned .panel { height: 100%; }
-}
-@media (max-width: 900px) {
-  .track { flex-direction: column; }
-  .panel { width: auto; grid-template-columns: 1fr; padding: clamp(48px, 10vw, 80px) clamp(16px, 4vw, 48px); border-bottom: 1px solid var(--line); gap: 22px; }
-  .panel:last-child { border-bottom: 0; }
-  .ghost { top: clamp(24px, 6vw, 48px); translate: 0 0; font-size: 25vw; }
-  .photo { max-height: none; min-height: 0; aspect-ratio: 4 / 3; margin-top: 8vw; }
-  .models { display: none; }
-}
+/* lista de modelos */
+.rail { position: relative; border-right: 1px solid var(--line); overflow: auto; padding: clamp(18px, 3vh, 32px) 0; display: flex; flex-direction: column; justify-content: center; }
+.rail h2 { font-family: var(--f-sans); font-size: 13px; font-weight: 600; color: var(--fg-dim); letter-spacing: .02em; padding: 18px clamp(16px, 2vw, 28px) 6px; }
+.rail h2:first-child { padding-top: 0; }
+.rail ul { list-style: none; margin: 0; padding: 0; }
+.it { position: relative; width: 100%; display: grid; grid-template-columns: 64px 1fr; grid-template-rows: auto auto; align-items: center; column-gap: 14px; padding: 10px clamp(16px, 2vw, 28px); background: none; border: 0; text-align: left; cursor: pointer; }
+.it .tn { grid-row: 1 / span 2; width: 64px; height: 50px; display: grid; place-items: center; }
+.it .tn img { max-width: 100%; max-height: 100%; object-fit: contain; transition: scale .5s var(--ease), rotate .5s var(--ease), opacity .3s; opacity: .55; }
+.it b { font-family: var(--f-serif); font-weight: 600; font-size: 22px; line-height: 1.05; color: var(--fg-dim); transition: color .25s; }
+.it .price { font-size: 17px; margin-top: 4px; opacity: .7; transition: opacity .25s; }
+.it::before { content: ""; position: absolute; left: 0; top: 14px; bottom: 14px; width: 2px; background: var(--gold); scale: 1 0; transition: scale .45s var(--ease); }
+.it:hover b, .it[aria-pressed=true] b { color: var(--fg); }
+.it:hover .tn img, .it[aria-pressed=true] .tn img { opacity: 1; }
+.it[aria-pressed=true] .price { opacity: 1; }
+.it[aria-pressed=true]::before { scale: 1 1; }
+@media (hover: hover) { .it:hover .tn img { scale: 1.12; rotate: -5deg; } }
 
-/* LUVAS */
-.gloves { padding-block: clamp(90px, 12vw, 150px); background: var(--ink-2); border-top: 1px solid var(--line); }
-.gloves-head { display: grid; grid-template-columns: 1fr 1fr; gap: 20px 48px; align-items: end; margin-bottom: clamp(40px, 6vw, 72px); }
-.gloves-head p { color: var(--fg-dim); max-width: 32em; }
-.houses { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 5vw, 80px); }
-.house h3 { font-size: clamp(34px, 3.6vw, 48px); letter-spacing: .04em; }
-.house .from { display: block; color: var(--fg-dim); font-size: 15px; margin-top: 10px; }
-.house .feel { color: var(--fg-dim); margin-top: 14px; max-width: 28em; }
-.house ul { list-style: none; margin: 28px 0 0; padding: 0; border-top: 1px solid var(--gold-dim); }
-.gl { position: relative; display: grid; grid-template-columns: 76px 1fr auto; align-items: center; gap: 4px 20px; padding: 18px 0; border-bottom: 1px solid var(--line); text-decoration: none; }
-.gl .gpic { grid-column: 1; grid-row: 1 / span 2; width: 76px; height: 64px; display: grid; place-items: center; }
-.gl .gpic img { max-width: 100%; max-height: 100%; object-fit: contain; filter: drop-shadow(0 8px 10px rgba(0,0,0,.6)); transition: scale .45s var(--ease), rotate .45s var(--ease); }
-.gl b { grid-column: 2; font-weight: 600; font-size: 18px; line-height: 1.3; }
-.gl .use { grid-column: 2; color: var(--fg-dim); font-size: 15px; }
-.gl .end { grid-column: 3; grid-row: 1 / span 2; position: relative; overflow: hidden; height: 36px; display: grid; justify-items: end; }
-.gl .end > * { grid-area: 1 / 1; display: flex; align-items: center; height: 36px; transition: translate .35s var(--ease), opacity .35s; }
-.gl .end .price { font-size: 30px; }
-.gl .end .go { font-weight: 600; font-size: 15px; color: var(--gold); translate: 0 100%; opacity: 0; }
-.gl::before { content: ""; position: absolute; left: 0; bottom: -1px; height: 1px; width: 100%; background: var(--gold); transform-origin: left; scale: 0 1; transition: scale .45s var(--ease); }
-@media (hover: hover) {
-  .gl:hover .end .price { translate: 0 -100%; opacity: 0; }
-  .gl:hover .end .go { translate: 0 0; opacity: 1; }
-  .gl:hover::before { scale: 1 1; }
-  .gl:hover .gpic img { scale: 1.12; rotate: -6deg; }
-}
-.float { position: fixed; left: 0; top: 0; z-index: 25; width: 300px; height: 240px; margin: -120px 0 0 -150px; pointer-events: none; opacity: 0; scale: .6; }
-.float img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 24px 30px rgba(0,0,0,.7)); }
-.gloves .note { margin-top: 36px; }
-@media (max-width: 860px) { .gloves-head, .houses { grid-template-columns: 1fr; } }
-@media (max-width: 480px) { .gl { grid-template-columns: 60px 1fr auto; gap: 4px 14px; } .gl .gpic { width: 60px; height: 52px; } .gl .end .price { font-size: 24px; } }
-@media (hover: none), (pointer: coarse) { .float { display: none; } }
+/* palco */
+.stage { position: relative; min-width: 0; min-height: 0; overflow: hidden; display: grid; grid-template-rows: minmax(0, 1fr) auto; isolation: isolate; }
+.stage::before { content: ""; position: absolute; inset: 0; z-index: -2; background: radial-gradient(48% 42% at 50% 60%, color-mix(in srgb, var(--gold) 15%, transparent), transparent 72%); opacity: var(--light, 1); }
+.ghost { position: absolute; z-index: -1; left: 50%; top: 46%; translate: -50% -50%; font-family: var(--f-serif); font-weight: 600; font-size: clamp(90px, 15vw, 260px); line-height: 1; letter-spacing: .06em; white-space: nowrap; color: transparent; -webkit-text-stroke: 1px color-mix(in srgb, var(--gold) 26%, transparent); pointer-events: none; user-select: none; }
+.shot { position: relative; margin: clamp(10px, 3vh, 36px) clamp(52px, 6vw, 96px) 0; min-height: 0; padding: 0; border: 0; background: none; cursor: zoom-in; perspective: 1200px; touch-action: pan-y; }
+.shot .tilt { position: absolute; inset: 0; transform-style: preserve-3d; transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); transition: transform .6s var(--ease); }
+.shot.live .tilt { transition: transform .12s linear; }
+.shot .layer { position: absolute; inset: 0; }
+.shot .layer img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 34px 34px rgba(0,0,0,.8)); }
+.shot .sheen { position: absolute; inset: 0; pointer-events: none; -webkit-mask-size: contain; mask-size: contain; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; -webkit-mask-position: center; mask-position: center; background: radial-gradient(circle at var(--mx, 30%) var(--my, 20%), rgba(255, 240, 215, .34), transparent 38%); mix-blend-mode: soft-light; opacity: 0; transition: opacity .4s; }
+.shot.live .sheen { opacity: 1; }
+.floor { position: absolute; z-index: -1; left: 22%; right: 22%; bottom: 84px; height: 7%; border-radius: 50%; background: radial-gradient(closest-side, rgba(201, 166, 107, .28), transparent); }
+.arrow { position: absolute; top: 44%; z-index: 2; width: 48px; height: 48px; border-radius: 50%; border: 1px solid var(--line); background: color-mix(in srgb, var(--ink) 60%, transparent); display: grid; place-items: center; cursor: pointer; transition: border-color .2s, background-color .2s, scale .2s; }
+.arrow:hover { border-color: var(--gold); }
+.arrow:active { scale: .92; }
+.arrow svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.arrow.prev { left: clamp(10px, 1.5vw, 24px); }
+.arrow.next { right: clamp(10px, 1.5vw, 24px); }
+.arrow[hidden] { display: none; }
+.strip { display: flex; align-items: center; justify-content: center; gap: 4px; padding: 14px 16px 18px; min-height: 84px; }
+.sw { position: relative; width: 70px; height: 52px; padding: 4px; border: 0; background: none; cursor: pointer; border-radius: 10px; transition: background-color .2s; }
+.sw img { width: 100%; height: 100%; object-fit: contain; }
+.sw::after { content: ""; position: absolute; left: 14px; right: 14px; bottom: -3px; height: 2px; border-radius: 2px; background: var(--gold); scale: 0 1; transition: scale .35s var(--ease); }
+.sw:hover { background: var(--ink-3); }
+.sw[aria-pressed=true]::after { scale: 1 1; }
+.strip .one { color: var(--fg-dim); font-size: 14px; }
 
-/* GUIA DE ONÇAS */
-.guide { padding-block: clamp(90px, 12vw, 150px); border-top: 1px solid var(--line); }
-.guide .wrap { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(36px, 6vw, 96px); align-items: center; }
-.guide .lede { color: var(--fg-dim); margin-top: 22px; max-width: 30em; }
-.oz-big { margin-top: clamp(28px, 4vw, 48px); display: flex; align-items: baseline; gap: 14px; }
-.oz-big .n { font-family: var(--f-serif); font-weight: 700; font-size: clamp(120px, 16vw, 220px); line-height: .78; font-variant-numeric: lining-nums tabular-nums; display: inline-block; }
-.oz-big .u { font-family: var(--f-serif); font-size: clamp(34px, 4vw, 56px); color: var(--gold); }
-.calc { display: grid; gap: 34px; }
+/* ficha */
+.panel { border-left: 1px solid var(--line); overflow: auto; padding: clamp(20px, 4vh, 44px) clamp(20px, 2.4vw, 36px); display: flex; flex-direction: column; justify-content: center; gap: 0; }
+.panel h1 { font-size: clamp(44px, 4.4vw, 68px); letter-spacing: -.01em; }
+.panel h1.long { font-size: clamp(36px, 3.2vw, 48px); }
+.panel .by { color: var(--gold); font-size: 15px; font-weight: 500; margin-top: 10px; }
+.panel .big { font-size: clamp(36px, 3vw, 46px); margin-top: 22px; }
+.panel .desc { color: var(--fg-dim); margin-top: 16px; max-width: 34em; }
+.opt { margin-top: 24px; }
+.opt .lbl { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; font-size: 14px; color: var(--fg-dim); margin-bottom: 10px; }
+.opt .lbl strong { color: var(--fg); font-weight: 600; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chips button { min-width: 44px; min-height: 44px; padding: 0 10px; border-radius: 999px; border: 1px solid var(--line); background: none; cursor: pointer; font-size: 15px; font-variant-numeric: tabular-nums; transition: border-color .2s, background-color .2s, color .2s; }
+.chips button:hover { border-color: var(--gold-dim); }
+.chips button[aria-pressed=true] { background: var(--fg); color: #000; border-color: var(--fg); }
+.panel .cta { margin-top: 28px; display: grid; gap: 12px; justify-items: start; }
+.panel .note { font-size: 13.5px; color: var(--fg-dim); }
+
+/* rodapé da tela */
+.foot { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 0 clamp(16px, 3vw, 40px); border-top: 1px solid var(--line); font-size: 13.5px; color: var(--fg-dim); }
+.foot .keys { display: flex; gap: 16px; }
+.foot kbd { font-family: var(--f-sans); font-size: 12px; padding: 1px 7px; border: 1px solid var(--line); border-radius: 6px; color: var(--fg); margin-right: 4px; }
+
+/* PAINÉIS: guia de onças e como comprar */
+.veil { position: fixed; inset: 0; z-index: 40; background: rgba(0,0,0,.6); opacity: 0; visibility: hidden; transition: opacity .4s var(--ease), visibility 0s .4s; }
+.veil.on { opacity: 1; visibility: visible; transition: opacity .4s var(--ease); }
+.sheet { position: fixed; top: 0; right: 0; bottom: 0; z-index: 41; width: min(560px, 100vw); background: var(--ink-2); border-left: 1px solid var(--line); overflow: auto; padding: calc(28px + env(safe-area-inset-top, 0px)) clamp(22px, 3vw, 44px) calc(36px + env(safe-area-inset-bottom, 0px)); translate: 100% 0; visibility: hidden; transition: translate .55s var(--ease), visibility 0s .55s; }
+.sheet.on { translate: 0 0; visibility: visible; transition: translate .55s var(--ease); }
+.sheet .top { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 26px; }
+.sheet h2 { font-size: clamp(38px, 4vw, 52px); }
+.x { width: 48px; height: 48px; flex: none; border-radius: 50%; border: 1px solid var(--line); background: none; cursor: pointer; display: grid; place-items: center; transition: border-color .2s; }
+.x:hover { border-color: var(--gold); }
+.x svg { width: 16px; height: 16px; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; fill: none; }
+.sheet .lede { color: var(--fg-dim); }
+
+.oz-big { margin: 26px 0 30px; display: flex; align-items: baseline; gap: 12px; }
+.oz-big .n { font-family: var(--f-serif); font-weight: 700; font-size: clamp(110px, 14vw, 170px); line-height: .78; font-variant-numeric: lining-nums tabular-nums; display: inline-block; }
+.oz-big .u { font-family: var(--f-serif); font-size: 44px; color: var(--gold); }
+.calc { display: grid; gap: 30px; }
 .field { display: grid; gap: 12px; }
 .field .row { display: flex; justify-content: space-between; align-items: baseline; }
 .field label, .field .lbl { font-size: 15px; color: var(--fg-dim); }
-.field output { font-family: var(--f-serif); font-weight: 600; font-size: 34px; line-height: 1; font-variant-numeric: tabular-nums; }
+.field output { font-family: var(--f-serif); font-weight: 600; font-size: 32px; line-height: 1; font-variant-numeric: tabular-nums; }
 input[type=range] { width: 100%; height: 44px; margin: 0; accent-color: var(--gold); background: none; cursor: pointer; }
-.seg { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; background: var(--ink-2); padding: 5px; border-radius: 999px; border: 1px solid var(--line); position: relative; }
+.seg { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; background: var(--ink); padding: 5px; border-radius: 999px; border: 1px solid var(--line); position: relative; }
 .seg button { position: relative; z-index: 1; min-height: 44px; padding: 8px 6px; background: none; border: 0; border-radius: 999px; cursor: pointer; font-weight: 600; font-size: 14.5px; transition: color .25s; }
 .seg button[aria-pressed=true] { color: #000; }
 .seg .pill { position: absolute; z-index: 0; top: 5px; bottom: 5px; left: 5px; border-radius: 999px; background: var(--gold); transition: translate .4s var(--ease), width .4s var(--ease); }
-.oz-note { color: var(--fg-dim); padding-top: 22px; border-top: 1px solid var(--line); min-height: 5.2em; }
+.oz-note { color: var(--fg-dim); padding-top: 20px; border-top: 1px solid var(--line); min-height: 5.2em; }
 .scale { position: relative; display: grid; grid-template-columns: repeat(5, 1fr); font-size: 13px; color: var(--fg-dim); text-align: center; padding-top: 16px; font-variant-numeric: tabular-nums; }
 .scale::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 3px; border-radius: 3px; background: var(--line); }
 .scale .fill { position: absolute; left: 0; top: 0; height: 3px; border-radius: 3px; background: var(--gold); width: 100%; transition: width .5s var(--ease); }
-@media (max-width: 860px) { .guide .wrap { grid-template-columns: 1fr; } }
+#useOz { justify-self: start; }
 
-/* COMPRA */
-.buy { padding-block: clamp(90px, 12vw, 150px); background: var(--ink-2); border-top: 1px solid var(--line); }
-.buy h2 { margin-bottom: clamp(40px, 6vw, 72px); }
-.steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(28px, 4vw, 56px); counter-reset: s; position: relative; }
-.steps li { counter-increment: s; display: grid; gap: 12px; align-content: start; padding-top: 28px; border-top: 1px solid var(--gold-dim); }
-.steps li::before { content: counter(s); font-family: var(--f-serif); font-size: 22px; color: var(--gold); line-height: 1; }
-.steps h3 { font-size: 34px; }
+.steps { list-style: none; margin: 30px 0 0; padding: 0; display: grid; gap: 26px; counter-reset: s; }
+.steps li { counter-increment: s; display: grid; grid-template-columns: 34px 1fr; gap: 4px 14px; padding-top: 22px; border-top: 1px solid var(--gold-dim); }
+.steps li::before { content: counter(s); grid-row: 1 / span 2; font-family: var(--f-serif); font-size: 24px; color: var(--gold); line-height: 1.1; }
+.steps h3 { font-size: 30px; }
 .steps p { color: var(--fg-dim); }
-@media (max-width: 820px) { .steps { grid-template-columns: 1fr; } }
-
-/* FECHAMENTO */
-.closer { padding-block: clamp(110px, 14vw, 180px); text-align: center; border-top: 1px solid var(--line); overflow: hidden; }
-.closer .mark b { font-size: clamp(42px, 9vw, 116px); letter-spacing: var(--track, .42em); margin-right: calc(-1 * var(--track, .42em)); }
-.closer .mark i { font-size: clamp(10px, 1.4vw, 15px); margin-top: 16px; }
-.closer .rule { width: min(560px, 80%); height: 1px; background: var(--gold-dim); margin: 40px auto; transform-origin: center; }
-.closer h2 { font-size: clamp(36px, 5vw, 60px); }
-.closer p { margin: 18px auto 0; color: var(--fg-dim); max-width: 32em; }
-.closer .ctas { margin-top: 36px; display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
-footer { border-top: 1px solid var(--line); }
-footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; padding-block: 28px; font-size: 14px; color: var(--fg-dim); }
-
-/* Barra de reserva no celular */
-.bar { position: fixed; left: 10px; right: 10px; bottom: calc(10px + env(safe-area-inset-bottom, 0px)); z-index: 28; display: none; align-items: center; gap: 12px; padding: 8px 8px 8px 16px; border-radius: 999px; background: color-mix(in srgb, var(--ink-3) 90%, transparent); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); box-shadow: 0 0 0 1px var(--line), 0 18px 40px rgba(0,0,0,.6); translate: 0 140%; transition: translate .45s var(--ease); }
-.bar.on { translate: 0 0; }
-.bar .t { flex: 1; min-width: 0; font-size: 14px; line-height: 1.25; }
-.bar .t b { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.bar .t span { color: var(--gold); font-variant-numeric: tabular-nums; }
-.bar .btn { min-height: 44px; padding: 8px 18px; font-size: 14px; flex: none; }
-@media (max-width: 900px) { .bar { display: flex; } }
+.sheet .end { margin-top: 36px; padding-top: 28px; border-top: 1px solid var(--line); display: grid; gap: 16px; justify-items: start; }
+.sheet .end p { color: var(--fg-dim); }
 
 /* Foto ampliada */
 .lb { position: fixed; inset: 0; z-index: 60; background: #000; display: grid; grid-template-rows: auto 1fr auto; opacity: 0; visibility: hidden; transition: opacity .35s var(--ease), visibility 0s .35s; }
@@ -234,145 +179,183 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
 .lb header { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: calc(14px + env(safe-area-inset-top, 0px)) clamp(16px, 4vw, 40px) 14px; }
 .lb header b { font-family: var(--f-serif); font-size: 26px; font-weight: 600; }
 .lb header span { color: var(--fg-dim); margin-left: 10px; }
-.lb .x { width: 48px; height: 48px; border-radius: 50%; border: 1px solid var(--line); background: none; cursor: pointer; font-size: 24px; line-height: 1; }
-.lb .x:hover { border-color: var(--gold); }
 .lb .stagebox { position: relative; overflow: hidden; cursor: zoom-in; touch-action: none; }
 .lb .stagebox.zoom { cursor: zoom-out; }
 .lb .stagebox img { position: absolute; inset: 4% 6%; width: 88%; height: 92%; object-fit: contain; transform-origin: 50% 50%; transition: transform .45s var(--ease); }
-.lb footer { border: 0; text-align: center; color: var(--fg-dim); font-size: 14px; padding: 12px 16px calc(18px + env(safe-area-inset-bottom, 0px)); }
+.lb footer { text-align: center; color: var(--fg-dim); font-size: 14px; padding: 12px 16px calc(18px + env(safe-area-inset-bottom, 0px)); }
 
-/* Aviso de mensagem copiada */
-.toast { position: fixed; left: 50%; bottom: calc(84px + env(safe-area-inset-bottom, 0px)); z-index: 70; translate: -50% 20px; opacity: 0; padding: 12px 20px; border-radius: 999px; background: var(--fg); color: #000; font-size: 14.5px; font-weight: 600; pointer-events: none; transition: opacity .3s, translate .4s var(--ease); max-width: calc(100vw - 32px); text-align: center; }
+/* Abertura: o wordmark grande vira o logo da barra */
+.intro { position: fixed; inset: 0; z-index: 80; display: grid; place-items: center; background: var(--ink); pointer-events: none; }
+.intro .mark b { font-size: clamp(54px, 11.5vw, 168px); letter-spacing: var(--track, .34em); margin-right: calc(-1 * var(--track, .34em)); }
+.intro .mark i { font-size: clamp(11px, 1.35vw, 18px); letter-spacing: .9em; margin-right: -.9em; margin-top: clamp(10px, 1.6vw, 22px); }
+
+/* Enquanto a abertura não começa, a tela fica escondida (sem piscar) */
+.js-anim .app { opacity: 0; }
+
+/* Aviso */
+.toast { position: fixed; left: 50%; bottom: calc(76px + env(safe-area-inset-bottom, 0px)); z-index: 70; translate: -50% 20px; opacity: 0; padding: 12px 20px; border-radius: 999px; background: var(--fg); color: #000; font-size: 14.5px; font-weight: 600; pointer-events: none; transition: opacity .3s, translate .4s var(--ease); max-width: calc(100vw - 32px); text-align: center; }
 .toast.on { opacity: 1; translate: -50% 0; }
 
-/* Antes da abertura animada, o topo fica escondido (sem piscar) */
-.js-anim .hero-top > *, .js-anim .boot { opacity: 0; }
-
-/* Cursor sobre fotos */
+/* Cursor sobre a foto */
 .cursor { position: fixed; left: 0; top: 0; z-index: 50; width: 0; height: 0; pointer-events: none; }
-.cursor span { position: absolute; left: -38px; top: -38px; width: 76px; height: 76px; border-radius: 50%; border: 1px solid var(--gold); display: grid; place-items: center; font-size: 12.5px; font-weight: 600; color: var(--fg); background: color-mix(in srgb, var(--ink) 35%, transparent); backdrop-filter: blur(3px); opacity: 0; scale: .4; transition: opacity .25s, scale .3s var(--ease); }
+.cursor span { position: absolute; left: -38px; top: -38px; width: 76px; height: 76px; border-radius: 50%; border: 1px solid var(--gold); display: grid; place-items: center; font-size: 12.5px; font-weight: 600; background: color-mix(in srgb, var(--ink) 35%, transparent); backdrop-filter: blur(3px); opacity: 0; scale: .4; transition: opacity .25s, scale .3s var(--ease); }
 .cursor.on span { opacity: 1; scale: 1; }
-@media (hover: none), (pointer: coarse) { .cursor { display: none; } }
+
+/* Barra de reserva (celular) */
+.bar { display: none; }
+
+/* Telas médias: a lista vira uma fileira acima da foto */
+@media (max-width: 1100px) {
+  .room { grid-template-columns: minmax(0, 1fr) minmax(300px, 360px); grid-template-rows: auto minmax(0, 1fr); }
+  .rail { grid-column: 1; grid-row: 1; border-right: 0; border-bottom: 1px solid var(--line); flex-direction: row; justify-content: flex-start; padding: 8px clamp(12px, 2vw, 24px); overflow-x: auto; overflow-y: hidden; }
+  .rail h2 { display: none; }
+  .rail ul { display: flex; gap: 2px; }
+  .it { width: auto; grid-template-columns: 44px auto; column-gap: 10px; padding: 8px 14px; white-space: nowrap; }
+  .it .tn { width: 44px; height: 36px; }
+  .it b { font-size: 19px; }
+  .it .price { font-size: 15px; margin-top: 2px; }
+  .it::before { left: 14px; right: 14px; top: auto; bottom: 0; width: auto; height: 2px; scale: 0 1; }
+  .it[aria-pressed=true]::before { scale: 1 1; }
+  .stage { grid-column: 1; grid-row: 2; }
+  .panel { grid-column: 2; grid-row: 1 / span 2; }
+  .nav .end { gap: 16px; }
+}
+@media (min-width: 761px) and (max-width: 900px) { .nav .end .btn { display: none; } }
+
+/* Celular: a tela vira uma coluna, com a reserva fixa embaixo */
+@media (max-width: 760px) {
+  :root { --nav-h: 64px; }
+  .app { height: auto; min-height: 0; grid-template-rows: auto auto; }
+  .nav { grid-template-columns: auto 1fr; grid-template-rows: var(--nav-h) auto; gap: 0 12px; }
+  .nav .mark b { font-size: 20px; }
+  .cats { grid-row: 2; grid-column: 1 / -1; margin: 0 0 12px; }
+  .nav .end .btn { display: none; }
+  .nav .end .link { display: inline; font-size: 14px; }
+  .room { grid-template-columns: 1fr; grid-template-rows: auto auto auto; }
+  .rail { grid-row: 1; }
+  .stage { grid-row: 2; height: min(58svh, 500px); }
+  .panel { grid-row: 3; grid-column: 1; border-left: 0; justify-content: flex-start; padding-bottom: 120px; }
+  .shot { margin: 8px 44px 0; }
+  .arrow { width: 40px; height: 40px; top: 42%; }
+  .arrow.prev { left: 4px; } .arrow.next { right: 4px; }
+  .ghost { font-size: 30vw; }
+  .floor { bottom: 76px; }
+  .sw { width: 54px; height: 44px; }
+  .strip { min-height: 72px; padding: 8px 8px 12px; flex-wrap: wrap; }
+  .foot { display: none; }
+  .bar { position: fixed; left: 10px; right: 10px; bottom: calc(10px + env(safe-area-inset-bottom, 0px)); z-index: 28; display: flex; align-items: center; gap: 12px; padding: 8px 8px 8px 16px; border-radius: 999px; background: color-mix(in srgb, var(--ink-3) 92%, transparent); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); box-shadow: 0 0 0 1px var(--line), 0 18px 40px rgba(0,0,0,.6); }
+  .bar .t { flex: 1; min-width: 0; font-size: 14px; line-height: 1.25; }
+  .bar .t b { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .bar .t span { color: var(--gold); font-variant-numeric: tabular-nums; }
+  .bar .btn { min-height: 44px; padding: 8px 18px; font-size: 14px; flex: none; }
+}
+
+/* Telas baixas no computador */
+@media (min-width: 761px) and (max-height: 760px) {
+  :root { --nav-h: 64px; --foot-h: 44px; }
+  .panel h1 { font-size: 46px; }
+  .panel .big { margin-top: 14px; font-size: 34px; }
+  .panel .desc { font-size: 15px; margin-top: 10px; }
+  .opt { margin-top: 16px; }
+  .panel .cta { margin-top: 18px; }
+  .strip { min-height: 70px; padding-block: 8px 12px; }
+}
+
+@media (hover: none), (pointer: coarse) { .cursor, .foot .keys { display: none; } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition-duration: .01ms !important; animation: none !important; } }
 </style>
 
-<nav class="nav" id="nav" aria-label="Principal">
-  <div class="wrap">
-    <a class="mark" href="#topo" aria-label="Clinch Supply, voltar ao topo"><b>CLINCH</b><i>SUPPLY</i></a>
-    <ul>
-      <li><a href="#sapatilhas">Sapatilhas</a></li>
-      <li><a href="#luvas">Luvas</a></li>
-      <li><a href="#guia">Guia de onças</a></li>
-      <li><a href="#compra">Como comprar</a></li>
-    </ul>
-    <a class="btn btn-ghost js-contact" href="https://www.instagram.com/clinchsupply/" target="_blank" rel="noopener">Falar com a loja</a>
-  </div>
-</nav>
-
-<header class="hero" id="topo">
-  <div class="hero-top wrap">
-    <h1 aria-label="Clinch Supply"><span class="w" id="heroMark" aria-hidden="true">CLINCH</span><span class="s" aria-hidden="true">SUPPLY</span></h1>
-    <p class="tag"><strong>Pré-venda aberta.</strong> Sapatilhas Nike e Adidas e luvas Cleto Reyes e Rival, originais e importadas dos Estados Unidos.</p>
-  </div>
-  <div class="shelf wrap" id="shelf"></div>
-</header>
-
-<section class="show" id="sapatilhas" aria-labelledby="showTitle">
-  <div class="show-head wrap">
-    <div>
-      <h2 id="showTitle">Sapatilhas em pré-venda</h2>
-      <p>Chegam em novembro. Numeração do 38 ao 46 BR.</p>
+<div class="app" id="app">
+  <header class="nav">
+    <a class="mark" id="navMark" href="#" aria-label="Clinch Supply" translate="no"><b>CLINCH</b><i>SUPPLY</i></a>
+    <div class="cats" role="group" aria-label="Categoria" id="cats">
+      <span class="pill" aria-hidden="true"></span>
+      <button type="button" data-cat="shoes" aria-pressed="true">Sapatilhas</button>
+      <button type="button" data-cat="gloves" aria-pressed="false">Luvas</button>
     </div>
-    <ul class="models" id="models"></ul>
-  </div>
-  <div class="track" id="track"></div>
-  <noscript><p class="wrap note">Ative o JavaScript para ver as sapatilhas e escolher cor e número.</p></noscript>
-</section>
-
-<section class="gloves" id="luvas" aria-labelledby="glovesTitle">
-  <div class="wrap">
-    <div class="gloves-head">
-      <h2 id="glovesTitle">Luvas</h2>
-      <p>Duas casas, dois jeitos de sentir o golpe. A Cleto Reyes é compacta e seca, para quem quer sentir cada soco entrar. A Rival é anatômica e acolchoada, feita para proteger a mão e o parceiro.</p>
+    <div class="end">
+      <button class="link" type="button" data-open="guia">Guia de onças</button>
+      <button class="link" type="button" data-open="compra">Como comprar</button>
+      <a class="btn btn-ghost js-contact" href="https://www.instagram.com/clinchsupply/" target="_blank" rel="noopener">Falar com a loja</a>
     </div>
-    <div class="houses" id="houses"></div>
-    <p class="note">Pesos, cores e prazo das luvas sob consulta com a loja.</p>
-  </div>
-  <div class="float" id="float" aria-hidden="true"><img alt=""></div>
-</section>
+  </header>
 
-<section class="guide" id="guia" aria-labelledby="guideTitle">
-  <div class="wrap">
-    <div>
-      <h2 id="guideTitle">Qual peso de luva?</h2>
-      <p class="lede">Luva leve demais machuca o parceiro. Pesada demais tira velocidade do treino de saco. Use a régua como ponto de partida e confirme com a loja antes de fechar.</p>
-      <div class="oz-big" aria-live="polite"><span class="n" id="ozOut">16</span><span class="u">oz</span></div>
+  <main class="room" id="room">
+    <h1 class="sr">Clinch Supply. Sapatilhas Nike e Adidas e luvas Cleto Reyes e Rival, originais e importadas dos Estados Unidos.</h1>
+    <nav class="rail" id="rail" aria-label="Modelos"></nav>
+
+    <section class="stage" id="stage" aria-label="Foto do produto">
+      <div class="ghost" id="ghost" aria-hidden="true"></div>
+      <span class="floor" aria-hidden="true"></span>
+      <button class="shot" id="shot" type="button" data-cursor><span class="tilt"><span class="layer" id="layer"></span><span class="sheen" id="sheen"></span></span></button>
+      <button class="arrow prev" id="prev" type="button" aria-label="Cor anterior"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <button class="arrow next" id="next" type="button" aria-label="Próxima cor"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+      <div class="strip" id="strip" role="group" aria-label="Cores"></div>
+    </section>
+
+    <section class="panel" id="panel" aria-live="polite"></section>
+  </main>
+
+  <footer class="foot">
+    <span>Pré-venda aberta. Originais importados dos EUA, com chegada em novembro.</span>
+    <span class="keys" aria-hidden="true"><span><kbd>←</kbd><kbd>→</kbd>cor</span><span><kbd>↑</kbd><kbd>↓</kbd>modelo</span></span>
+  </footer>
+</div>
+
+<div class="veil" id="veil"></div>
+
+<aside class="sheet" id="sheet-guia" role="dialog" aria-modal="true" aria-labelledby="guiaTitle">
+  <div class="top"><h2 id="guiaTitle">Qual peso de luva?</h2><button class="x" type="button" data-close aria-label="Fechar"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <p class="lede">Luva leve demais machuca o parceiro. Pesada demais tira velocidade do treino de saco. Use a régua como ponto de partida e confirme com a loja antes de fechar.</p>
+  <div class="oz-big" aria-live="polite"><span class="n" id="ozOut">16</span><span class="u">oz</span></div>
+  <div class="calc">
+    <div class="field">
+      <div class="row"><label for="peso">Seu peso</label><output id="pesoOut" for="peso">80 kg</output></div>
+      <input id="peso" type="range" min="45" max="120" step="1" value="80">
     </div>
-    <div class="calc">
-      <div class="field">
-        <div class="row"><label for="peso">Seu peso</label><output id="pesoOut" for="peso">80 kg</output></div>
-        <input id="peso" type="range" min="45" max="120" step="1" value="80">
+    <div class="field">
+      <span class="lbl" id="usoLbl">Uso principal</span>
+      <div class="seg" role="group" aria-labelledby="usoLbl" id="seg">
+        <span class="pill" aria-hidden="true"></span>
+        <button type="button" data-uso="saco" aria-pressed="false">Saco e manopla</button>
+        <button type="button" data-uso="sparring" aria-pressed="true">Sparring</button>
+        <button type="button" data-uso="luta" aria-pressed="false">Luta</button>
       </div>
-      <div class="field">
-        <span class="lbl" id="usoLbl">Uso principal</span>
-        <div class="seg" role="group" aria-labelledby="usoLbl" id="seg">
-          <span class="pill" aria-hidden="true"></span>
-          <button type="button" id="uso-saco" data-uso="saco" aria-pressed="false">Saco e manopla</button>
-          <button type="button" id="uso-sparring" data-uso="sparring" aria-pressed="true">Sparring</button>
-          <button type="button" id="uso-luta" data-uso="luta" aria-pressed="false">Luta</button>
-        </div>
-      </div>
-      <div class="scale" aria-hidden="true"><span class="fill" id="ozFill"></span><span>8</span><span>10</span><span>12</span><span>14</span><span>16</span></div>
-      <p class="oz-note" id="ozNote">Padrão para sparring acima de 70 kg. Mais proteção para você e para o parceiro.</p>
     </div>
+    <div class="scale" aria-hidden="true"><span class="fill" id="ozFill"></span><span>8</span><span>10</span><span>12</span><span>14</span><span>16</span></div>
+    <p class="oz-note" id="ozNote">Padrão para sparring acima de 70 kg. Mais proteção para você e para o parceiro.</p>
+    <button class="btn btn-solid" type="button" id="useOz">Usar 16 oz nas luvas</button>
   </div>
-</section>
+</aside>
 
-<section class="buy" id="compra" aria-labelledby="buyTitle">
-  <div class="wrap">
-    <h2 id="buyTitle">Como funciona a compra</h2>
-    <ol class="steps">
-      <li><h3>Conversa</h3><p>Conte como você treina e o que já usa. A loja indica o modelo e o número certos.</p></li>
-      <li><h3>Reserva</h3><p>As importações chegam em lotes pequenos. Na pré-venda, seu número e sua cor ficam garantidos.</p></li>
-      <li><h3>Entrega</h3><p>Produto original importado dos Estados Unidos, entregue a você em novembro.</p></li>
-    </ol>
-  </div>
-</section>
-
-<section class="closer" id="closer">
-  <div class="wrap">
-    <span class="mark" aria-hidden="true" id="closerMark"><b>CLINCH</b><i>SUPPLY</i></span>
-    <div class="rule" id="closerRule"></div>
-    <h2>Garanta o seu antes de novembro.</h2>
+<aside class="sheet" id="sheet-compra" role="dialog" aria-modal="true" aria-labelledby="compraTitle">
+  <div class="top"><h2 id="compraTitle">Como funciona a compra</h2><button class="x" type="button" data-close aria-label="Fechar"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <ol class="steps">
+    <li><h3>Conversa</h3><p>Conte como você treina e o que já usa. A loja indica o modelo e o número certos.</p></li>
+    <li><h3>Reserva</h3><p>As importações chegam em lotes pequenos. Na pré-venda, seu número e sua cor ficam garantidos.</p></li>
+    <li><h3>Entrega</h3><p>Produto original importado dos Estados Unidos, entregue a você em novembro.</p></li>
+  </ol>
+  <div class="end">
     <p>Mande o modelo, a cor e o seu número. A loja responde com a disponibilidade do lote.</p>
-    <div class="ctas">
-      <a class="btn btn-solid js-contact" href="https://www.instagram.com/clinchsupply/" target="_blank" rel="noopener">Falar com a loja</a>
-      <a class="btn btn-ghost" href="#sapatilhas">Rever sapatilhas</a>
-    </div>
+    <a class="btn btn-solid js-contact" href="https://www.instagram.com/clinchsupply/" target="_blank" rel="noopener">Falar com a loja</a>
   </div>
-</section>
+</aside>
 
-<footer>
-  <div class="wrap">
-    <span>© 2026 Clinch Supply. Produtos originais importados dos EUA.</span>
-    <a href="https://www.instagram.com/clinchsupply/" target="_blank" rel="noopener">@clinchsupply</a>
-  </div>
-</footer>
-
-<div class="bar" id="bar" aria-hidden="true">
+<div class="bar" id="bar">
   <div class="t"><b id="barName">HyperKO 3, Preta</b><span id="barPrice">R$ 1.900</span></div>
-  <a class="btn btn-solid" id="barCta" href="https://www.instagram.com/clinchsupply/" target="_blank" rel="noopener" tabindex="-1">Reservar</a>
+  <a class="btn btn-solid" id="barCta" href="https://www.instagram.com/clinchsupply/" target="_blank" rel="noopener">Reservar</a>
 </div>
 
 <div class="lb" id="lb" role="dialog" aria-modal="true" aria-labelledby="lbName" hidden>
-  <header><div><b id="lbName">HyperKO 3</b><span id="lbColor">Preta</span></div><button class="x" type="button" id="lbClose" aria-label="Fechar">×</button></header>
+  <header><div><b id="lbName">HyperKO 3</b><span id="lbColor">Preta</span></div><button class="x" type="button" id="lbClose" aria-label="Fechar"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></header>
   <div class="stagebox" id="lbStage"><img id="lbImg" alt=""></div>
   <footer id="lbHint">Clique ou toque na foto para aproximar. As setas do teclado trocam a cor.</footer>
 </div>
 
 <div class="cursor" id="cursor" aria-hidden="true"><span>Ampliar</span></div>
+<noscript><p style="padding:24px">Ative o JavaScript para ver os produtos e escolher modelo, cor e número.</p></noscript>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script>
 /*__APP__*/
 </script>

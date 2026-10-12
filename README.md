@@ -1,6 +1,8 @@
 # Clinch Supply, landing page
 
-Site estático da Clinch Supply: vitrine de sapatilhas e luvas de boxe com fotos de produto recortadas e animações (GSAP).
+Site estático da Clinch Supply: um provador numa tela só. Escolha categoria, modelo, cor e número (ou peso da luva) sem rolar a página; o guia de onças e o passo a passo da compra abrem em painéis. Animações com GSAP.
+
+Atalhos: setas ←/→ trocam a cor, ↑/↓ e a roda do mouse sobre a foto trocam o modelo. O endereço guarda a escolha (ex.: `#hyperko-branca-dourada`), então dá para mandar o link de um produto.
 
 - `index.html`: o site publicado (gerado, não edite à mão)
 - `src/page.html`: estrutura e estilos
