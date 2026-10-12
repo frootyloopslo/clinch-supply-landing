@@ -67,13 +67,13 @@ p { margin: 0; text-wrap: pretty; }
 .hero h1 .s { font-family: var(--f-sans); font-size: clamp(11px, 1.35vw, 18px); font-weight: 500; letter-spacing: .9em; margin-right: -.9em; color: var(--gold); margin-top: clamp(10px, 1.6vw, 22px); }
 .hero .tag { font-size: clamp(16px, 1.6vw, 19px); color: var(--fg-dim); max-width: 34em; }
 .hero .tag strong { color: var(--fg); font-weight: 600; }
-.shelf { position: relative; display: grid; grid-template-columns: 1fr 1.25fr 1fr; align-items: end; gap: clamp(8px, 3vw, 48px); padding-bottom: clamp(28px, 5vh, 56px); }
+.shelf { position: relative; width: 100%; display: grid; grid-template-columns: 1fr 1.25fr 1fr; align-items: end; gap: clamp(8px, 3vw, 48px); padding-bottom: clamp(28px, 5vh, 56px); }
 .boot { display: grid; justify-items: center; text-align: center; text-decoration: none; gap: 0; }
 .boot .pic { position: relative; width: 100%; aspect-ratio: 4 / 3; display: grid; align-items: end; justify-items: center; }
 .boot .pic::after { content: ""; position: absolute; left: -22%; right: -22%; bottom: 0; height: 1px; background: var(--gold-dim); transform-origin: center; scale: var(--shelf, 1) 1; }
 .boot:first-child .pic::after { left: -40%; background: linear-gradient(90deg, transparent, var(--gold-dim) 45%); }
 .boot:last-child .pic::after { right: -40%; background: linear-gradient(90deg, var(--gold-dim) 55%, transparent); }
-.boot .pic img { width: 100%; height: 100%; object-fit: contain; object-position: 50% 100%; transition: translate .5s var(--ease); filter: drop-shadow(0 18px 24px rgba(0,0,0,.7)); }
+.boot .pic img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; object-position: 50% 100%; transition: translate .5s var(--ease); filter: drop-shadow(0 18px 24px rgba(0,0,0,.7)); }
 .boot .refl { position: relative; width: 100%; height: 40px; overflow: hidden; opacity: .16; pointer-events: none; }
 .boot .refl img { width: 100%; aspect-ratio: 4 / 3; object-fit: contain; object-position: 50% 100%; transform: scaleY(-1); transform-origin: 50% 0; -webkit-mask-image: linear-gradient(180deg, transparent 72%, #000 100%); mask-image: linear-gradient(180deg, transparent 72%, #000 100%); position: absolute; left: 0; bottom: 0; }
 .boot .name { font-family: var(--f-serif); font-weight: 600; font-size: clamp(17px, 2vw, 28px); line-height: 1.1; margin-top: 4px; }
@@ -81,7 +81,7 @@ p { margin: 0; text-wrap: pretty; }
 .boot:hover .pic img, .boot:focus-visible .pic img { translate: 0 -10px; }
 @media (max-width: 700px) {
   .hero { min-height: 92svh; }
-  .shelf { grid-template-columns: 1fr 1.3fr 1fr; gap: 0; padding-inline: 4px; }
+  .shelf { grid-template-columns: 1fr 1.3fr 1fr; gap: 8px; padding-inline: 14px; }
   .boot .pic { aspect-ratio: 1 / 1; }
   .boot .refl { height: 22px; }
 }
@@ -104,7 +104,7 @@ p { margin: 0; text-wrap: pretty; }
 .photo .tilt { position: absolute; inset: 0; transform-style: preserve-3d; transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); transition: transform .5s var(--ease); }
 .photo.live .tilt { transition: transform .12s linear; }
 .photo .layer { position: absolute; inset: 0; display: grid; place-items: center; }
-.photo .layer img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 30px 34px rgba(0,0,0,.75)); }
+.photo .layer img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 30px 34px rgba(0,0,0,.75)); }
 .photo .sheen { position: absolute; inset: 0; pointer-events: none; -webkit-mask-size: contain; mask-size: contain; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; -webkit-mask-position: center; mask-position: center; background: radial-gradient(circle at var(--mx, 30%) var(--my, 20%), rgba(255, 240, 215, .32), transparent 38%); mix-blend-mode: soft-light; opacity: 0; transition: opacity .4s; }
 .photo.live .sheen { opacity: 1; }
 .photo .floor { position: absolute; left: 14%; right: 14%; bottom: 1%; height: 9%; border-radius: 50%; background: radial-gradient(closest-side, rgba(201, 166, 107, .22), transparent); transform: translateX(calc(var(--ry, 0deg) / 1deg * -3px)); transition: transform .5s var(--ease); }
@@ -152,10 +152,12 @@ p { margin: 0; text-wrap: pretty; }
 .house .from { display: block; color: var(--fg-dim); font-size: 15px; margin-top: 10px; }
 .house .feel { color: var(--fg-dim); margin-top: 14px; max-width: 28em; }
 .house ul { list-style: none; margin: 28px 0 0; padding: 0; border-top: 1px solid var(--gold-dim); }
-.gl { position: relative; display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 4px 20px; padding: 20px 0; border-bottom: 1px solid var(--line); text-decoration: none; }
-.gl b { font-weight: 600; font-size: 18px; line-height: 1.3; }
-.gl .use { grid-column: 1; color: var(--fg-dim); font-size: 15px; }
-.gl .end { grid-column: 2; grid-row: 1 / span 2; position: relative; overflow: hidden; height: 36px; display: grid; justify-items: end; }
+.gl { position: relative; display: grid; grid-template-columns: 76px 1fr auto; align-items: center; gap: 4px 20px; padding: 18px 0; border-bottom: 1px solid var(--line); text-decoration: none; }
+.gl .gpic { grid-column: 1; grid-row: 1 / span 2; width: 76px; height: 64px; display: grid; place-items: center; }
+.gl .gpic img { max-width: 100%; max-height: 100%; object-fit: contain; filter: drop-shadow(0 8px 10px rgba(0,0,0,.6)); transition: scale .45s var(--ease), rotate .45s var(--ease); }
+.gl b { grid-column: 2; font-weight: 600; font-size: 18px; line-height: 1.3; }
+.gl .use { grid-column: 2; color: var(--fg-dim); font-size: 15px; }
+.gl .end { grid-column: 3; grid-row: 1 / span 2; position: relative; overflow: hidden; height: 36px; display: grid; justify-items: end; }
 .gl .end > * { grid-area: 1 / 1; display: flex; align-items: center; height: 36px; transition: translate .35s var(--ease), opacity .35s; }
 .gl .end .price { font-size: 30px; }
 .gl .end .go { font-weight: 600; font-size: 15px; color: var(--gold); translate: 0 100%; opacity: 0; }
@@ -164,11 +166,13 @@ p { margin: 0; text-wrap: pretty; }
   .gl:hover .end .price { translate: 0 -100%; opacity: 0; }
   .gl:hover .end .go { translate: 0 0; opacity: 1; }
   .gl:hover::before { scale: 1 1; }
+  .gl:hover .gpic img { scale: 1.12; rotate: -6deg; }
 }
 .float { position: fixed; left: 0; top: 0; z-index: 25; width: 300px; height: 240px; margin: -120px 0 0 -150px; pointer-events: none; opacity: 0; scale: .6; }
 .float img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 24px 30px rgba(0,0,0,.7)); }
 .gloves .note { margin-top: 36px; }
 @media (max-width: 860px) { .gloves-head, .houses { grid-template-columns: 1fr; } }
+@media (max-width: 480px) { .gl { grid-template-columns: 60px 1fr auto; gap: 4px 14px; } .gl .gpic { width: 60px; height: 52px; } .gl .end .price { font-size: 24px; } }
 @media (hover: none), (pointer: coarse) { .float { display: none; } }
 
 /* GUIA DE ONÇAS */
