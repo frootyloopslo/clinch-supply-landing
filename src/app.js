@@ -12,26 +12,26 @@
   var OZS = [10, 12, 14, 16];
   var CATS = {
     shoes: [
-      { key: 'hyperko', by: 'Nike Boxing', name: 'HyperKO 3', ghost: 'HYPERKO', price: 1900,
+      { key: 'hyperko', by: 'Nike Boxing', name: 'HyperKO 3', price: 1900,
         desc: 'A sapatilha mais leve que a Nike já produziu. Cano alto com suporte total de tornozelo e amarração dupla para máxima estabilidade no ringue.',
         colors: [['preta', 'Preta'], ['branca', 'Branca'], ['branca-dourada', 'Branca e dourada'], ['preta-vermelha', 'Preta e vermelha'], ['azul-especial', 'Azul, edição especial'], ['preta-rosa', 'Preta e rosa']] },
-      { key: 'boxhog', by: 'Adidas Boxing', name: 'Box Hog 4', ghost: 'BOX HOG', price: 1500,
+      { key: 'boxhog', by: 'Adidas Boxing', name: 'Box Hog 4', price: 1500,
         desc: 'Cabedal em mesh respirável com reforços internos, entressola EVA e solado com ponto de pivô para footwork rápido. O melhor custo-benefício da Adidas.',
         colors: [['preta', 'Preta'], ['azul', 'Azul royal'], ['vermelha', 'Vermelha']] },
-      { key: 'machomai', by: 'Nike Boxing', name: 'Machomai 3', ghost: 'MACHOMAI', price: 1100,
+      { key: 'machomai', by: 'Nike Boxing', name: 'Machomai 3', price: 1100,
         desc: 'Sola fina para máximo contato com o solo. Leve, respirável e com tração equilibrada para pivotar sem travar o joelho. A mais versátil da Nike Boxing.',
         colors: [['preta', 'Preta'], ['branca', 'Branca'], ['branca-dourada', 'Branca e dourada'], ['azul', 'Azul royal'], ['vermelha', 'Vermelha']] }
     ],
     gloves: [
-      { key: 'cleto-velcro', house: 'Cleto Reyes', by: 'Cleto Reyes, Cidade do México', name: 'Traditional Training', variant: 'Velcro', ghost: 'CLETO', price: 2400,
+      { key: 'cleto-velcro', house: 'Cleto Reyes', by: 'Cleto Reyes, Cidade do México', name: 'Traditional Training', variant: 'Velcro', price: 2400,
         desc: 'Compacta, punho firme e sensação seca: você sente cada golpe conectar. Com velcro, calça e tira sozinho. Para o treino de todo dia.' },
-      { key: 'cleto-cadarco', house: 'Cleto Reyes', by: 'Cleto Reyes, Cidade do México', name: 'Traditional Training', variant: 'Cadarço', ghost: 'CLETO', price: 2250,
+      { key: 'cleto-cadarco', house: 'Cleto Reyes', by: 'Cleto Reyes, Cidade do México', name: 'Traditional Training', variant: 'Cadarço', price: 2250,
         desc: 'A mesma Cleto clássica com cadarço, que trava o punho mais firme. Para treino e sparring de quem já tem alguém para amarrar.' },
-      { key: 'rival-rs1', house: 'Rival', by: 'Rival, Montreal', name: 'RS1 Ultra Sparring 2.0', ghost: 'RIVAL', price: 2100,
+      { key: 'rival-rs1', house: 'Rival', by: 'Rival, Montreal', name: 'RS1 Ultra Sparring 2.0', price: 2100,
         desc: 'Anatômica e muito acolchoada. Feita para sparring pesado, protege a sua mão e o parceiro.' },
-      { key: 'rival-rs2v', house: 'Rival', by: 'Rival, Montreal', name: 'RS2V Super Sparring 2.0', ghost: 'RIVAL', price: 1900,
+      { key: 'rival-rs2v', house: 'Rival', by: 'Rival, Montreal', name: 'RS2V Super Sparring 2.0', price: 1900,
         desc: 'A proteção de sparring da Rival com fechamento em velcro, para treinar sem depender de ninguém para calçar.' },
-      { key: 'rival-rb10', house: 'Rival', by: 'Rival, Montreal', name: 'RB10 Intelli-Shock Bag', ghost: 'RIVAL', price: 2250,
+      { key: 'rival-rb10', house: 'Rival', by: 'Rival, Montreal', name: 'RB10 Intelli-Shock Bag', price: 2250,
         desc: 'Luva de saco e manopla. A espuma absorve o impacto repetido e poupa punho e articulações.' }
     ]
   };
@@ -112,7 +112,7 @@
   }
 
   // ---------- palco: foto, nome ao fundo, cores
-  var stage = $('#stage'), shot = $('#shot'), layer = $('#layer'), sheen = $('#sheen'), ghost = $('#ghost'), strip = $('#strip');
+  var stage = $('#stage'), shot = $('#shot'), layer = $('#layer'), sheen = $('#sheen'), strip = $('#strip');
   var prevB = $('#prev'), nextB = $('#next');
   var swap = null;
   function putImage(p, dir, kind) {
@@ -139,14 +139,6 @@
       swap = tl;
     };
     (img.decode ? img.decode() : Promise.resolve()).then(run, run);
-  }
-  function putGhost(p, dir) {
-    if (ghost.textContent === p.ghost) return;
-    if (!anim || !ghost.textContent) { ghost.textContent = p.ghost; return; }
-    G.timeline()
-      .to(ghost, { autoAlpha: 0, xPercent: -6 * dir, letterSpacing: '0.2em', duration: 0.3, ease: 'power2.in' })
-      .call(function () { ghost.textContent = p.ghost; })
-      .fromTo(ghost, { xPercent: 6 * dir, letterSpacing: '0em' }, { autoAlpha: 1, xPercent: 0, letterSpacing: '0.06em', duration: 1, ease: 'expo.out' });
   }
   function renderStrip() {
     var p = cur(); strip.innerHTML = '';
@@ -221,7 +213,7 @@
     dir = dir || (i > S.idx[S.cat] ? 1 : -1);
     S.idx[S.cat] = i;
     var p = cur();
-    markRail(); putImage(p, dir, 'model'); putGhost(p, dir); renderStrip(); renderPanel(priceNow); afterChange();
+    markRail(); putImage(p, dir, 'model'); renderStrip(); renderPanel(priceNow); afterChange();
   }
   function setColor(ci) {
     var p = cur(); if (!p.colors) return;
@@ -238,7 +230,7 @@
     catBtns.forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.cat === cat ? 'true' : 'false'); });
     placePill(catPill, catBtns, 4);
     var p = cur(), dir = cat === 'gloves' ? 1 : -1;
-    renderRail(); putImage(p, dir, 'model'); putGhost(p, dir); renderStrip(); renderPanel(priceNow); afterChange();
+    renderRail(); putImage(p, dir, 'model'); renderStrip(); renderPanel(priceNow); afterChange();
     if (anim) G.from($$('.it', rail), { autoAlpha: 0, x: -16 * dir, duration: 0.55, stagger: 0.05, ease: 'expo.out' });
   }
   // o endereço guarda a escolha (ex.: #hyperko-branca-dourada), para mandar o link de um produto
@@ -478,7 +470,7 @@
       var move = G.to(track, { x: function () { return -dist(); }, ease: 'none',
         scrollTrigger: { trigger: coll, start: 'top top', end: function () { return '+=' + dist(); }, pin: true, scrub: 0.6, invalidateOnRefresh: true } });
       $$('.card', track).forEach(function (c) {
-        G.fromTo($('.ph img', c), { rotation: -8, xPercent: 10 }, { rotation: 6, xPercent: -10, ease: 'none',
+        G.fromTo($('.ph img', c), { xPercent: 6, scale: 0.94 }, { xPercent: -6, scale: 1, ease: 'none',
           scrollTrigger: { trigger: c, containerAnimation: move, start: 'left right', end: 'right left', scrub: true } });
       });
       return function () { coll.classList.remove('pin'); };
@@ -492,15 +484,13 @@
     G.fromTo('.rule i', { scaleX: 0 }, { scaleX: 1, ease: 'none', scrollTrigger: { trigger: '.rule', start: 'top 90%', end: 'top 45%', scrub: true } });
     G.set('.steps li', { autoAlpha: 0, y: 34 });
     ST.batch('.steps li', { start: 'top 90%', once: true, onEnter: function (els) { G.to(els, { autoAlpha: 1, y: 0, duration: 0.9, stagger: 0.14, ease: 'expo.out' }); } });
-    // fechamento: o nome da loja atravessa o fundo e o convite sobe
-    G.fromTo('.talk .wm', { xPercent: 4 }, { xPercent: -30, ease: 'none', scrollTrigger: { trigger: '.talk', start: 'top bottom', end: 'bottom bottom', scrub: true } });
+    // fechamento: o convite sobe
     G.from('.talk .kick, .talk h2, .talk .lede, .talk .acts > *', { autoAlpha: 0, y: 30, duration: 1, stagger: 0.08, ease: 'expo.out', scrollTrigger: { trigger: '.talk', start: 'top 70%' } });
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { ST.refresh(); });
   }
 
   // ---------- primeira pintura
   readHash();
-  ghost.textContent = cur().ghost;
   renderRail(); renderStrip();
   var animWas = anim; anim = false; renderPanel(); anim = animWas;
   putImage(cur(), 1, 'model'); afterChange();
@@ -538,8 +528,7 @@
     .set(intro, { display: 'none' }, 2.46)
     .from('.rail .it, .cats, .nav .end > *', { autoAlpha: 0, y: 12, duration: 0.7, stagger: 0.05 }, 2.0)
     .from('#layer', { autoAlpha: 0, yPercent: 12, scale: 0.92, duration: 1.2 }, 1.9)
-    .from('#panel > *', { autoAlpha: 0, y: 14, duration: 0.7, stagger: 0.05, clearProps: 'all' }, 2.1)
-    .from('.ghost', { autoAlpha: 0, letterSpacing: '0em', duration: 1.4 }, 1.9);
+    .from('#panel > *', { autoAlpha: 0, y: 14, duration: 0.7, stagger: 0.05, clearProps: 'all' }, 2.1);
   var skip = function () {
     if (tl.progress() >= 1) return;
     tl.progress(1); G.killTweensOf([big, intro]);
