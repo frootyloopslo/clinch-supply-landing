@@ -106,7 +106,6 @@ p { margin: 0; text-wrap: pretty; }
 /* palco */
 .stage { position: relative; min-width: 0; min-height: 0; overflow: hidden; display: grid; grid-template-rows: minmax(0, 1fr) auto; isolation: isolate; }
 .stage::before { content: ""; position: absolute; inset: 0; z-index: -2; background: radial-gradient(48% 42% at 50% 60%, color-mix(in srgb, var(--gold) 15%, transparent), transparent 72%); opacity: var(--light, 1); }
-.ghost { position: absolute; z-index: -1; left: 50%; top: 46%; translate: -50% -50%; font-family: var(--f-serif); font-weight: 600; font-size: clamp(90px, 15vw, 260px); line-height: 1; letter-spacing: .06em; white-space: nowrap; color: transparent; -webkit-text-stroke: 1px color-mix(in srgb, var(--gold) 26%, transparent); pointer-events: none; user-select: none; }
 .shot { position: relative; margin: clamp(10px, 3vh, 36px) clamp(52px, 6vw, 96px) 0; min-height: 0; padding: 0; border: 0; background: none; cursor: zoom-in; perspective: 1200px; touch-action: pan-y; }
 .shot .tilt { position: absolute; inset: 0; transform-style: preserve-3d; transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); transition: transform .6s var(--ease); }
 .shot.live .tilt { transition: transform .12s linear; }
@@ -200,12 +199,12 @@ input[type=range] { width: 100%; height: 44px; margin: 0; accent-color: var(--go
 .coll-head { flex: none; width: clamp(250px, 30vw, 440px); display: flex; flex-direction: column; justify-content: flex-end; gap: 16px; padding: 0 clamp(8px, 2vw, 36px) 20px 0; scroll-snap-align: start; }
 .coll-head h2 { font-size: clamp(44px, 5vw, 82px); }
 .coll-head .hint { color: var(--fg-dim); max-width: 24em; }
-.card { flex: none; width: clamp(240px, 21vw, 330px); display: grid; grid-template-rows: auto minmax(0, 1fr) auto; gap: 12px; padding: 20px 22px 22px; border: 1px solid var(--line); border-radius: 18px; background: var(--ink-2); cursor: pointer; text-align: left; scroll-snap-align: start; transition: border-color .3s, background-color .3s; }
+.card { flex: none; width: clamp(240px, 21vw, 330px); display: grid; grid-template-rows: auto auto 1fr; gap: 12px; padding: 20px 22px 22px; border: 1px solid var(--line); border-radius: 18px; background: var(--ink-2); cursor: pointer; text-align: left; scroll-snap-align: start; transition: border-color .3s, background-color .3s; }
 .card:hover { border-color: var(--gold-dim); background: var(--ink-3); }
 .card .num { font-family: var(--f-serif); font-size: 20px; color: var(--gold); font-variant-numeric: lining-nums tabular-nums; }
-.card .ph { height: clamp(190px, 36svh, 340px); display: grid; place-items: center; }
-.card .ph img { max-width: 100%; max-height: 100%; object-fit: contain; filter: drop-shadow(0 24px 24px rgba(0,0,0,.75)); }
-.card .meta { display: grid; gap: 2px; }
+.card .ph { position: relative; height: clamp(170px, 34svh, 320px); overflow: hidden; }
+.card .ph img { position: absolute; inset: 4% 8% 10%; width: 84%; height: 86%; object-fit: contain; filter: drop-shadow(0 18px 16px rgba(0,0,0,.75)); }
+.card .meta { position: relative; z-index: 1; display: grid; gap: 2px; align-content: end; }
 .card .meta small { color: var(--fg-dim); font-size: 13.5px; }
 .card .meta b { font-family: var(--f-serif); font-weight: 600; font-size: 28px; line-height: 1.05; }
 .card .meta .price { font-size: 22px; margin-top: 8px; }
@@ -227,7 +226,6 @@ input[type=range] { width: 100%; height: 44px; margin: 0; accent-color: var(--go
 
 /* fechamento: atendimento por WhatsApp */
 .talk { position: relative; overflow: hidden; isolation: isolate; padding: clamp(70px, 12vh, 140px) clamp(16px, 3vw, 40px) 0; text-align: center; border-top: 1px solid var(--line); }
-.talk .wm { position: absolute; z-index: -1; top: 10%; left: 0; white-space: nowrap; font-family: var(--f-serif); font-weight: 600; font-size: clamp(120px, 24vw, 380px); line-height: 1; letter-spacing: .1em; color: transparent; -webkit-text-stroke: 1px color-mix(in srgb, var(--gold) 22%, transparent); pointer-events: none; user-select: none; }
 .talk h2 { font-size: clamp(54px, 7.4vw, 120px); margin-top: 18px; }
 .talk .lede { color: var(--fg-dim); max-width: 32em; margin: 24px auto 0; }
 .talk .acts { margin-top: 38px; display: flex; flex-direction: column; align-items: center; gap: 18px; }
@@ -304,7 +302,6 @@ input[type=range] { width: 100%; height: 44px; margin: 0; accent-color: var(--go
   .shot { margin: 8px 44px 0; }
   .arrow { width: 40px; height: 40px; top: 42%; }
   .arrow.prev { left: 4px; } .arrow.next { right: 4px; }
-  .ghost { font-size: 30vw; }
   .floor { bottom: 76px; }
   .sw { width: 54px; height: 44px; }
   .strip { min-height: 72px; padding: 8px 8px 12px; flex-wrap: wrap; }
@@ -362,7 +359,6 @@ input[type=range] { width: 100%; height: 44px; margin: 0; accent-color: var(--go
     <nav class="rail" id="rail" aria-label="Modelos"></nav>
 
     <section class="stage" id="stage" aria-label="Foto do produto">
-      <div class="ghost" id="ghost" aria-hidden="true"></div>
       <span class="floor" aria-hidden="true"></span>
       <button class="shot" id="shot" type="button" data-cursor><span class="tilt"><span class="layer" id="layer"></span><span class="sheen" id="sheen"></span></span></button>
       <button class="arrow prev" id="prev" type="button" aria-label="Cor anterior"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
@@ -410,7 +406,6 @@ input[type=range] { width: 100%; height: 44px; margin: 0; accent-color: var(--go
 </section>
 
 <section class="talk" id="contato" aria-labelledby="talkTitle">
-  <span class="wm" aria-hidden="true">CLINCH SUPPLY</span>
   <p class="kick">Atendimento por WhatsApp</p>
   <h2 id="talkTitle">Fale direto<br>com a loja.</h2>
   <p class="lede">Mande o modelo, a cor e o seu número. A loja responde com a disponibilidade do lote.</p>
@@ -483,26 +478,26 @@ input[type=range] { width: 100%; height: 44px; margin: 0; accent-color: var(--go
   var OZS = [10, 12, 14, 16];
   var CATS = {
     shoes: [
-      { key: 'hyperko', by: 'Nike Boxing', name: 'HyperKO 3', ghost: 'HYPERKO', price: 1900,
+      { key: 'hyperko', by: 'Nike Boxing', name: 'HyperKO 3', price: 1900,
         desc: 'A sapatilha mais leve que a Nike já produziu. Cano alto com suporte total de tornozelo e amarração dupla para máxima estabilidade no ringue.',
         colors: [['preta', 'Preta'], ['branca', 'Branca'], ['branca-dourada', 'Branca e dourada'], ['preta-vermelha', 'Preta e vermelha'], ['azul-especial', 'Azul, edição especial'], ['preta-rosa', 'Preta e rosa']] },
-      { key: 'boxhog', by: 'Adidas Boxing', name: 'Box Hog 4', ghost: 'BOX HOG', price: 1500,
+      { key: 'boxhog', by: 'Adidas Boxing', name: 'Box Hog 4', price: 1500,
         desc: 'Cabedal em mesh respirável com reforços internos, entressola EVA e solado com ponto de pivô para footwork rápido. O melhor custo-benefício da Adidas.',
         colors: [['preta', 'Preta'], ['azul', 'Azul royal'], ['vermelha', 'Vermelha']] },
-      { key: 'machomai', by: 'Nike Boxing', name: 'Machomai 3', ghost: 'MACHOMAI', price: 1100,
+      { key: 'machomai', by: 'Nike Boxing', name: 'Machomai 3', price: 1100,
         desc: 'Sola fina para máximo contato com o solo. Leve, respirável e com tração equilibrada para pivotar sem travar o joelho. A mais versátil da Nike Boxing.',
         colors: [['preta', 'Preta'], ['branca', 'Branca'], ['branca-dourada', 'Branca e dourada'], ['azul', 'Azul royal'], ['vermelha', 'Vermelha']] }
     ],
     gloves: [
-      { key: 'cleto-velcro', house: 'Cleto Reyes', by: 'Cleto Reyes, Cidade do México', name: 'Traditional Training', variant: 'Velcro', ghost: 'CLETO', price: 2400,
+      { key: 'cleto-velcro', house: 'Cleto Reyes', by: 'Cleto Reyes, Cidade do México', name: 'Traditional Training', variant: 'Velcro', price: 2400,
         desc: 'Compacta, punho firme e sensação seca: você sente cada golpe conectar. Com velcro, calça e tira sozinho. Para o treino de todo dia.' },
-      { key: 'cleto-cadarco', house: 'Cleto Reyes', by: 'Cleto Reyes, Cidade do México', name: 'Traditional Training', variant: 'Cadarço', ghost: 'CLETO', price: 2250,
+      { key: 'cleto-cadarco', house: 'Cleto Reyes', by: 'Cleto Reyes, Cidade do México', name: 'Traditional Training', variant: 'Cadarço', price: 2250,
         desc: 'A mesma Cleto clássica com cadarço, que trava o punho mais firme. Para treino e sparring de quem já tem alguém para amarrar.' },
-      { key: 'rival-rs1', house: 'Rival', by: 'Rival, Montreal', name: 'RS1 Ultra Sparring 2.0', ghost: 'RIVAL', price: 2100,
+      { key: 'rival-rs1', house: 'Rival', by: 'Rival, Montreal', name: 'RS1 Ultra Sparring 2.0', price: 2100,
         desc: 'Anatômica e muito acolchoada. Feita para sparring pesado, protege a sua mão e o parceiro.' },
-      { key: 'rival-rs2v', house: 'Rival', by: 'Rival, Montreal', name: 'RS2V Super Sparring 2.0', ghost: 'RIVAL', price: 1900,
+      { key: 'rival-rs2v', house: 'Rival', by: 'Rival, Montreal', name: 'RS2V Super Sparring 2.0', price: 1900,
         desc: 'A proteção de sparring da Rival com fechamento em velcro, para treinar sem depender de ninguém para calçar.' },
-      { key: 'rival-rb10', house: 'Rival', by: 'Rival, Montreal', name: 'RB10 Intelli-Shock Bag', ghost: 'RIVAL', price: 2250,
+      { key: 'rival-rb10', house: 'Rival', by: 'Rival, Montreal', name: 'RB10 Intelli-Shock Bag', price: 2250,
         desc: 'Luva de saco e manopla. A espuma absorve o impacto repetido e poupa punho e articulações.' }
     ]
   };
@@ -583,7 +578,7 @@ input[type=range] { width: 100%; height: 44px; margin: 0; accent-color: var(--go
   }
 
   // ---------- palco: foto, nome ao fundo, cores
-  var stage = $('#stage'), shot = $('#shot'), layer = $('#layer'), sheen = $('#sheen'), ghost = $('#ghost'), strip = $('#strip');
+  var stage = $('#stage'), shot = $('#shot'), layer = $('#layer'), sheen = $('#sheen'), strip = $('#strip');
   var prevB = $('#prev'), nextB = $('#next');
   var swap = null;
   function putImage(p, dir, kind) {
@@ -610,14 +605,6 @@ input[type=range] { width: 100%; height: 44px; margin: 0; accent-color: var(--go
       swap = tl;
     };
     (img.decode ? img.decode() : Promise.resolve()).then(run, run);
-  }
-  function putGhost(p, dir) {
-    if (ghost.textContent === p.ghost) return;
-    if (!anim || !ghost.textContent) { ghost.textContent = p.ghost; return; }
-    G.timeline()
-      .to(ghost, { autoAlpha: 0, xPercent: -6 * dir, letterSpacing: '0.2em', duration: 0.3, ease: 'power2.in' })
-      .call(function () { ghost.textContent = p.ghost; })
-      .fromTo(ghost, { xPercent: 6 * dir, letterSpacing: '0em' }, { autoAlpha: 1, xPercent: 0, letterSpacing: '0.06em', duration: 1, ease: 'expo.out' });
   }
   function renderStrip() {
     var p = cur(); strip.innerHTML = '';
@@ -692,7 +679,7 @@ input[type=range] { width: 100%; height: 44px; margin: 0; accent-color: var(--go
     dir = dir || (i > S.idx[S.cat] ? 1 : -1);
     S.idx[S.cat] = i;
     var p = cur();
-    markRail(); putImage(p, dir, 'model'); putGhost(p, dir); renderStrip(); renderPanel(priceNow); afterChange();
+    markRail(); putImage(p, dir, 'model'); renderStrip(); renderPanel(priceNow); afterChange();
   }
   function setColor(ci) {
     var p = cur(); if (!p.colors) return;
@@ -709,7 +696,7 @@ input[type=range] { width: 100%; height: 44px; margin: 0; accent-color: var(--go
     catBtns.forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.cat === cat ? 'true' : 'false'); });
     placePill(catPill, catBtns, 4);
     var p = cur(), dir = cat === 'gloves' ? 1 : -1;
-    renderRail(); putImage(p, dir, 'model'); putGhost(p, dir); renderStrip(); renderPanel(priceNow); afterChange();
+    renderRail(); putImage(p, dir, 'model'); renderStrip(); renderPanel(priceNow); afterChange();
     if (anim) G.from($$('.it', rail), { autoAlpha: 0, x: -16 * dir, duration: 0.55, stagger: 0.05, ease: 'expo.out' });
   }
   // o endereço guarda a escolha (ex.: #hyperko-branca-dourada), para mandar o link de um produto
@@ -949,7 +936,7 @@ input[type=range] { width: 100%; height: 44px; margin: 0; accent-color: var(--go
       var move = G.to(track, { x: function () { return -dist(); }, ease: 'none',
         scrollTrigger: { trigger: coll, start: 'top top', end: function () { return '+=' + dist(); }, pin: true, scrub: 0.6, invalidateOnRefresh: true } });
       $$('.card', track).forEach(function (c) {
-        G.fromTo($('.ph img', c), { rotation: -8, xPercent: 10 }, { rotation: 6, xPercent: -10, ease: 'none',
+        G.fromTo($('.ph img', c), { xPercent: 6, scale: 0.94 }, { xPercent: -6, scale: 1, ease: 'none',
           scrollTrigger: { trigger: c, containerAnimation: move, start: 'left right', end: 'right left', scrub: true } });
       });
       return function () { coll.classList.remove('pin'); };
@@ -963,15 +950,13 @@ input[type=range] { width: 100%; height: 44px; margin: 0; accent-color: var(--go
     G.fromTo('.rule i', { scaleX: 0 }, { scaleX: 1, ease: 'none', scrollTrigger: { trigger: '.rule', start: 'top 90%', end: 'top 45%', scrub: true } });
     G.set('.steps li', { autoAlpha: 0, y: 34 });
     ST.batch('.steps li', { start: 'top 90%', once: true, onEnter: function (els) { G.to(els, { autoAlpha: 1, y: 0, duration: 0.9, stagger: 0.14, ease: 'expo.out' }); } });
-    // fechamento: o nome da loja atravessa o fundo e o convite sobe
-    G.fromTo('.talk .wm', { xPercent: 4 }, { xPercent: -30, ease: 'none', scrollTrigger: { trigger: '.talk', start: 'top bottom', end: 'bottom bottom', scrub: true } });
+    // fechamento: o convite sobe
     G.from('.talk .kick, .talk h2, .talk .lede, .talk .acts > *', { autoAlpha: 0, y: 30, duration: 1, stagger: 0.08, ease: 'expo.out', scrollTrigger: { trigger: '.talk', start: 'top 70%' } });
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { ST.refresh(); });
   }
 
   // ---------- primeira pintura
   readHash();
-  ghost.textContent = cur().ghost;
   renderRail(); renderStrip();
   var animWas = anim; anim = false; renderPanel(); anim = animWas;
   putImage(cur(), 1, 'model'); afterChange();
@@ -1009,8 +994,7 @@ input[type=range] { width: 100%; height: 44px; margin: 0; accent-color: var(--go
     .set(intro, { display: 'none' }, 2.46)
     .from('.rail .it, .cats, .nav .end > *', { autoAlpha: 0, y: 12, duration: 0.7, stagger: 0.05 }, 2.0)
     .from('#layer', { autoAlpha: 0, yPercent: 12, scale: 0.92, duration: 1.2 }, 1.9)
-    .from('#panel > *', { autoAlpha: 0, y: 14, duration: 0.7, stagger: 0.05, clearProps: 'all' }, 2.1)
-    .from('.ghost', { autoAlpha: 0, letterSpacing: '0em', duration: 1.4 }, 1.9);
+    .from('#panel > *', { autoAlpha: 0, y: 14, duration: 0.7, stagger: 0.05, clearProps: 'all' }, 2.1);
   var skip = function () {
     if (tl.progress() >= 1) return;
     tl.progress(1); G.killTweensOf([big, intro]);

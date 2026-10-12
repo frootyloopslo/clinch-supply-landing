@@ -89,7 +89,6 @@ p { margin: 0; text-wrap: pretty; }
 /* palco */
 .stage { position: relative; min-width: 0; min-height: 0; overflow: hidden; display: grid; grid-template-rows: minmax(0, 1fr) auto; isolation: isolate; }
 .stage::before { content: ""; position: absolute; inset: 0; z-index: -2; background: radial-gradient(48% 42% at 50% 60%, color-mix(in srgb, var(--gold) 15%, transparent), transparent 72%); opacity: var(--light, 1); }
-.ghost { position: absolute; z-index: -1; left: 50%; top: 46%; translate: -50% -50%; font-family: var(--f-serif); font-weight: 600; font-size: clamp(90px, 15vw, 260px); line-height: 1; letter-spacing: .06em; white-space: nowrap; color: transparent; -webkit-text-stroke: 1px color-mix(in srgb, var(--gold) 26%, transparent); pointer-events: none; user-select: none; }
 .shot { position: relative; margin: clamp(10px, 3vh, 36px) clamp(52px, 6vw, 96px) 0; min-height: 0; padding: 0; border: 0; background: none; cursor: zoom-in; perspective: 1200px; touch-action: pan-y; }
 .shot .tilt { position: absolute; inset: 0; transform-style: preserve-3d; transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); transition: transform .6s var(--ease); }
 .shot.live .tilt { transition: transform .12s linear; }
@@ -183,12 +182,12 @@ input[type=range] { width: 100%; height: 44px; margin: 0; accent-color: var(--go
 .coll-head { flex: none; width: clamp(250px, 30vw, 440px); display: flex; flex-direction: column; justify-content: flex-end; gap: 16px; padding: 0 clamp(8px, 2vw, 36px) 20px 0; scroll-snap-align: start; }
 .coll-head h2 { font-size: clamp(44px, 5vw, 82px); }
 .coll-head .hint { color: var(--fg-dim); max-width: 24em; }
-.card { flex: none; width: clamp(240px, 21vw, 330px); display: grid; grid-template-rows: auto minmax(0, 1fr) auto; gap: 12px; padding: 20px 22px 22px; border: 1px solid var(--line); border-radius: 18px; background: var(--ink-2); cursor: pointer; text-align: left; scroll-snap-align: start; transition: border-color .3s, background-color .3s; }
+.card { flex: none; width: clamp(240px, 21vw, 330px); display: grid; grid-template-rows: auto auto 1fr; gap: 12px; padding: 20px 22px 22px; border: 1px solid var(--line); border-radius: 18px; background: var(--ink-2); cursor: pointer; text-align: left; scroll-snap-align: start; transition: border-color .3s, background-color .3s; }
 .card:hover { border-color: var(--gold-dim); background: var(--ink-3); }
 .card .num { font-family: var(--f-serif); font-size: 20px; color: var(--gold); font-variant-numeric: lining-nums tabular-nums; }
-.card .ph { height: clamp(190px, 36svh, 340px); display: grid; place-items: center; }
-.card .ph img { max-width: 100%; max-height: 100%; object-fit: contain; filter: drop-shadow(0 24px 24px rgba(0,0,0,.75)); }
-.card .meta { display: grid; gap: 2px; }
+.card .ph { position: relative; height: clamp(170px, 34svh, 320px); overflow: hidden; }
+.card .ph img { position: absolute; inset: 4% 8% 10%; width: 84%; height: 86%; object-fit: contain; filter: drop-shadow(0 18px 16px rgba(0,0,0,.75)); }
+.card .meta { position: relative; z-index: 1; display: grid; gap: 2px; align-content: end; }
 .card .meta small { color: var(--fg-dim); font-size: 13.5px; }
 .card .meta b { font-family: var(--f-serif); font-weight: 600; font-size: 28px; line-height: 1.05; }
 .card .meta .price { font-size: 22px; margin-top: 8px; }
@@ -210,7 +209,6 @@ input[type=range] { width: 100%; height: 44px; margin: 0; accent-color: var(--go
 
 /* fechamento: atendimento por WhatsApp */
 .talk { position: relative; overflow: hidden; isolation: isolate; padding: clamp(70px, 12vh, 140px) clamp(16px, 3vw, 40px) 0; text-align: center; border-top: 1px solid var(--line); }
-.talk .wm { position: absolute; z-index: -1; top: 10%; left: 0; white-space: nowrap; font-family: var(--f-serif); font-weight: 600; font-size: clamp(120px, 24vw, 380px); line-height: 1; letter-spacing: .1em; color: transparent; -webkit-text-stroke: 1px color-mix(in srgb, var(--gold) 22%, transparent); pointer-events: none; user-select: none; }
 .talk h2 { font-size: clamp(54px, 7.4vw, 120px); margin-top: 18px; }
 .talk .lede { color: var(--fg-dim); max-width: 32em; margin: 24px auto 0; }
 .talk .acts { margin-top: 38px; display: flex; flex-direction: column; align-items: center; gap: 18px; }
@@ -287,7 +285,6 @@ input[type=range] { width: 100%; height: 44px; margin: 0; accent-color: var(--go
   .shot { margin: 8px 44px 0; }
   .arrow { width: 40px; height: 40px; top: 42%; }
   .arrow.prev { left: 4px; } .arrow.next { right: 4px; }
-  .ghost { font-size: 30vw; }
   .floor { bottom: 76px; }
   .sw { width: 54px; height: 44px; }
   .strip { min-height: 72px; padding: 8px 8px 12px; flex-wrap: wrap; }
@@ -342,7 +339,6 @@ input[type=range] { width: 100%; height: 44px; margin: 0; accent-color: var(--go
     <nav class="rail" id="rail" aria-label="Modelos"></nav>
 
     <section class="stage" id="stage" aria-label="Foto do produto">
-      <div class="ghost" id="ghost" aria-hidden="true"></div>
       <span class="floor" aria-hidden="true"></span>
       <button class="shot" id="shot" type="button" data-cursor><span class="tilt"><span class="layer" id="layer"></span><span class="sheen" id="sheen"></span></span></button>
       <button class="arrow prev" id="prev" type="button" aria-label="Cor anterior"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
@@ -390,7 +386,6 @@ input[type=range] { width: 100%; height: 44px; margin: 0; accent-color: var(--go
 </section>
 
 <section class="talk" id="contato" aria-labelledby="talkTitle">
-  <span class="wm" aria-hidden="true">CLINCH SUPPLY</span>
   <p class="kick">Atendimento por WhatsApp</p>
   <h2 id="talkTitle">Fale direto<br>com a loja.</h2>
   <p class="lede">Mande o modelo, a cor e o seu número. A loja responde com a disponibilidade do lote.</p>
