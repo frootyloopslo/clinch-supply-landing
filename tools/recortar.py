@@ -4,7 +4,7 @@ Uso: python3 tools/recortar.py [pasta_entrada] [pasta_saida]
 Padrão: fotos/originais -> fotos/
 
 Cada foto vira um .webp com fundo transparente, cortado rente ao produto,
-com no máximo 1800 px no lado maior. O nome do arquivo é mantido
+com no máximo 1400 px no lado maior. O nome do arquivo é mantido
 (ex.: hyperko-preta.jpg -> hyperko-preta.webp), e é esse nome que o site usa.
 Precisa de: pip install "rembg[cpu]" pillow numpy scipy
 """
@@ -14,7 +14,7 @@ from PIL import Image, ImageFilter
 from scipy import ndimage
 from rembg import new_session, remove
 
-MAX = 1800
+MAX = 1400
 MODEL = 'birefnet-general'
 
 def fundo_claro(rgb):
@@ -78,7 +78,7 @@ def uma(p, saida):
     p, saida = pathlib.Path(p), pathlib.Path(saida)
     out = recortar(p, new_session(MODEL))
     dst = saida / (p.stem + '.webp')
-    out.save(dst, 'WEBP', quality=90, method=6)
+    out.save(dst, 'WEBP', quality=86, method=6)
     print(f'{p.name} -> {dst.name} {out.size[0]}x{out.size[1]}', flush=True)
 
 if __name__ == '__main__':

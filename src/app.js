@@ -287,7 +287,8 @@
     $('h3', d).textContent = h.name; $('.from', d).textContent = h.from; $('.feel', d).textContent = h.feel;
     h.items.forEach(function (g) {
       var li = el('li'), a = el('a', 'gl');
-      a.innerHTML = '<b></b><span class="use"></span><span class="end"><span class="price"><small>R$</small>' + fmt(g.price) + '</span><span class="go">Reservar</span></span>';
+      a.innerHTML = '<span class="gpic" aria-hidden="true"><img alt="" loading="lazy"></span><b></b><span class="use"></span><span class="end"><span class="price"><small>R$</small>' + fmt(g.price) + '</span><span class="go">Reservar</span></span>';
+      $('.gpic img', a).src = FOTOS + g.key + '.webp';
       $('b', a).textContent = h.name + ' ' + g.name; $('.use', a).textContent = g.use;
       wire(a, function () { return 'Oi! Quero a luva ' + h.name + ' ' + g.name + '. Quais pesos e cores vocês têm e qual o prazo?'; });
       a.dataset.key = g.key;

@@ -8,4 +8,4 @@ machomai-azul.jpg, machomai-vermelha.jpg, cleto-velcro.jpg, cleto-cadarco.jpg,
 rival-rs1.jpg, rival-rs2v.jpg, rival-rb10.jpg
 
 Depois rode `python3 tools/recortar.py`: ele tira o fundo e salva o .webp em fotos/.
-As luvas só aparecem com foto (seguindo o mouse na lista) quando o arquivo existir.
+As fotos atuais vêm das lojas listadas em tools/fotos.json (fotos oficiais de produto).
