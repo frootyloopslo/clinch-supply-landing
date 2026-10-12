@@ -2,9 +2,9 @@
   'use strict';
 
   // ---------- contato da loja
-  // Quando a loja passar o WhatsApp, coloque só os números com DDI e DDD (ex.: '5511999998888').
-  // Com o número preenchido, todos os botões abrem o WhatsApp com a mensagem pronta.
-  var CONTATO = { whatsapp: '', instagram: 'https://www.instagram.com/clinchsupply/' };
+  // WhatsApp só com números, DDI e DDD. Todos os botões abrem a conversa com a mensagem pronta.
+  // Se ficar vazio, os botões caem no Instagram e copiam a mensagem.
+  var CONTATO = { whatsapp: '5511991617925', instagram: 'https://www.instagram.com/clinchsupply/' };
   var FOTOS = 'fotos/';
 
   // ---------- catálogo
@@ -288,16 +288,16 @@
     if (openSheet) { if (e.key === 'Escape') closeSheet(); else if (e.key === 'Tab') trap(e, openSheet); return; }
     var t = e.target; if (t && (t.tagName === 'INPUT' || t.isContentEditable)) return;
     if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { e.preventDefault(); if (cur().colors) setColor(S.color[cur().key] + (e.key === 'ArrowRight' ? 1 : -1)); else go(S.idx[S.cat] + (e.key === 'ArrowRight' ? 1 : -1)); }
-    else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { if (matchMedia('(max-width: 760px)').matches) return; e.preventDefault(); go(S.idx[S.cat] + (e.key === 'ArrowDown' ? 1 : -1)); }
+    else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { if (matchMedia('(max-width: 760px)').matches || window.scrollY > innerHeight * 0.4) return; e.preventDefault(); go(S.idx[S.cat] + (e.key === 'ArrowDown' ? 1 : -1)); }
   });
-  // no computador, a roda do mouse sobre a foto troca de modelo em vez de rolar a página
+  // o gesto lateral do trackpad sobre a foto troca a cor; a rolagem vertical continua descendo a página
   var wheelAcc = 0, wheelLock = 0;
   stage.addEventListener('wheel', function (e) {
-    if (matchMedia('(max-width: 760px)').matches) return;
+    if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
     e.preventDefault();
     if (Date.now() < wheelLock) return;
-    wheelAcc += e.deltaY;
-    if (Math.abs(wheelAcc) > 60) { go(S.idx[S.cat] + (wheelAcc > 0 ? 1 : -1)); wheelAcc = 0; wheelLock = Date.now() + 650; }
+    wheelAcc += e.deltaX;
+    if (Math.abs(wheelAcc) > 50) { var d = wheelAcc > 0 ? 1 : -1; if (cur().colors) setColor(S.color[cur().key] + d); else go(S.idx[S.cat] + d); wheelAcc = 0; wheelLock = Date.now() + 650; }
   }, { passive: false });
   var down = null, swiped = false;
   shot.addEventListener('pointerdown', function (e) { down = { x: e.clientX, y: e.clientY }; swiped = false; });
@@ -426,14 +426,76 @@
   wire(barCta, function () { return msgFor(cur()); });
 
   // ---------- cursor "Ampliar" sobre a foto
-  var cursorEl = $('#cursor');
+  var cursorEl = $('#cursor'), cursorTxt = $('#cursorTxt');
   if (FINE) {
     var cx = G ? G.quickTo(cursorEl, 'x', { duration: 0.35, ease: 'power3' }) : function (v) { cursorEl.style.left = v + 'px'; };
     var cy = G ? G.quickTo(cursorEl, 'y', { duration: 0.35, ease: 'power3' }) : function (v) { cursorEl.style.top = v + 'px'; };
     window.addEventListener('pointermove', function (e) {
       cx(e.clientX); cy(e.clientY);
-      cursorEl.classList.toggle('on', !!(e.target.closest && e.target.closest('[data-cursor]')) && !lb.open && !openSheet);
+      var t = e.target.closest && e.target.closest('[data-cursor]');
+      if (t) cursorTxt.textContent = t.dataset.cursor || 'Ampliar';
+      cursorEl.classList.toggle('on', !!t && !lb.open && !openSheet);
     }, { passive: true });
+  }
+
+  // ---------- abaixo da vitrine: a coleção, a compra e o contato
+  var track = $('#track'), num = 0;
+  ['shoes', 'gloves'].forEach(function (cat) {
+    CATS[cat].forEach(function (p, i) {
+      num++;
+      var b = el('button', 'card'); b.type = 'button'; b.dataset.cursor = 'Provar';
+      b.innerHTML = '<span class="num">0' + num + '</span><span class="ph"><img alt="" loading="lazy"></span><span class="meta"><small></small><b></b><span class="price"><small>R$</small>' + fmt(p.price) + '</span></span>';
+      $('img', b).src = p.colors ? srcOf(p, 0) : srcOf(p);
+      $('.meta small', b).textContent = (p.house || p.by.split(' ')[0]) + (p.colors ? ', ' + p.colors.length + ' cores' : '');
+      $('b', b).textContent = title(p);
+      b.setAttribute('aria-label', 'Provar ' + (p.house ? p.house + ' ' : p.by.split(' ')[0] + ' ') + title(p) + ', R$ ' + fmt(p.price));
+      b.addEventListener('click', function () { pick(cat, i); });
+      track.appendChild(b);
+    });
+  });
+  // tocar num card sobe até a vitrine e troca o produto quando ela aparece
+  function pick(cat, i) {
+    var change = function () { if (cat !== S.cat) { S.idx[cat] = i; setCat(cat); } else go(i); };
+    window.scrollTo({ top: 0, behavior: anim ? 'smooth' : 'auto' });
+    if (anim) setTimeout(change, 420); else change();
+  }
+  $$('[data-go]').forEach(function (b) {
+    b.addEventListener('click', function () { var t = $('#' + b.dataset.go); if (t) t.scrollIntoView({ behavior: anim ? 'smooth' : 'auto', block: 'start' }); });
+  });
+  // a barra de reserva do celular sai de cena quando o contato aparece
+  if (window.IntersectionObserver) new IntersectionObserver(function (es) { $('#bar').classList.toggle('away', es[0].isIntersecting); }).observe($('#contato'));
+  var sayEl = $('#say');
+  sayEl.innerHTML = sayEl.textContent.split(' ').map(function (w) { return '<span>' + w + '</span>'; }).join(' ');
+
+  var ST = window.ScrollTrigger;
+  if (anim && ST) {
+    G.registerPlugin(ST);
+    var mm = G.matchMedia();
+    // no computador a seção da coleção fica presa e a rolagem leva os cards para o lado
+    mm.add('(min-width: 761px)', function () {
+      var coll = $('#colecao'); coll.classList.add('pin');
+      var dist = function () { return Math.max(0, track.offsetWidth - window.innerWidth); };
+      var move = G.to(track, { x: function () { return -dist(); }, ease: 'none',
+        scrollTrigger: { trigger: coll, start: 'top top', end: function () { return '+=' + dist(); }, pin: true, scrub: 0.6, invalidateOnRefresh: true } });
+      $$('.card', track).forEach(function (c) {
+        G.fromTo($('.ph img', c), { rotation: -8, xPercent: 10 }, { rotation: 6, xPercent: -10, ease: 'none',
+          scrollTrigger: { trigger: c, containerAnimation: move, start: 'left right', end: 'right left', scrub: true } });
+      });
+      return function () { coll.classList.remove('pin'); };
+    });
+    mm.add('(max-width: 760px)', function () {
+      G.from('.card', { autoAlpha: 0, x: 40, duration: 0.9, stagger: 0.08, ease: 'expo.out', scrollTrigger: { trigger: '#colecao', start: 'top 75%' } });
+    });
+    // a frase acende palavra por palavra conforme a página desce
+    G.fromTo('#say span', { opacity: 0.16 }, { opacity: 1, stagger: 0.1, ease: 'none', scrollTrigger: { trigger: '#say', start: 'top 82%', end: 'bottom 45%', scrub: true } });
+    // a linha dourada da compra se desenha e os passos entram em sequência
+    G.fromTo('.rule i', { scaleX: 0 }, { scaleX: 1, ease: 'none', scrollTrigger: { trigger: '.rule', start: 'top 90%', end: 'top 45%', scrub: true } });
+    G.set('.steps li', { autoAlpha: 0, y: 34 });
+    ST.batch('.steps li', { start: 'top 90%', once: true, onEnter: function (els) { G.to(els, { autoAlpha: 1, y: 0, duration: 0.9, stagger: 0.14, ease: 'expo.out' }); } });
+    // fechamento: o nome da loja atravessa o fundo e o convite sobe
+    G.fromTo('.talk .wm', { xPercent: 4 }, { xPercent: -30, ease: 'none', scrollTrigger: { trigger: '.talk', start: 'top bottom', end: 'bottom bottom', scrub: true } });
+    G.from('.talk .kick, .talk h2, .talk .lede, .talk .acts > *', { autoAlpha: 0, y: 30, duration: 1, stagger: 0.08, ease: 'expo.out', scrollTrigger: { trigger: '.talk', start: 'top 70%' } });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { ST.refresh(); });
   }
 
   // ---------- primeira pintura

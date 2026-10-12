@@ -20,10 +20,11 @@ if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Hanken+Grotesk:wght@400;500;600;700&display=swap">
 <style>
-/* O provador. A identidade dos flyers (preto, wordmark serifado espaçado, dourado nos preços) num lugar só:
-   uma tela, sem rolar. Quem entra escolhe categoria, modelo, cor e número e vê o produto mudar sob a luz.
-   O momento autoral é a troca de luz: o produto sai, o nome atrás dele muda e o próximo sobe para o foco.
-   Guia de onças e como comprar abrem em painéis por cima, sem tirar a pessoa da vitrine. */
+/* O provador. A identidade dos flyers (preto, wordmark serifado espaçado, dourado nos preços).
+   A primeira tela é a vitrine: quem entra escolhe categoria, modelo, cor e número e vê o produto mudar sob a luz.
+   Abaixo dela, um pouco de rolagem com movimento: a coleção passa na horizontal, a frase acende palavra por
+   palavra, a compra se desenha em três passos e o fechamento leva para o WhatsApp da loja.
+   O guia de onças abre num painel por cima, sem tirar a pessoa da vitrine. */
 :root {
   --ink: #000;
   --ink-2: #0d0c0b;
@@ -149,9 +150,13 @@ p { margin: 0; text-wrap: pretty; }
 /* rodapé da tela */
 .foot { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 0 clamp(16px, 3vw, 40px); border-top: 1px solid var(--line); font-size: 13.5px; color: var(--fg-dim); }
 .foot .keys { display: flex; gap: 16px; }
+.foot .r { display: flex; align-items: center; gap: 26px; }
+.cue { display: inline-flex; align-items: center; gap: 8px; background: none; border: 0; padding: 0; cursor: pointer; font-size: 13.5px; font-weight: 600; color: var(--fg); }
+.cue svg { width: 14px; height: 14px; stroke: var(--gold); stroke-width: 1.8; fill: none; stroke-linecap: round; stroke-linejoin: round; animation: cue 1.8s var(--ease) infinite; }
+@keyframes cue { 0% { translate: 0 -5px; opacity: 0; } 35% { opacity: 1; } 100% { translate: 0 6px; opacity: 0; } }
 .foot kbd { font-family: var(--f-sans); font-size: 12px; padding: 1px 7px; border: 1px solid var(--line); border-radius: 6px; color: var(--fg); margin-right: 4px; }
 
-/* PAINÉIS: guia de onças e como comprar */
+/* PAINEL: guia de onças */
 .veil { position: fixed; inset: 0; z-index: 40; background: rgba(0,0,0,.6); opacity: 0; visibility: hidden; transition: opacity .4s var(--ease), visibility 0s .4s; }
 .veil.on { opacity: 1; visibility: visible; transition: opacity .4s var(--ease); }
 .sheet { position: fixed; top: 0; right: 0; bottom: 0; z-index: 41; width: min(560px, 100vw); background: var(--ink-2); border-left: 1px solid var(--line); overflow: auto; padding: calc(28px + env(safe-area-inset-top, 0px)) clamp(22px, 3vw, 44px) calc(36px + env(safe-area-inset-bottom, 0px)); translate: 100% 0; visibility: hidden; transition: translate .55s var(--ease), visibility 0s .55s; }
@@ -182,13 +187,56 @@ input[type=range] { width: 100%; height: 44px; margin: 0; accent-color: var(--go
 .scale .fill { position: absolute; left: 0; top: 0; height: 3px; border-radius: 3px; background: var(--gold); width: 100%; transition: width .5s var(--ease); }
 #useOz { justify-self: start; }
 
-.steps { list-style: none; margin: 30px 0 0; padding: 0; display: grid; gap: 26px; counter-reset: s; }
-.steps li { counter-increment: s; display: grid; grid-template-columns: 34px 1fr; gap: 4px 14px; padding-top: 22px; border-top: 1px solid var(--gold-dim); }
-.steps li::before { content: counter(s); grid-row: 1 / span 2; font-family: var(--f-serif); font-size: 24px; color: var(--gold); line-height: 1.1; }
-.steps h3 { font-size: 30px; }
-.steps p { color: var(--fg-dim); }
-.sheet .end { margin-top: 36px; padding-top: 28px; border-top: 1px solid var(--line); display: grid; gap: 16px; justify-items: start; }
-.sheet .end p { color: var(--fg-dim); }
+
+/* ABAIXO DA VITRINE: rolagem curta, com movimento */
+.kick { font-size: 13px; font-weight: 600; letter-spacing: .02em; color: var(--gold); }
+.btn svg { width: 20px; height: 20px; fill: currentColor; flex: none; }
+
+/* a coleção: no computador a rolagem empurra os cards para o lado */
+.coll { position: relative; overflow: hidden; border-top: 1px solid var(--line); }
+.coll-pin { min-height: 100svh; display: flex; align-items: center; padding-block: clamp(36px, 7vh, 80px); }
+.track { display: flex; align-items: stretch; gap: clamp(14px, 1.6vw, 24px); width: 100%; padding: 4px clamp(16px, 3vw, 40px); overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: clamp(16px, 3vw, 40px); overscroll-behavior-x: contain; }
+.coll.pin .track { width: max-content; overflow: visible; scroll-snap-type: none; padding-right: clamp(40px, 8vw, 120px); }
+.coll-head { flex: none; width: clamp(250px, 30vw, 440px); display: flex; flex-direction: column; justify-content: flex-end; gap: 16px; padding: 0 clamp(8px, 2vw, 36px) 20px 0; scroll-snap-align: start; }
+.coll-head h2 { font-size: clamp(44px, 5vw, 82px); }
+.coll-head .hint { color: var(--fg-dim); max-width: 24em; }
+.card { flex: none; width: clamp(240px, 21vw, 330px); display: grid; grid-template-rows: auto minmax(0, 1fr) auto; gap: 12px; padding: 20px 22px 22px; border: 1px solid var(--line); border-radius: 18px; background: var(--ink-2); cursor: pointer; text-align: left; scroll-snap-align: start; transition: border-color .3s, background-color .3s; }
+.card:hover { border-color: var(--gold-dim); background: var(--ink-3); }
+.card .num { font-family: var(--f-serif); font-size: 20px; color: var(--gold); font-variant-numeric: lining-nums tabular-nums; }
+.card .ph { height: clamp(190px, 36svh, 340px); display: grid; place-items: center; }
+.card .ph img { max-width: 100%; max-height: 100%; object-fit: contain; filter: drop-shadow(0 24px 24px rgba(0,0,0,.75)); }
+.card .meta { display: grid; gap: 2px; }
+.card .meta small { color: var(--fg-dim); font-size: 13.5px; }
+.card .meta b { font-family: var(--f-serif); font-weight: 600; font-size: 28px; line-height: 1.05; }
+.card .meta .price { font-size: 22px; margin-top: 8px; }
+
+/* por que a Clinch e como funciona a compra */
+.why { padding: clamp(70px, 12vh, 140px) clamp(16px, 3vw, 40px) clamp(60px, 10vh, 120px); border-top: 1px solid var(--line); }
+.say { font-family: var(--f-serif); font-weight: 500; font-size: clamp(34px, 4.6vw, 76px); line-height: 1.08; max-width: 17em; margin-top: 22px; }
+.say span { display: inline-block; }
+.steps-h { margin-top: clamp(70px, 11vh, 130px); display: flex; justify-content: space-between; align-items: end; gap: 12px 24px; flex-wrap: wrap; scroll-margin-top: 40px; }
+.steps-h h2 { font-size: clamp(38px, 3.8vw, 58px); }
+.steps-h p { color: var(--fg-dim); max-width: 30em; }
+.rule { position: relative; height: 1px; background: var(--line); margin-top: 30px; }
+.rule i { position: absolute; inset: 0; background: var(--gold); transform-origin: 0 50%; }
+.steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(20px, 3vw, 52px); counter-reset: s; }
+.steps li { counter-increment: s; padding-top: 28px; display: grid; gap: 10px; align-content: start; }
+.steps li::before { content: "0" counter(s); font-family: var(--f-serif); font-size: 22px; color: var(--gold); line-height: 1; }
+.steps h3 { font-size: clamp(30px, 2.6vw, 40px); }
+.steps p { color: var(--fg-dim); max-width: 26em; }
+
+/* fechamento: atendimento por WhatsApp */
+.talk { position: relative; overflow: hidden; isolation: isolate; padding: clamp(70px, 12vh, 140px) clamp(16px, 3vw, 40px) 0; text-align: center; border-top: 1px solid var(--line); }
+.talk .wm { position: absolute; z-index: -1; top: 10%; left: 0; white-space: nowrap; font-family: var(--f-serif); font-weight: 600; font-size: clamp(120px, 24vw, 380px); line-height: 1; letter-spacing: .1em; color: transparent; -webkit-text-stroke: 1px color-mix(in srgb, var(--gold) 22%, transparent); pointer-events: none; user-select: none; }
+.talk h2 { font-size: clamp(54px, 7.4vw, 120px); margin-top: 18px; }
+.talk .lede { color: var(--fg-dim); max-width: 32em; margin: 24px auto 0; }
+.talk .acts { margin-top: 38px; display: flex; flex-direction: column; align-items: center; gap: 18px; }
+.btn-big { min-height: 60px; padding: 16px 34px; font-size: 17px; }
+.talk .tel { font-family: var(--f-serif); font-weight: 600; font-size: clamp(26px, 2.4vw, 34px); text-decoration: none; font-variant-numeric: lining-nums tabular-nums; transition: color .2s; }
+.talk .tel:hover { color: var(--gold); }
+.talk .ig { font-size: 14.5px; }
+.end-foot { margin-top: clamp(70px, 11vh, 120px); border-top: 1px solid var(--line); padding: 26px 0 calc(26px + env(safe-area-inset-bottom, 0px)); display: flex; justify-content: space-between; align-items: center; gap: 16px 24px; flex-wrap: wrap; font-size: 13.5px; color: var(--fg-dim); text-align: left; }
+.end-foot .mark b { font-size: 18px; }
 
 /* Foto ampliada */
 .lb { position: fixed; inset: 0; z-index: 60; background: #000; display: grid; grid-template-rows: auto 1fr auto; opacity: 0; visibility: hidden; transition: opacity .35s var(--ease), visibility 0s .35s; }
@@ -220,6 +268,7 @@ input[type=range] { width: 100%; height: 44px; margin: 0; accent-color: var(--go
 
 /* Barra de reserva (celular) */
 .bar { display: none; }
+.bar.away { translate: 0 150%; opacity: 0; pointer-events: none; }
 
 /* Telas médias: a lista vira uma fileira acima da foto */
 @media (max-width: 1100px) {
@@ -260,11 +309,19 @@ input[type=range] { width: 100%; height: 44px; margin: 0; accent-color: var(--go
   .sw { width: 54px; height: 44px; }
   .strip { min-height: 72px; padding: 8px 8px 12px; flex-wrap: wrap; }
   .foot { display: none; }
-  .bar { position: fixed; left: 10px; right: 10px; bottom: calc(10px + env(safe-area-inset-bottom, 0px)); z-index: 28; display: flex; align-items: center; gap: 12px; padding: 8px 8px 8px 16px; border-radius: 999px; background: color-mix(in srgb, var(--ink-3) 92%, transparent); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); box-shadow: 0 0 0 1px var(--line), 0 18px 40px rgba(0,0,0,.6); }
+  .bar { position: fixed; left: 10px; right: 10px; bottom: calc(10px + env(safe-area-inset-bottom, 0px)); z-index: 28; display: flex; align-items: center; gap: 12px; padding: 8px 8px 8px 16px; border-radius: 999px; background: color-mix(in srgb, var(--ink-3) 92%, transparent); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); box-shadow: 0 0 0 1px var(--line), 0 18px 40px rgba(0,0,0,.6); transition: translate .5s var(--ease), opacity .3s; }
   .bar .t { flex: 1; min-width: 0; font-size: 14px; line-height: 1.25; }
   .bar .t b { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .bar .t span { color: var(--gold); font-variant-numeric: tabular-nums; }
   .bar .btn { min-height: 44px; padding: 8px 18px; font-size: 14px; flex: none; }
+  .panel { padding-bottom: 40px; }
+  .coll-pin { min-height: 0; padding-block: 56px 48px; }
+  .coll-head { width: 78vw; }
+  .card { width: 74vw; }
+  .card .ph { height: 46vw; }
+  .steps { grid-template-columns: 1fr; }
+  .steps li { padding-top: 22px; }
+  .end-foot { padding-bottom: calc(26px + env(safe-area-inset-bottom, 0px)); }
 }
 
 /* Telas baixas no computador */
@@ -295,8 +352,8 @@ input[type=range] { width: 100%; height: 44px; margin: 0; accent-color: var(--go
     </div>
     <div class="end">
       <button class="link" type="button" data-open="guia">Guia de onças</button>
-      <button class="link" type="button" data-open="compra">Como comprar</button>
-      <a class="btn btn-ghost js-contact" href="https://www.instagram.com/clinchsupply/" target="_blank" rel="noopener">Falar com a loja</a>
+      <button class="link" type="button" data-go="compra">Como comprar</button>
+      <a class="btn btn-ghost js-contact" href="https://wa.me/5511991617925" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.04 2a9.9 9.9 0 0 0-8.5 14.98L2 22l5.17-1.5A9.9 9.9 0 1 0 12.04 2zm0 18.1a8.2 8.2 0 0 1-4.18-1.15l-.3-.18-3.07.9.92-3-.2-.31a8.2 8.2 0 1 1 6.83 3.74zm4.5-6.14c-.25-.12-1.46-.72-1.69-.8-.23-.08-.39-.12-.55.12-.16.25-.63.8-.78.97-.14.16-.29.18-.53.06a6.7 6.7 0 0 1-3.32-2.9c-.25-.43.25-.4.72-1.33.08-.16.04-.3-.02-.43-.06-.12-.55-1.32-.75-1.81-.2-.48-.4-.41-.55-.42h-.47a.9.9 0 0 0-.65.3c-.22.25-.86.84-.86 2.04s.88 2.37 1 2.53c.12.16 1.73 2.64 4.2 3.7 1.56.67 2.17.73 2.95.62.48-.07 1.46-.6 1.67-1.17.2-.58.2-1.07.14-1.17-.06-.1-.22-.16-.47-.28z"/></svg>WhatsApp</a>
     </div>
   </header>
 
@@ -318,9 +375,55 @@ input[type=range] { width: 100%; height: 44px; margin: 0; accent-color: var(--go
 
   <footer class="foot">
     <span>Pré-venda aberta. Originais importados dos EUA, com chegada em novembro.</span>
-    <span class="keys" aria-hidden="true"><span><kbd>←</kbd><kbd>→</kbd>cor</span><span><kbd>↑</kbd><kbd>↓</kbd>modelo</span></span>
+    <span class="r">
+      <span class="keys" aria-hidden="true"><span><kbd>←</kbd><kbd>→</kbd>cor</span><span><kbd>↑</kbd><kbd>↓</kbd>modelo</span></span>
+      <button class="cue" type="button" data-go="colecao">Ver a coleção<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v15M6 13l6 6 6-6"/></svg></button>
+    </span>
   </footer>
 </div>
+
+<section class="coll" id="colecao" aria-labelledby="collTitle">
+  <div class="coll-pin">
+    <div class="track" id="track">
+      <header class="coll-head">
+        <p class="kick">A coleção</p>
+        <h2 id="collTitle">Oito modelos, uma vitrine.</h2>
+        <p class="hint">Escolha qualquer um para provar lá em cima, com todas as cores e números.</p>
+      </header>
+    </div>
+  </div>
+</section>
+
+<section class="why" aria-labelledby="whyKick">
+  <p class="kick" id="whyKick">Por que a Clinch</p>
+  <p class="say" id="say">Material de luta original, importado dos Estados Unidos em lotes pequenos, para quem leva o treino a sério.</p>
+  <div class="steps-h" id="compra">
+    <h2>Como funciona a compra</h2>
+    <p>Pré-venda aberta. Seu número e sua cor ficam garantidos no lote de novembro.</p>
+  </div>
+  <div class="rule" aria-hidden="true"><i></i></div>
+  <ol class="steps">
+    <li><h3>Conversa</h3><p>Conte pelo WhatsApp como você treina e o que já usa. A loja indica o modelo e o número certos.</p></li>
+    <li><h3>Reserva</h3><p>As importações chegam em lotes pequenos. Na pré-venda, seu número e sua cor ficam guardados.</p></li>
+    <li><h3>Entrega</h3><p>Produto original importado dos Estados Unidos, entregue a você em novembro.</p></li>
+  </ol>
+</section>
+
+<section class="talk" id="contato" aria-labelledby="talkTitle">
+  <span class="wm" aria-hidden="true">CLINCH SUPPLY</span>
+  <p class="kick">Atendimento por WhatsApp</p>
+  <h2 id="talkTitle">Fale direto<br>com a loja.</h2>
+  <p class="lede">Mande o modelo, a cor e o seu número. A loja responde com a disponibilidade do lote.</p>
+  <div class="acts">
+    <a class="btn btn-solid btn-big js-contact" href="https://wa.me/5511991617925" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.04 2a9.9 9.9 0 0 0-8.5 14.98L2 22l5.17-1.5A9.9 9.9 0 1 0 12.04 2zm0 18.1a8.2 8.2 0 0 1-4.18-1.15l-.3-.18-3.07.9.92-3-.2-.31a8.2 8.2 0 1 1 6.83 3.74zm4.5-6.14c-.25-.12-1.46-.72-1.69-.8-.23-.08-.39-.12-.55.12-.16.25-.63.8-.78.97-.14.16-.29.18-.53.06a6.7 6.7 0 0 1-3.32-2.9c-.25-.43.25-.4.72-1.33.08-.16.04-.3-.02-.43-.06-.12-.55-1.32-.75-1.81-.2-.48-.4-.41-.55-.42h-.47a.9.9 0 0 0-.65.3c-.22.25-.86.84-.86 2.04s.88 2.37 1 2.53c.12.16 1.73 2.64 4.2 3.7 1.56.67 2.17.73 2.95.62.48-.07 1.46-.6 1.67-1.17.2-.58.2-1.07.14-1.17-.06-.1-.22-.16-.47-.28z"/></svg>Chamar no WhatsApp</a>
+    <a class="tel js-contact" href="https://wa.me/5511991617925" target="_blank" rel="noopener">+55 11 99161-7925</a>
+    <a class="link ig" href="https://www.instagram.com/clinchsupply/" target="_blank" rel="noopener">@clinchsupply no Instagram</a>
+  </div>
+  <footer class="end-foot">
+    <span class="mark" translate="no"><b>CLINCH</b><i>SUPPLY</i></span>
+    <span>Originais importados dos EUA. Pré-venda com chegada em novembro.</span>
+  </footer>
+</section>
 
 <div class="veil" id="veil"></div>
 
@@ -348,22 +451,10 @@ input[type=range] { width: 100%; height: 44px; margin: 0; accent-color: var(--go
   </div>
 </aside>
 
-<aside class="sheet" id="sheet-compra" role="dialog" aria-modal="true" aria-labelledby="compraTitle">
-  <div class="top"><h2 id="compraTitle">Como funciona a compra</h2><button class="x" type="button" data-close aria-label="Fechar"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
-  <ol class="steps">
-    <li><h3>Conversa</h3><p>Conte como você treina e o que já usa. A loja indica o modelo e o número certos.</p></li>
-    <li><h3>Reserva</h3><p>As importações chegam em lotes pequenos. Na pré-venda, seu número e sua cor ficam garantidos.</p></li>
-    <li><h3>Entrega</h3><p>Produto original importado dos Estados Unidos, entregue a você em novembro.</p></li>
-  </ol>
-  <div class="end">
-    <p>Mande o modelo, a cor e o seu número. A loja responde com a disponibilidade do lote.</p>
-    <a class="btn btn-solid js-contact" href="https://www.instagram.com/clinchsupply/" target="_blank" rel="noopener">Falar com a loja</a>
-  </div>
-</aside>
 
 <div class="bar" id="bar">
   <div class="t"><b id="barName">HyperKO 3, Preta</b><span id="barPrice">R$ 1.900</span></div>
-  <a class="btn btn-solid" id="barCta" href="https://www.instagram.com/clinchsupply/" target="_blank" rel="noopener">Reservar</a>
+  <a class="btn btn-solid" id="barCta" href="https://wa.me/5511991617925" target="_blank" rel="noopener">Reservar</a>
 </div>
 
 <div class="lb" id="lb" role="dialog" aria-modal="true" aria-labelledby="lbName" hidden>
@@ -372,18 +463,19 @@ input[type=range] { width: 100%; height: 44px; margin: 0; accent-color: var(--go
   <footer id="lbHint">Clique ou toque na foto para aproximar. As setas do teclado trocam a cor.</footer>
 </div>
 
-<div class="cursor" id="cursor" aria-hidden="true"><span>Ampliar</span></div>
+<div class="cursor" id="cursor" aria-hidden="true"><span id="cursorTxt">Ampliar</span></div>
 <noscript><p style="padding:24px">Ative o JavaScript para ver os produtos e escolher modelo, cor e número.</p></noscript>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script>
 (function () {
   'use strict';
 
   // ---------- contato da loja
-  // Quando a loja passar o WhatsApp, coloque só os números com DDI e DDD (ex.: '5511999998888').
-  // Com o número preenchido, todos os botões abrem o WhatsApp com a mensagem pronta.
-  var CONTATO = { whatsapp: '', instagram: 'https://www.instagram.com/clinchsupply/' };
+  // WhatsApp só com números, DDI e DDD. Todos os botões abrem a conversa com a mensagem pronta.
+  // Se ficar vazio, os botões caem no Instagram e copiam a mensagem.
+  var CONTATO = { whatsapp: '5511991617925', instagram: 'https://www.instagram.com/clinchsupply/' };
   var FOTOS = 'fotos/';
 
   // ---------- catálogo
@@ -667,16 +759,16 @@ input[type=range] { width: 100%; height: 44px; margin: 0; accent-color: var(--go
     if (openSheet) { if (e.key === 'Escape') closeSheet(); else if (e.key === 'Tab') trap(e, openSheet); return; }
     var t = e.target; if (t && (t.tagName === 'INPUT' || t.isContentEditable)) return;
     if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { e.preventDefault(); if (cur().colors) setColor(S.color[cur().key] + (e.key === 'ArrowRight' ? 1 : -1)); else go(S.idx[S.cat] + (e.key === 'ArrowRight' ? 1 : -1)); }
-    else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { if (matchMedia('(max-width: 760px)').matches) return; e.preventDefault(); go(S.idx[S.cat] + (e.key === 'ArrowDown' ? 1 : -1)); }
+    else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { if (matchMedia('(max-width: 760px)').matches || window.scrollY > innerHeight * 0.4) return; e.preventDefault(); go(S.idx[S.cat] + (e.key === 'ArrowDown' ? 1 : -1)); }
   });
-  // no computador, a roda do mouse sobre a foto troca de modelo em vez de rolar a página
+  // o gesto lateral do trackpad sobre a foto troca a cor; a rolagem vertical continua descendo a página
   var wheelAcc = 0, wheelLock = 0;
   stage.addEventListener('wheel', function (e) {
-    if (matchMedia('(max-width: 760px)').matches) return;
+    if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
     e.preventDefault();
     if (Date.now() < wheelLock) return;
-    wheelAcc += e.deltaY;
-    if (Math.abs(wheelAcc) > 60) { go(S.idx[S.cat] + (wheelAcc > 0 ? 1 : -1)); wheelAcc = 0; wheelLock = Date.now() + 650; }
+    wheelAcc += e.deltaX;
+    if (Math.abs(wheelAcc) > 50) { var d = wheelAcc > 0 ? 1 : -1; if (cur().colors) setColor(S.color[cur().key] + d); else go(S.idx[S.cat] + d); wheelAcc = 0; wheelLock = Date.now() + 650; }
   }, { passive: false });
   var down = null, swiped = false;
   shot.addEventListener('pointerdown', function (e) { down = { x: e.clientX, y: e.clientY }; swiped = false; });
@@ -805,14 +897,76 @@ input[type=range] { width: 100%; height: 44px; margin: 0; accent-color: var(--go
   wire(barCta, function () { return msgFor(cur()); });
 
   // ---------- cursor "Ampliar" sobre a foto
-  var cursorEl = $('#cursor');
+  var cursorEl = $('#cursor'), cursorTxt = $('#cursorTxt');
   if (FINE) {
     var cx = G ? G.quickTo(cursorEl, 'x', { duration: 0.35, ease: 'power3' }) : function (v) { cursorEl.style.left = v + 'px'; };
     var cy = G ? G.quickTo(cursorEl, 'y', { duration: 0.35, ease: 'power3' }) : function (v) { cursorEl.style.top = v + 'px'; };
     window.addEventListener('pointermove', function (e) {
       cx(e.clientX); cy(e.clientY);
-      cursorEl.classList.toggle('on', !!(e.target.closest && e.target.closest('[data-cursor]')) && !lb.open && !openSheet);
+      var t = e.target.closest && e.target.closest('[data-cursor]');
+      if (t) cursorTxt.textContent = t.dataset.cursor || 'Ampliar';
+      cursorEl.classList.toggle('on', !!t && !lb.open && !openSheet);
     }, { passive: true });
+  }
+
+  // ---------- abaixo da vitrine: a coleção, a compra e o contato
+  var track = $('#track'), num = 0;
+  ['shoes', 'gloves'].forEach(function (cat) {
+    CATS[cat].forEach(function (p, i) {
+      num++;
+      var b = el('button', 'card'); b.type = 'button'; b.dataset.cursor = 'Provar';
+      b.innerHTML = '<span class="num">0' + num + '</span><span class="ph"><img alt="" loading="lazy"></span><span class="meta"><small></small><b></b><span class="price"><small>R$</small>' + fmt(p.price) + '</span></span>';
+      $('img', b).src = p.colors ? srcOf(p, 0) : srcOf(p);
+      $('.meta small', b).textContent = (p.house || p.by.split(' ')[0]) + (p.colors ? ', ' + p.colors.length + ' cores' : '');
+      $('b', b).textContent = title(p);
+      b.setAttribute('aria-label', 'Provar ' + (p.house ? p.house + ' ' : p.by.split(' ')[0] + ' ') + title(p) + ', R$ ' + fmt(p.price));
+      b.addEventListener('click', function () { pick(cat, i); });
+      track.appendChild(b);
+    });
+  });
+  // tocar num card sobe até a vitrine e troca o produto quando ela aparece
+  function pick(cat, i) {
+    var change = function () { if (cat !== S.cat) { S.idx[cat] = i; setCat(cat); } else go(i); };
+    window.scrollTo({ top: 0, behavior: anim ? 'smooth' : 'auto' });
+    if (anim) setTimeout(change, 420); else change();
+  }
+  $$('[data-go]').forEach(function (b) {
+    b.addEventListener('click', function () { var t = $('#' + b.dataset.go); if (t) t.scrollIntoView({ behavior: anim ? 'smooth' : 'auto', block: 'start' }); });
+  });
+  // a barra de reserva do celular sai de cena quando o contato aparece
+  if (window.IntersectionObserver) new IntersectionObserver(function (es) { $('#bar').classList.toggle('away', es[0].isIntersecting); }).observe($('#contato'));
+  var sayEl = $('#say');
+  sayEl.innerHTML = sayEl.textContent.split(' ').map(function (w) { return '<span>' + w + '</span>'; }).join(' ');
+
+  var ST = window.ScrollTrigger;
+  if (anim && ST) {
+    G.registerPlugin(ST);
+    var mm = G.matchMedia();
+    // no computador a seção da coleção fica presa e a rolagem leva os cards para o lado
+    mm.add('(min-width: 761px)', function () {
+      var coll = $('#colecao'); coll.classList.add('pin');
+      var dist = function () { return Math.max(0, track.offsetWidth - window.innerWidth); };
+      var move = G.to(track, { x: function () { return -dist(); }, ease: 'none',
+        scrollTrigger: { trigger: coll, start: 'top top', end: function () { return '+=' + dist(); }, pin: true, scrub: 0.6, invalidateOnRefresh: true } });
+      $$('.card', track).forEach(function (c) {
+        G.fromTo($('.ph img', c), { rotation: -8, xPercent: 10 }, { rotation: 6, xPercent: -10, ease: 'none',
+          scrollTrigger: { trigger: c, containerAnimation: move, start: 'left right', end: 'right left', scrub: true } });
+      });
+      return function () { coll.classList.remove('pin'); };
+    });
+    mm.add('(max-width: 760px)', function () {
+      G.from('.card', { autoAlpha: 0, x: 40, duration: 0.9, stagger: 0.08, ease: 'expo.out', scrollTrigger: { trigger: '#colecao', start: 'top 75%' } });
+    });
+    // a frase acende palavra por palavra conforme a página desce
+    G.fromTo('#say span', { opacity: 0.16 }, { opacity: 1, stagger: 0.1, ease: 'none', scrollTrigger: { trigger: '#say', start: 'top 82%', end: 'bottom 45%', scrub: true } });
+    // a linha dourada da compra se desenha e os passos entram em sequência
+    G.fromTo('.rule i', { scaleX: 0 }, { scaleX: 1, ease: 'none', scrollTrigger: { trigger: '.rule', start: 'top 90%', end: 'top 45%', scrub: true } });
+    G.set('.steps li', { autoAlpha: 0, y: 34 });
+    ST.batch('.steps li', { start: 'top 90%', once: true, onEnter: function (els) { G.to(els, { autoAlpha: 1, y: 0, duration: 0.9, stagger: 0.14, ease: 'expo.out' }); } });
+    // fechamento: o nome da loja atravessa o fundo e o convite sobe
+    G.fromTo('.talk .wm', { xPercent: 4 }, { xPercent: -30, ease: 'none', scrollTrigger: { trigger: '.talk', start: 'top bottom', end: 'bottom bottom', scrub: true } });
+    G.from('.talk .kick, .talk h2, .talk .lede, .talk .acts > *', { autoAlpha: 0, y: 30, duration: 1, stagger: 0.08, ease: 'expo.out', scrollTrigger: { trigger: '.talk', start: 'top 70%' } });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { ST.refresh(); });
   }
 
   // ---------- primeira pintura
