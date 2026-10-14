@@ -2,7 +2,9 @@
 
 Site estático da Clinch Supply. A primeira tela é um provador: escolha categoria, modelo, cor e número (ou peso da luva) sem rolar; o guia de onças abre num painel. Abaixo, uma rolagem curta: a coleção passa na horizontal (clicar num card leva o produto para o provador), como funciona a compra e o fechamento com o WhatsApp da loja. Animações com GSAP e ScrollTrigger.
 
-Atalhos: setas ←/→ (ou o gesto lateral do trackpad sobre a foto) trocam a cor, ↑/↓ trocam o modelo. O endereço guarda a escolha (ex.: `#hyperko-branca-dourada`), então dá para mandar o link de um produto.
+A busca no topo verifica a disponibilidade de qualquer modelo: o que está no catálogo aparece para provar; o que não está leva para o direct do Instagram (@clinchsupply) com a mensagem copiada.
+
+Atalhos: `/` abre a busca, setas ←/→ (ou o gesto lateral do trackpad sobre a foto) trocam a cor, ↑/↓ trocam o modelo. O endereço guarda a escolha (ex.: `#hyperko-branca-dourada`), então dá para mandar o link de um produto.
 
 - `index.html`: o site publicado (gerado, não edite à mão)
 - `src/page.html`: estrutura e estilos

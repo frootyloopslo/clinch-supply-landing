@@ -74,14 +74,36 @@ p { margin: 0; text-wrap: pretty; }
 .app { height: 100svh; min-height: 600px; display: grid; grid-template-rows: var(--nav-h) minmax(0, 1fr) var(--foot-h); }
 
 /* NAV */
-.nav { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 24px; padding: 0 clamp(16px, 3vw, 40px); padding-top: env(safe-area-inset-top, 0px); border-bottom: 1px solid var(--line); position: relative; z-index: 5; }
-.nav .mark { justify-self: start; }
-.nav .end { justify-self: end; display: flex; align-items: center; gap: 22px; }
+.nav { display: grid; grid-template-columns: auto minmax(0, 1fr) auto auto; grid-template-areas: "mark cats find end"; align-items: center; gap: 22px; padding: 0 clamp(16px, 3vw, 40px); padding-top: env(safe-area-inset-top, 0px); border-bottom: 1px solid var(--line); position: relative; z-index: 5; }
+.nav .mark { grid-area: mark; justify-self: start; }
+.nav .cats { grid-area: cats; justify-self: center; }
+.nav .end { grid-area: end; justify-self: end; display: flex; align-items: center; gap: 22px; }
+.nav .end [data-go] { display: none; }
 .nav .end .btn { min-height: 40px; padding: 8px 18px; font-size: 14px; }
 .cats { position: relative; display: grid; grid-template-columns: 1fr 1fr; padding: 4px; border: 1px solid var(--line); border-radius: 999px; background: var(--ink-2); }
 .cats button { position: relative; z-index: 1; min-height: 40px; padding: 6px 26px; background: none; border: 0; border-radius: 999px; cursor: pointer; font-weight: 600; font-size: 15px; color: var(--fg-dim); transition: color .3s; }
 .cats button[aria-pressed=true] { color: #000; }
 .cats .pill { position: absolute; z-index: 0; top: 4px; bottom: 4px; left: 4px; border-radius: 999px; background: var(--gold); transition: translate .5s var(--ease), width .5s var(--ease); }
+
+/* BUSCA: verificar disponibilidade de qualquer modelo */
+.find { grid-area: find; position: relative; display: flex; align-items: center; gap: 8px; width: clamp(240px, 22vw, 330px); height: 46px; padding: 0 5px 0 15px; border: 1px solid var(--gold-dim); border-radius: 999px; background: var(--ink-2); transition: border-color .25s, background-color .25s; }
+.find:focus-within { border-color: var(--gold); background: var(--ink-3); }
+.find > svg { width: 17px; height: 17px; flex: none; stroke: var(--gold); fill: none; stroke-width: 1.8; stroke-linecap: round; }
+.find input { flex: 1; min-width: 0; height: 100%; padding: 0; background: none; border: 0; outline: 0; color: var(--fg); font: inherit; font-size: 14.5px; }
+.find input::placeholder { color: var(--fg-dim); opacity: 1; transition: opacity .3s; }
+.find input.swap::placeholder { opacity: 0; }
+.find input::-webkit-search-cancel-button { -webkit-appearance: none; }
+.find .go { flex: none; height: 36px; padding: 0 15px; border-radius: 999px; border: 0; background: var(--gold); color: #000; font-size: 13.5px; font-weight: 600; cursor: pointer; transition: background-color .2s, scale .2s; }
+.find .go:hover { background: var(--fg); }
+.find .go:active { scale: .95; }
+.sug { position: absolute; top: calc(100% + 8px); left: 0; right: 0; z-index: 30; margin: 0; padding: 6px; list-style: none; border: 1px solid var(--line); border-radius: 16px; background: var(--ink-2); box-shadow: 0 24px 50px rgba(0,0,0,.65); }
+.sug[hidden] { display: none; }
+.sug button { width: 100%; display: grid; grid-template-columns: 44px minmax(0, 1fr) auto; align-items: center; gap: 10px; padding: 7px 10px 7px 6px; border: 0; border-radius: 10px; background: none; cursor: pointer; text-align: left; font-size: 14px; line-height: 1.25; }
+.sug button:hover, .sug button:focus-visible { background: var(--ink-3); outline: 0; }
+.sug img { width: 44px; height: 34px; object-fit: contain; }
+.sug .price { font-size: 15px; }
+.sug .ask { grid-template-columns: 44px minmax(0, 1fr); color: var(--gold); font-weight: 600; }
+.sug .ask svg { justify-self: center; width: 18px; height: 18px; stroke: var(--gold); fill: none; stroke-width: 1.8; stroke-linecap: round; }
 
 /* SALA: lista | foto | ficha */
 .room { display: grid; grid-template-columns: minmax(230px, 290px) minmax(0, 1fr) minmax(320px, 400px); min-height: 0; position: relative; }
@@ -186,6 +208,35 @@ input[type=range] { width: 100%; height: 44px; margin: 0; accent-color: var(--go
 .scale .fill { position: absolute; left: 0; top: 0; height: 3px; border-radius: 3px; background: var(--gold); width: 100%; transition: width .5s var(--ease); }
 #useOz { justify-self: start; }
 
+/* painel da busca: a checagem e o resultado */
+.qbig { font-family: var(--f-serif); font-weight: 600; font-size: clamp(34px, 3.4vw, 46px); line-height: 1.05; margin-top: 8px; overflow-wrap: anywhere; }
+.checks { list-style: none; margin: 28px 0 0; padding: 0; border-top: 1px solid var(--line); }
+.checks li { display: grid; grid-template-columns: 24px 1fr auto; align-items: center; gap: 14px; padding: 16px 0; border-bottom: 1px solid var(--line); color: var(--fg-dim); transition: color .3s; }
+.checks li.on, .checks li.done { color: var(--fg); }
+.checks .ic { position: relative; width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid var(--line); display: grid; place-items: center; }
+.checks .ic svg { width: 12px; height: 12px; fill: none; stroke: #000; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; opacity: 0; }
+.checks li.on .ic { border-top-color: var(--gold); animation: spin .8s linear infinite; }
+.checks li.ok .ic { border-color: var(--gold); background: var(--gold); }
+.checks li.ok .ic svg { opacity: 1; }
+.checks li.no .ic::after { content: ""; width: 9px; height: 1.5px; background: var(--fg-dim); }
+.checks li.ask .ic { border-color: var(--gold); }
+.checks li.ask .ic::after { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--gold); }
+.checks .st { font-size: 13.5px; color: var(--fg-dim); }
+.checks li.ok .st, .checks li.ask .st { color: var(--gold); }
+@keyframes spin { to { rotate: 360deg; } }
+.res { margin-top: 30px; display: grid; gap: 16px; justify-items: start; }
+.res:empty { display: none; }
+.res h3 { font-size: clamp(30px, 2.8vw, 40px); }
+.res p { color: var(--fg-dim); }
+.res .note { font-size: 13.5px; margin-top: -6px; }
+.hits { display: grid; gap: 8px; width: 100%; }
+.hit { width: 100%; display: grid; grid-template-columns: 72px minmax(0, 1fr) auto; align-items: center; gap: 14px; padding: 10px 16px 10px 10px; border: 1px solid var(--line); border-radius: 14px; background: none; cursor: pointer; text-align: left; transition: border-color .2s, background-color .2s; }
+.hit:hover { border-color: var(--gold-dim); background: var(--ink-3); }
+.hit img { width: 72px; height: 54px; object-fit: contain; }
+.hit b { display: block; font-family: var(--f-serif); font-weight: 600; font-size: 22px; line-height: 1.1; }
+.hit small { color: var(--fg-dim); font-size: 13px; }
+.hit .to { font-size: 13.5px; font-weight: 600; color: var(--gold); white-space: nowrap; }
+
 
 /* ABAIXO DA VITRINE: rolagem curta, com movimento */
 .kick { font-size: 13px; font-weight: 600; letter-spacing: .02em; color: var(--gold); }
@@ -284,15 +335,18 @@ input[type=range] { width: 100%; height: 44px; margin: 0; accent-color: var(--go
   .panel { grid-column: 2; grid-row: 1 / span 2; }
   .nav .end { gap: 16px; }
 }
-@media (min-width: 761px) and (max-width: 900px) { .nav .end .btn { display: none; } }
+@media (min-width: 761px) and (max-width: 1280px) { .nav .end [data-open=guia] { display: none; } }
+@media (min-width: 761px) and (max-width: 900px) { .nav .end .btn { display: none; } .find { width: 230px; } .nav { gap: 14px; } }
 
 /* Celular: a tela vira uma coluna, com a reserva fixa embaixo */
 @media (max-width: 760px) {
   :root { --nav-h: 64px; }
   .app { height: auto; min-height: 0; grid-template-rows: auto auto; }
-  .nav { grid-template-columns: auto 1fr; grid-template-rows: var(--nav-h) auto; gap: 0 12px; }
+  .nav { grid-template-columns: auto 1fr; grid-template-rows: var(--nav-h) auto auto; grid-template-areas: "mark end" "find find" "cats cats"; gap: 0 12px; }
   .nav .mark b { font-size: 20px; }
-  .cats { grid-row: 2; grid-column: 1 / -1; margin: 0 0 12px; }
+  .nav .cats { justify-self: stretch; margin: 0 0 12px; }
+  .find { width: 100%; margin-bottom: 10px; }
+  .nav .end [data-go] { display: inline; }
   .nav .end .btn { display: none; }
   .nav .end .link { display: inline; font-size: 14px; }
   .room { grid-template-columns: 1fr; grid-template-rows: auto auto auto; }
@@ -347,6 +401,12 @@ input[type=range] { width: 100%; height: 44px; margin: 0; accent-color: var(--go
       <button type="button" data-cat="shoes" aria-pressed="true">Sapatilhas</button>
       <button type="button" data-cat="gloves" aria-pressed="false">Luvas</button>
     </div>
+    <form class="find" id="find" role="search" autocomplete="off" novalidate>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>
+      <input id="q" type="search" name="q" placeholder="Procurar modelo" aria-label="Procurar um modelo e verificar a disponibilidade" enterkeyhint="search" maxlength="80">
+      <button class="go" type="submit">Verificar</button>
+      <ul class="sug" id="sug" hidden></ul>
+    </form>
     <div class="end">
       <button class="link" type="button" data-open="guia">Guia de onças</button>
       <button class="link" type="button" data-go="compra">Como comprar</button>
@@ -370,7 +430,7 @@ input[type=range] { width: 100%; height: 44px; margin: 0; accent-color: var(--go
   </main>
 
   <footer class="foot">
-    <span>Pré-venda aberta. Originais importados dos EUA, com chegada em novembro.</span>
+    <span>Pré-venda aberta. Originais importados dos EUA.</span>
     <span class="r">
       <span class="keys" aria-hidden="true"><span><kbd>←</kbd><kbd>→</kbd>cor</span><span><kbd>↑</kbd><kbd>↓</kbd>modelo</span></span>
       <button class="cue" type="button" data-go="colecao">Ver a coleção<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v15M6 13l6 6 6-6"/></svg></button>
@@ -395,13 +455,13 @@ input[type=range] { width: 100%; height: 44px; margin: 0; accent-color: var(--go
   <p class="say" id="say">Material de luta original, importado dos Estados Unidos em lotes pequenos, para quem leva o treino a sério.</p>
   <div class="steps-h" id="compra">
     <h2>Como funciona a compra</h2>
-    <p>Pré-venda aberta. Seu número e sua cor ficam garantidos no lote de novembro.</p>
+    <p>Pré-venda aberta. Seu número e sua cor ficam garantidos no próximo lote.</p>
   </div>
   <div class="rule" aria-hidden="true"><i></i></div>
   <ol class="steps">
     <li><h3>Conversa</h3><p>Conte pelo WhatsApp como você treina e o que já usa. A loja indica o modelo e o número certos.</p></li>
     <li><h3>Reserva</h3><p>As importações chegam em lotes pequenos. Na pré-venda, seu número e sua cor ficam guardados.</p></li>
-    <li><h3>Entrega</h3><p>Produto original importado dos Estados Unidos, entregue a você em novembro.</p></li>
+    <li><h3>Entrega</h3><p>Produto original importado dos Estados Unidos, entregue direto a você.</p></li>
   </ol>
 </section>
 
@@ -416,11 +476,23 @@ input[type=range] { width: 100%; height: 44px; margin: 0; accent-color: var(--go
   </div>
   <footer class="end-foot">
     <span class="mark" translate="no"><b>CLINCH</b><i>SUPPLY</i></span>
-    <span>Originais importados dos EUA. Pré-venda com chegada em novembro.</span>
+    <span>Originais importados dos EUA. Pré-venda aberta.</span>
   </footer>
 </section>
 
 <div class="veil" id="veil"></div>
+
+<aside class="sheet" id="sheet-busca" role="dialog" aria-modal="true" aria-labelledby="buscaTitle">
+  <div class="top"><h2 id="buscaTitle">Disponibilidade</h2><button class="x" type="button" data-close aria-label="Fechar"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <p class="kick">Você procurou</p>
+  <p class="qbig" id="qShow"></p>
+  <ol class="checks" id="checks" aria-live="polite">
+    <li><span class="ic"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span>Vitrine da Clinch</span><span class="st"></span></li>
+    <li><span class="ic"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span>Lote da pré-venda</span><span class="st"></span></li>
+    <li><span class="ic"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span>Encomenda dos EUA</span><span class="st"></span></li>
+  </ol>
+  <div class="res" id="res" aria-live="polite"></div>
+</aside>
 
 <aside class="sheet" id="sheet-guia" role="dialog" aria-modal="true" aria-labelledby="guiaTitle">
   <div class="top"><h2 id="guiaTitle">Qual peso de luva?</h2><button class="x" type="button" data-close aria-label="Fechar"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
@@ -652,7 +724,7 @@ input[type=range] { width: 100%; height: 44px; margin: 0; accent-color: var(--go
       chips.appendChild(b);
     });
     $('.reserve', panel).textContent = (p.colors ? 'Reservar ' : 'Pedir ') + via;
-    $('.note', panel).textContent = p.colors ? 'Pré-venda com chegada em novembro. Numeração do 38 ao 46 BR.' : 'Original, importada dos EUA. Cores e prazo sob consulta.';
+    $('.note', panel).textContent = p.colors ? 'Pré-venda aberta. Numeração do 38 ao 46 BR.' : 'Original, importada dos EUA. Cores e prazo sob consulta.';
     wire($('.reserve', panel), function () { return msgFor(cur()); });
     bindOpeners(panel);
     // o preço corre até o valor do modelo novo
@@ -745,6 +817,7 @@ input[type=range] { width: 100%; height: 44px; margin: 0; accent-color: var(--go
     }
     if (openSheet) { if (e.key === 'Escape') closeSheet(); else if (e.key === 'Tab') trap(e, openSheet); return; }
     var t = e.target; if (t && (t.tagName === 'INPUT' || t.isContentEditable)) return;
+    if (e.key === '/') { e.preventDefault(); qIn.focus(); return; }
     if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { e.preventDefault(); if (cur().colors) setColor(S.color[cur().key] + (e.key === 'ArrowRight' ? 1 : -1)); else go(S.idx[S.cat] + (e.key === 'ArrowRight' ? 1 : -1)); }
     else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { if (matchMedia('(max-width: 760px)').matches || window.scrollY > innerHeight * 0.4) return; e.preventDefault(); go(S.idx[S.cat] + (e.key === 'ArrowDown' ? 1 : -1)); }
   });
@@ -896,6 +969,136 @@ input[type=range] { width: 100%; height: 44px; margin: 0; accent-color: var(--go
     }, { passive: true });
   }
 
+  // ---------- busca: a pessoa procura qualquer modelo e "verifica a disponibilidade".
+  // O que está no catálogo aparece para provar; o que não está vira uma conversa no direct da loja.
+  var IG_DM = 'https://ig.me/m/clinchsupply';
+  var IG_SVG = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.5 2h9A5.5 5.5 0 0 1 22 7.5v9a5.5 5.5 0 0 1-5.5 5.5h-9A5.5 5.5 0 0 1 2 16.5v-9A5.5 5.5 0 0 1 7.5 2zm0 1.8A3.7 3.7 0 0 0 3.8 7.5v9a3.7 3.7 0 0 0 3.7 3.7h9a3.7 3.7 0 0 0 3.7-3.7v-9a3.7 3.7 0 0 0-3.7-3.7h-9zM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 1.8a3.2 3.2 0 1 0 0 6.4 3.2 3.2 0 0 0 0-6.4zm5.3-3.1a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4z"/></svg>';
+  var norm = function (s) { return String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, ' ').trim(); };
+  var STOP = ' de da do das dos a o e em com para pra tem voces vcs quero queria procuro procurando modelo modelos cor tamanho numero n oz the ';
+  var INDEX = [];
+  ['shoes', 'gloves'].forEach(function (cat) {
+    CATS[cat].forEach(function (p, i) {
+      var words = [p.house, p.by, p.name, p.variant, p.key.replace(/-/g, ' '),
+        cat === 'shoes' ? 'sapatilha sapatilhas bota botas tenis ' + SIZES.join(' ') : 'luva luvas ' + OZS.join(' ')]
+        .concat((p.colors || []).map(function (c) { return c[1]; }));
+      INDEX.push({ cat: cat, i: i, p: p, hay: ' ' + norm(words.join(' ')) + ' ' });
+    });
+  });
+  // devolve os produtos que mais combinam com a busca e se algum cobre todas as palavras
+  function lookup(q) {
+    var toks = norm(q).split(' ').filter(function (w) { return w && STOP.indexOf(' ' + w + ' ') < 0; });
+    if (!toks.length) return { hits: [], exact: false };
+    var scored = INDEX.map(function (it) {
+      var n = 0;
+      toks.forEach(function (w) {
+        if (it.hay.indexOf(' ' + w + ' ') > -1 || (!/^\d+$/.test(w) && w.length >= 3 && it.hay.indexOf(w) > -1)) n++;
+      });
+      return { it: it, n: n };
+    });
+    var max = Math.max.apply(null, scored.map(function (x) { return x.n; }));
+    if (!max) return { hits: [], exact: false };
+    return { hits: scored.filter(function (x) { return x.n === max; }).map(function (x) { return x.it; }), exact: max === toks.length };
+  }
+  var findF = $('#find'), qIn = $('#q'), sug = $('#sug');
+  function thumbOf(p) { return p.colors ? srcOf(p, 0) : srcOf(p); }
+  function nameOf(p) { return (p.house || p.by.split(' ')[0]) + ' ' + title(p); }
+  function renderSug() {
+    var q = qIn.value.trim();
+    sug.innerHTML = '';
+    if (q.length < 2) { sug.hidden = true; return; }
+    lookup(q).hits.slice(0, 4).forEach(function (it) {
+      var li = el('li'), b = el('button'); b.type = 'button';
+      b.innerHTML = '<img alt=""><span></span><span class="price"><small>R$</small>' + fmt(it.p.price) + '</span>';
+      $('img', b).src = thumbOf(it.p); $('span', b).textContent = nameOf(it.p);
+      b.addEventListener('click', function () { sug.hidden = true; qIn.value = ''; pick(it.cat, it.i); });
+      li.appendChild(b); sug.appendChild(li);
+    });
+    var li = el('li'), b = el('button', 'ask'); b.type = 'button';
+    b.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg><span></span>';
+    $('span', b).textContent = 'Verificar disponibilidade de “' + q + '”';
+    b.addEventListener('click', function () { run(qIn.value); });
+    li.appendChild(b); sug.appendChild(li);
+    sug.hidden = false;
+  }
+  qIn.addEventListener('input', renderSug);
+  qIn.addEventListener('focus', renderSug);
+  qIn.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') { sug.hidden = true; qIn.blur(); }
+    else if (e.key === 'ArrowDown' && !sug.hidden) { e.preventDefault(); $('button', sug).focus(); }
+  });
+  sug.addEventListener('keydown', function (e) {
+    var bs = $$('button', sug), k = bs.indexOf(document.activeElement);
+    if (e.key === 'ArrowDown' && k < bs.length - 1) { e.preventDefault(); bs[k + 1].focus(); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); (k > 0 ? bs[k - 1] : qIn).focus(); }
+    else if (e.key === 'Escape') { sug.hidden = true; qIn.focus(); }
+  });
+  findF.addEventListener('focusout', function () { setTimeout(function () { if (!findF.contains(document.activeElement)) sug.hidden = true; }, 120); });
+  findF.addEventListener('submit', function (e) { e.preventDefault(); if (qIn.value.trim()) run(qIn.value); else qIn.focus(); });
+  // o campo vazio vai sugerindo o que dá para procurar
+  var EX = ['Procurar modelo', 'Winning 16 oz', 'Nike HyperKO 2', 'Hayabusa T3', 'Cleto Reyes Pro'], exI = 0;
+  if (anim) setInterval(function () {
+    if (document.activeElement === qIn || qIn.value) return;
+    qIn.classList.add('swap');
+    setTimeout(function () { exI = (exI + 1) % EX.length; qIn.placeholder = EX[exI]; qIn.classList.remove('swap'); }, 300);
+  }, 3200);
+
+  var checks = $$('#checks li'), res = $('#res'), runId = 0;
+  function dmMsg(q) { return 'Oi! Vim pelo site da Clinch Supply e procurei "' + q + '". Vocês conseguem esse modelo? Qual a disponibilidade?'; }
+  function igButton(q, solid) {
+    var a = el('a', 'btn ' + (solid ? 'btn-solid' : 'btn-ghost'), IG_SVG + 'Perguntar no direct');
+    a.href = IG_DM; a.target = '_blank'; a.rel = 'noopener';
+    a.addEventListener('click', function () {
+      if (navigator.clipboard) navigator.clipboard.writeText(dmMsg(q)).then(function () { say('Mensagem copiada. É só colar no direct.'); }, function () {});
+    });
+    return a;
+  }
+  function run(q) {
+    q = q.trim().slice(0, 80); if (!q) return;
+    sug.hidden = true; qIn.blur();
+    var r = lookup(q), id = ++runId, found = r.hits.length > 0;
+    $('#qShow').textContent = '“' + q + '”';
+    res.innerHTML = '';
+    checks.forEach(function (li) { li.className = ''; $('.st', li).textContent = ''; });
+    openSheetBy('busca');
+    var steps = [
+      [found ? 'ok' : 'no', found ? (r.exact ? 'Encontrado' : 'Parecido') : 'Não está'],
+      [found ? 'ok' : 'no', found ? 'Pré-venda aberta' : 'Fora do lote'],
+      r.exact && found ? ['ok', 'Não precisa'] : ['ask', 'A loja confirma']
+    ];
+    var d = anim ? 700 : 0, lead = anim ? 300 : 0;
+    steps.forEach(function (st, k) {
+      setTimeout(function () { if (id === runId) checks[k].className = 'on'; }, lead + d * k);
+      setTimeout(function () {
+        if (id !== runId) return;
+        checks[k].className = 'done ' + st[0]; $('.st', checks[k]).textContent = st[1];
+        if (k === 2) showResult(q, r);
+      }, lead + d * (k + 1) - (anim ? 120 : 0));
+    });
+  }
+  function showResult(q, r) {
+    var found = r.hits.length > 0;
+    res.innerHTML = found && r.exact
+      ? '<h3>Temos na vitrine.</h3><p>Escolha a cor e o número no provador e reserve na hora.</p>'
+      : found
+        ? '<h3>Esse exato não está no lote atual.</h3><p>A Clinch consegue buscar sob encomenda nos Estados Unidos. Pergunte no direct que a loja confirma a disponibilidade e o prazo.</p>'
+        : '<h3>Não está no lote atual.</h3><p>A Clinch busca sob encomenda nos Estados Unidos. Mande no direct que a loja confirma a disponibilidade e o prazo para você.</p>';
+    if (!r.exact || !found) { res.appendChild(igButton(q, true)); res.appendChild(el('p', 'note', 'A mensagem vai copiada. É só colar no direct da @clinchsupply.')); }
+    if (found) {
+      if (!r.exact) res.appendChild(el('p', null, 'Enquanto isso, o mais próximo na vitrine:'));
+      var box = el('div', 'hits');
+      r.hits.slice(0, 3).forEach(function (it) {
+        var b = el('button', 'hit'); b.type = 'button';
+        b.innerHTML = '<img alt=""><span><small></small><b></b></span><span class="to">Provar</span>';
+        $('img', b).src = thumbOf(it.p); $('small', b).textContent = (it.p.house || it.p.by.split(' ')[0]) + ', R$ ' + fmt(it.p.price); $('b', b).textContent = title(it.p);
+        b.addEventListener('click', function () { closeSheet(true); qIn.value = ''; pick(it.cat, it.i); });
+        box.appendChild(b);
+      });
+      res.appendChild(box);
+      if (r.exact) { var o = el('p', null, 'Procura outra versão ou cor? '); var a = igButton(q, false); a.className = 'link'; a.textContent = 'Pergunte no direct'; o.appendChild(a); res.appendChild(o); }
+    }
+    if (anim) G.from(res.children, { autoAlpha: 0, y: 14, duration: 0.6, stagger: 0.06, ease: 'expo.out' });
+  }
+
   // ---------- abaixo da vitrine: a coleção, a compra e o contato
   var track = $('#track'), num = 0;
   ['shoes', 'gloves'].forEach(function (cat) {
@@ -992,7 +1195,7 @@ input[type=range] { width: 100%; height: 44px; margin: 0; accent-color: var(--go
     }, 1.55)
     .set(navMark, { autoAlpha: 1 }, 2.45)
     .set(intro, { display: 'none' }, 2.46)
-    .from('.rail .it, .cats, .nav .end > *', { autoAlpha: 0, y: 12, duration: 0.7, stagger: 0.05 }, 2.0)
+    .from('.rail .it, .cats, .find, .nav .end > *', { autoAlpha: 0, y: 12, duration: 0.7, stagger: 0.05 }, 2.0)
     .from('#layer', { autoAlpha: 0, yPercent: 12, scale: 0.92, duration: 1.2 }, 1.9)
     .from('#panel > *', { autoAlpha: 0, y: 14, duration: 0.7, stagger: 0.05, clearProps: 'all' }, 2.1);
   var skip = function () {
