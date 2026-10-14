@@ -542,8 +542,8 @@
     res.innerHTML = found && r.exact
       ? '<h3>Temos na vitrine.</h3><p>Escolha a cor e o número no provador e reserve na hora.</p>'
       : found
-        ? '<h3>Esse exato não está no lote atual.</h3><p>A Clinch consegue buscar sob encomenda nos Estados Unidos. Pergunte no direct que a loja confirma a disponibilidade e o prazo.</p>'
-        : '<h3>Não está no lote atual.</h3><p>A Clinch busca sob encomenda nos Estados Unidos. Mande no direct que a loja confirma a disponibilidade e o prazo para você.</p>';
+        ? '<h3>Esse exato não está no lote atual.</h3><p>A Clinch provavelmente consegue resolver isso para você. Pergunte no direct que a loja confirma a disponibilidade e o prazo.</p>'
+        : '<h3>Não está no lote atual.</h3><p>A Clinch provavelmente consegue resolver isso para você. Mande no direct que a loja confirma a disponibilidade e o prazo.</p>';
     if (!r.exact || !found) { res.appendChild(igButton(q, true)); res.appendChild(el('p', 'note', 'A mensagem vai copiada. É só colar no direct da @clinchsupply.')); }
     if (found) {
       if (!r.exact) res.appendChild(el('p', null, 'Enquanto isso, o mais próximo na vitrine:'));
