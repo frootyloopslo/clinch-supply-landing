@@ -186,7 +186,7 @@
       chips.appendChild(b);
     });
     $('.reserve', panel).textContent = (p.colors ? 'Reservar ' : 'Pedir ') + via;
-    $('.note', panel).textContent = p.colors ? 'Pré-venda com chegada em novembro. Numeração do 38 ao 46 BR.' : 'Original, importada dos EUA. Cores e prazo sob consulta.';
+    $('.note', panel).textContent = p.colors ? 'Pré-venda aberta. Numeração do 38 ao 46 BR.' : 'Original, importada dos EUA. Cores e prazo sob consulta.';
     wire($('.reserve', panel), function () { return msgFor(cur()); });
     bindOpeners(panel);
     // o preço corre até o valor do modelo novo
@@ -279,6 +279,7 @@
     }
     if (openSheet) { if (e.key === 'Escape') closeSheet(); else if (e.key === 'Tab') trap(e, openSheet); return; }
     var t = e.target; if (t && (t.tagName === 'INPUT' || t.isContentEditable)) return;
+    if (e.key === '/') { e.preventDefault(); qIn.focus(); return; }
     if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { e.preventDefault(); if (cur().colors) setColor(S.color[cur().key] + (e.key === 'ArrowRight' ? 1 : -1)); else go(S.idx[S.cat] + (e.key === 'ArrowRight' ? 1 : -1)); }
     else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { if (matchMedia('(max-width: 760px)').matches || window.scrollY > innerHeight * 0.4) return; e.preventDefault(); go(S.idx[S.cat] + (e.key === 'ArrowDown' ? 1 : -1)); }
   });
@@ -430,6 +431,136 @@
     }, { passive: true });
   }
 
+  // ---------- busca: a pessoa procura qualquer modelo e "verifica a disponibilidade".
+  // O que está no catálogo aparece para provar; o que não está vira uma conversa no direct da loja.
+  var IG_DM = 'https://ig.me/m/clinchsupply';
+  var IG_SVG = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.5 2h9A5.5 5.5 0 0 1 22 7.5v9a5.5 5.5 0 0 1-5.5 5.5h-9A5.5 5.5 0 0 1 2 16.5v-9A5.5 5.5 0 0 1 7.5 2zm0 1.8A3.7 3.7 0 0 0 3.8 7.5v9a3.7 3.7 0 0 0 3.7 3.7h9a3.7 3.7 0 0 0 3.7-3.7v-9a3.7 3.7 0 0 0-3.7-3.7h-9zM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 1.8a3.2 3.2 0 1 0 0 6.4 3.2 3.2 0 0 0 0-6.4zm5.3-3.1a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4z"/></svg>';
+  var norm = function (s) { return String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, ' ').trim(); };
+  var STOP = ' de da do das dos a o e em com para pra tem voces vcs quero queria procuro procurando modelo modelos cor tamanho numero n oz the ';
+  var INDEX = [];
+  ['shoes', 'gloves'].forEach(function (cat) {
+    CATS[cat].forEach(function (p, i) {
+      var words = [p.house, p.by, p.name, p.variant, p.key.replace(/-/g, ' '),
+        cat === 'shoes' ? 'sapatilha sapatilhas bota botas tenis ' + SIZES.join(' ') : 'luva luvas ' + OZS.join(' ')]
+        .concat((p.colors || []).map(function (c) { return c[1]; }));
+      INDEX.push({ cat: cat, i: i, p: p, hay: ' ' + norm(words.join(' ')) + ' ' });
+    });
+  });
+  // devolve os produtos que mais combinam com a busca e se algum cobre todas as palavras
+  function lookup(q) {
+    var toks = norm(q).split(' ').filter(function (w) { return w && STOP.indexOf(' ' + w + ' ') < 0; });
+    if (!toks.length) return { hits: [], exact: false };
+    var scored = INDEX.map(function (it) {
+      var n = 0;
+      toks.forEach(function (w) {
+        if (it.hay.indexOf(' ' + w + ' ') > -1 || (!/^\d+$/.test(w) && w.length >= 3 && it.hay.indexOf(w) > -1)) n++;
+      });
+      return { it: it, n: n };
+    });
+    var max = Math.max.apply(null, scored.map(function (x) { return x.n; }));
+    if (!max) return { hits: [], exact: false };
+    return { hits: scored.filter(function (x) { return x.n === max; }).map(function (x) { return x.it; }), exact: max === toks.length };
+  }
+  var findF = $('#find'), qIn = $('#q'), sug = $('#sug');
+  function thumbOf(p) { return p.colors ? srcOf(p, 0) : srcOf(p); }
+  function nameOf(p) { return (p.house || p.by.split(' ')[0]) + ' ' + title(p); }
+  function renderSug() {
+    var q = qIn.value.trim();
+    sug.innerHTML = '';
+    if (q.length < 2) { sug.hidden = true; return; }
+    lookup(q).hits.slice(0, 4).forEach(function (it) {
+      var li = el('li'), b = el('button'); b.type = 'button';
+      b.innerHTML = '<img alt=""><span></span><span class="price"><small>R$</small>' + fmt(it.p.price) + '</span>';
+      $('img', b).src = thumbOf(it.p); $('span', b).textContent = nameOf(it.p);
+      b.addEventListener('click', function () { sug.hidden = true; qIn.value = ''; pick(it.cat, it.i); });
+      li.appendChild(b); sug.appendChild(li);
+    });
+    var li = el('li'), b = el('button', 'ask'); b.type = 'button';
+    b.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg><span></span>';
+    $('span', b).textContent = 'Verificar disponibilidade de “' + q + '”';
+    b.addEventListener('click', function () { run(qIn.value); });
+    li.appendChild(b); sug.appendChild(li);
+    sug.hidden = false;
+  }
+  qIn.addEventListener('input', renderSug);
+  qIn.addEventListener('focus', renderSug);
+  qIn.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') { sug.hidden = true; qIn.blur(); }
+    else if (e.key === 'ArrowDown' && !sug.hidden) { e.preventDefault(); $('button', sug).focus(); }
+  });
+  sug.addEventListener('keydown', function (e) {
+    var bs = $$('button', sug), k = bs.indexOf(document.activeElement);
+    if (e.key === 'ArrowDown' && k < bs.length - 1) { e.preventDefault(); bs[k + 1].focus(); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); (k > 0 ? bs[k - 1] : qIn).focus(); }
+    else if (e.key === 'Escape') { sug.hidden = true; qIn.focus(); }
+  });
+  findF.addEventListener('focusout', function () { setTimeout(function () { if (!findF.contains(document.activeElement)) sug.hidden = true; }, 120); });
+  findF.addEventListener('submit', function (e) { e.preventDefault(); if (qIn.value.trim()) run(qIn.value); else qIn.focus(); });
+  // o campo vazio vai sugerindo o que dá para procurar
+  var EX = ['Procurar modelo', 'Winning 16 oz', 'Nike HyperKO 2', 'Hayabusa T3', 'Cleto Reyes Pro'], exI = 0;
+  if (anim) setInterval(function () {
+    if (document.activeElement === qIn || qIn.value) return;
+    qIn.classList.add('swap');
+    setTimeout(function () { exI = (exI + 1) % EX.length; qIn.placeholder = EX[exI]; qIn.classList.remove('swap'); }, 300);
+  }, 3200);
+
+  var checks = $$('#checks li'), res = $('#res'), runId = 0;
+  function dmMsg(q) { return 'Oi! Vim pelo site da Clinch Supply e procurei "' + q + '". Vocês conseguem esse modelo? Qual a disponibilidade?'; }
+  function igButton(q, solid) {
+    var a = el('a', 'btn ' + (solid ? 'btn-solid' : 'btn-ghost'), IG_SVG + 'Perguntar no direct');
+    a.href = IG_DM; a.target = '_blank'; a.rel = 'noopener';
+    a.addEventListener('click', function () {
+      if (navigator.clipboard) navigator.clipboard.writeText(dmMsg(q)).then(function () { say('Mensagem copiada. É só colar no direct.'); }, function () {});
+    });
+    return a;
+  }
+  function run(q) {
+    q = q.trim().slice(0, 80); if (!q) return;
+    sug.hidden = true; qIn.blur();
+    var r = lookup(q), id = ++runId, found = r.hits.length > 0;
+    $('#qShow').textContent = '“' + q + '”';
+    res.innerHTML = '';
+    checks.forEach(function (li) { li.className = ''; $('.st', li).textContent = ''; });
+    openSheetBy('busca');
+    var steps = [
+      [found ? 'ok' : 'no', found ? (r.exact ? 'Encontrado' : 'Parecido') : 'Não está'],
+      [found ? 'ok' : 'no', found ? 'Pré-venda aberta' : 'Fora do lote'],
+      r.exact && found ? ['ok', 'Não precisa'] : ['ask', 'A loja confirma']
+    ];
+    var d = anim ? 700 : 0, lead = anim ? 300 : 0;
+    steps.forEach(function (st, k) {
+      setTimeout(function () { if (id === runId) checks[k].className = 'on'; }, lead + d * k);
+      setTimeout(function () {
+        if (id !== runId) return;
+        checks[k].className = 'done ' + st[0]; $('.st', checks[k]).textContent = st[1];
+        if (k === 2) showResult(q, r);
+      }, lead + d * (k + 1) - (anim ? 120 : 0));
+    });
+  }
+  function showResult(q, r) {
+    var found = r.hits.length > 0;
+    res.innerHTML = found && r.exact
+      ? '<h3>Temos na vitrine.</h3><p>Escolha a cor e o número no provador e reserve na hora.</p>'
+      : found
+        ? '<h3>Esse exato não está no lote atual.</h3><p>A Clinch provavelmente consegue resolver isso para você. Pergunte no direct que a loja confirma a disponibilidade e o prazo.</p>'
+        : '<h3>Não está no lote atual.</h3><p>A Clinch provavelmente consegue resolver isso para você. Mande no direct que a loja confirma a disponibilidade e o prazo.</p>';
+    if (!r.exact || !found) { res.appendChild(igButton(q, true)); res.appendChild(el('p', 'note', 'A mensagem vai copiada. É só colar no direct da @clinchsupply.')); }
+    if (found) {
+      if (!r.exact) res.appendChild(el('p', null, 'Enquanto isso, o mais próximo na vitrine:'));
+      var box = el('div', 'hits');
+      r.hits.slice(0, 3).forEach(function (it) {
+        var b = el('button', 'hit'); b.type = 'button';
+        b.innerHTML = '<img alt=""><span><small></small><b></b></span><span class="to">Provar</span>';
+        $('img', b).src = thumbOf(it.p); $('small', b).textContent = (it.p.house || it.p.by.split(' ')[0]) + ', R$ ' + fmt(it.p.price); $('b', b).textContent = title(it.p);
+        b.addEventListener('click', function () { closeSheet(true); qIn.value = ''; pick(it.cat, it.i); });
+        box.appendChild(b);
+      });
+      res.appendChild(box);
+      if (r.exact) { var o = el('p', null, 'Procura outra versão ou cor? '); var a = igButton(q, false); a.className = 'link'; a.textContent = 'Pergunte no direct'; o.appendChild(a); res.appendChild(o); }
+    }
+    if (anim) G.from(res.children, { autoAlpha: 0, y: 14, duration: 0.6, stagger: 0.06, ease: 'expo.out' });
+  }
+
   // ---------- abaixo da vitrine: a coleção, a compra e o contato
   var track = $('#track'), num = 0;
   ['shoes', 'gloves'].forEach(function (cat) {
@@ -526,7 +657,7 @@
     }, 1.55)
     .set(navMark, { autoAlpha: 1 }, 2.45)
     .set(intro, { display: 'none' }, 2.46)
-    .from('.rail .it, .cats, .nav .end > *', { autoAlpha: 0, y: 12, duration: 0.7, stagger: 0.05 }, 2.0)
+    .from('.rail .it, .cats, .find, .nav .end > *', { autoAlpha: 0, y: 12, duration: 0.7, stagger: 0.05 }, 2.0)
     .from('#layer', { autoAlpha: 0, yPercent: 12, scale: 0.92, duration: 1.2 }, 1.9)
     .from('#panel > *', { autoAlpha: 0, y: 14, duration: 0.7, stagger: 0.05, clearProps: 'all' }, 2.1);
   var skip = function () {

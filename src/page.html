@@ -57,14 +57,36 @@ p { margin: 0; text-wrap: pretty; }
 .app { height: 100svh; min-height: 600px; display: grid; grid-template-rows: var(--nav-h) minmax(0, 1fr) var(--foot-h); }
 
 /* NAV */
-.nav { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 24px; padding: 0 clamp(16px, 3vw, 40px); padding-top: env(safe-area-inset-top, 0px); border-bottom: 1px solid var(--line); position: relative; z-index: 5; }
-.nav .mark { justify-self: start; }
-.nav .end { justify-self: end; display: flex; align-items: center; gap: 22px; }
+.nav { display: grid; grid-template-columns: auto minmax(0, 1fr) auto auto; grid-template-areas: "mark cats find end"; align-items: center; gap: 22px; padding: 0 clamp(16px, 3vw, 40px); padding-top: env(safe-area-inset-top, 0px); border-bottom: 1px solid var(--line); position: relative; z-index: 5; }
+.nav .mark { grid-area: mark; justify-self: start; }
+.nav .cats { grid-area: cats; justify-self: center; }
+.nav .end { grid-area: end; justify-self: end; display: flex; align-items: center; gap: 22px; }
+.nav .end [data-go] { display: none; }
 .nav .end .btn { min-height: 40px; padding: 8px 18px; font-size: 14px; }
 .cats { position: relative; display: grid; grid-template-columns: 1fr 1fr; padding: 4px; border: 1px solid var(--line); border-radius: 999px; background: var(--ink-2); }
 .cats button { position: relative; z-index: 1; min-height: 40px; padding: 6px 26px; background: none; border: 0; border-radius: 999px; cursor: pointer; font-weight: 600; font-size: 15px; color: var(--fg-dim); transition: color .3s; }
 .cats button[aria-pressed=true] { color: #000; }
 .cats .pill { position: absolute; z-index: 0; top: 4px; bottom: 4px; left: 4px; border-radius: 999px; background: var(--gold); transition: translate .5s var(--ease), width .5s var(--ease); }
+
+/* BUSCA: verificar disponibilidade de qualquer modelo */
+.find { grid-area: find; position: relative; display: flex; align-items: center; gap: 8px; width: clamp(240px, 22vw, 330px); height: 46px; padding: 0 5px 0 15px; border: 1px solid var(--gold-dim); border-radius: 999px; background: var(--ink-2); transition: border-color .25s, background-color .25s; }
+.find:focus-within { border-color: var(--gold); background: var(--ink-3); }
+.find > svg { width: 17px; height: 17px; flex: none; stroke: var(--gold); fill: none; stroke-width: 1.8; stroke-linecap: round; }
+.find input { flex: 1; min-width: 0; height: 100%; padding: 0; background: none; border: 0; outline: 0; color: var(--fg); font: inherit; font-size: 14.5px; }
+.find input::placeholder { color: var(--fg-dim); opacity: 1; transition: opacity .3s; }
+.find input.swap::placeholder { opacity: 0; }
+.find input::-webkit-search-cancel-button { -webkit-appearance: none; }
+.find .go { flex: none; height: 36px; padding: 0 15px; border-radius: 999px; border: 0; background: var(--gold); color: #000; font-size: 13.5px; font-weight: 600; cursor: pointer; transition: background-color .2s, scale .2s; }
+.find .go:hover { background: var(--fg); }
+.find .go:active { scale: .95; }
+.sug { position: absolute; top: calc(100% + 8px); left: 0; right: 0; z-index: 30; margin: 0; padding: 6px; list-style: none; border: 1px solid var(--line); border-radius: 16px; background: var(--ink-2); box-shadow: 0 24px 50px rgba(0,0,0,.65); }
+.sug[hidden] { display: none; }
+.sug button { width: 100%; display: grid; grid-template-columns: 44px minmax(0, 1fr) auto; align-items: center; gap: 10px; padding: 7px 10px 7px 6px; border: 0; border-radius: 10px; background: none; cursor: pointer; text-align: left; font-size: 14px; line-height: 1.25; }
+.sug button:hover, .sug button:focus-visible { background: var(--ink-3); outline: 0; }
+.sug img { width: 44px; height: 34px; object-fit: contain; }
+.sug .price { font-size: 15px; }
+.sug .ask { grid-template-columns: 44px minmax(0, 1fr); color: var(--gold); font-weight: 600; }
+.sug .ask svg { justify-self: center; width: 18px; height: 18px; stroke: var(--gold); fill: none; stroke-width: 1.8; stroke-linecap: round; }
 
 /* SALA: lista | foto | ficha */
 .room { display: grid; grid-template-columns: minmax(230px, 290px) minmax(0, 1fr) minmax(320px, 400px); min-height: 0; position: relative; }
@@ -169,6 +191,35 @@ input[type=range] { width: 100%; height: 44px; margin: 0; accent-color: var(--go
 .scale .fill { position: absolute; left: 0; top: 0; height: 3px; border-radius: 3px; background: var(--gold); width: 100%; transition: width .5s var(--ease); }
 #useOz { justify-self: start; }
 
+/* painel da busca: a checagem e o resultado */
+.qbig { font-family: var(--f-serif); font-weight: 600; font-size: clamp(34px, 3.4vw, 46px); line-height: 1.05; margin-top: 8px; overflow-wrap: anywhere; }
+.checks { list-style: none; margin: 28px 0 0; padding: 0; border-top: 1px solid var(--line); }
+.checks li { display: grid; grid-template-columns: 24px 1fr auto; align-items: center; gap: 14px; padding: 16px 0; border-bottom: 1px solid var(--line); color: var(--fg-dim); transition: color .3s; }
+.checks li.on, .checks li.done { color: var(--fg); }
+.checks .ic { position: relative; width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid var(--line); display: grid; place-items: center; }
+.checks .ic svg { width: 12px; height: 12px; fill: none; stroke: #000; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; opacity: 0; }
+.checks li.on .ic { border-top-color: var(--gold); animation: spin .8s linear infinite; }
+.checks li.ok .ic { border-color: var(--gold); background: var(--gold); }
+.checks li.ok .ic svg { opacity: 1; }
+.checks li.no .ic::after { content: ""; width: 9px; height: 1.5px; background: var(--fg-dim); }
+.checks li.ask .ic { border-color: var(--gold); }
+.checks li.ask .ic::after { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--gold); }
+.checks .st { font-size: 13.5px; color: var(--fg-dim); }
+.checks li.ok .st, .checks li.ask .st { color: var(--gold); }
+@keyframes spin { to { rotate: 360deg; } }
+.res { margin-top: 30px; display: grid; gap: 16px; justify-items: start; }
+.res:empty { display: none; }
+.res h3 { font-size: clamp(30px, 2.8vw, 40px); }
+.res p { color: var(--fg-dim); }
+.res .note { font-size: 13.5px; margin-top: -6px; }
+.hits { display: grid; gap: 8px; width: 100%; }
+.hit { width: 100%; display: grid; grid-template-columns: 72px minmax(0, 1fr) auto; align-items: center; gap: 14px; padding: 10px 16px 10px 10px; border: 1px solid var(--line); border-radius: 14px; background: none; cursor: pointer; text-align: left; transition: border-color .2s, background-color .2s; }
+.hit:hover { border-color: var(--gold-dim); background: var(--ink-3); }
+.hit img { width: 72px; height: 54px; object-fit: contain; }
+.hit b { display: block; font-family: var(--f-serif); font-weight: 600; font-size: 22px; line-height: 1.1; }
+.hit small { color: var(--fg-dim); font-size: 13px; }
+.hit .to { font-size: 13.5px; font-weight: 600; color: var(--gold); white-space: nowrap; }
+
 
 /* ABAIXO DA VITRINE: rolagem curta, com movimento */
 .kick { font-size: 13px; font-weight: 600; letter-spacing: .02em; color: var(--gold); }
@@ -267,15 +318,18 @@ input[type=range] { width: 100%; height: 44px; margin: 0; accent-color: var(--go
   .panel { grid-column: 2; grid-row: 1 / span 2; }
   .nav .end { gap: 16px; }
 }
-@media (min-width: 761px) and (max-width: 900px) { .nav .end .btn { display: none; } }
+@media (min-width: 761px) and (max-width: 1280px) { .nav .end [data-open=guia] { display: none; } }
+@media (min-width: 761px) and (max-width: 900px) { .nav .end .btn { display: none; } .find { width: 230px; } .nav { gap: 14px; } }
 
 /* Celular: a tela vira uma coluna, com a reserva fixa embaixo */
 @media (max-width: 760px) {
   :root { --nav-h: 64px; }
   .app { height: auto; min-height: 0; grid-template-rows: auto auto; }
-  .nav { grid-template-columns: auto 1fr; grid-template-rows: var(--nav-h) auto; gap: 0 12px; }
+  .nav { grid-template-columns: auto 1fr; grid-template-rows: var(--nav-h) auto auto; grid-template-areas: "mark end" "find find" "cats cats"; gap: 0 12px; }
   .nav .mark b { font-size: 20px; }
-  .cats { grid-row: 2; grid-column: 1 / -1; margin: 0 0 12px; }
+  .nav .cats { justify-self: stretch; margin: 0 0 12px; }
+  .find { width: 100%; margin-bottom: 10px; }
+  .nav .end [data-go] { display: inline; }
   .nav .end .btn { display: none; }
   .nav .end .link { display: inline; font-size: 14px; }
   .room { grid-template-columns: 1fr; grid-template-rows: auto auto auto; }
@@ -327,6 +381,12 @@ input[type=range] { width: 100%; height: 44px; margin: 0; accent-color: var(--go
       <button type="button" data-cat="shoes" aria-pressed="true">Sapatilhas</button>
       <button type="button" data-cat="gloves" aria-pressed="false">Luvas</button>
     </div>
+    <form class="find" id="find" role="search" autocomplete="off" novalidate>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>
+      <input id="q" type="search" name="q" placeholder="Procurar modelo" aria-label="Procurar um modelo e verificar a disponibilidade" enterkeyhint="search" maxlength="80">
+      <button class="go" type="submit">Verificar</button>
+      <ul class="sug" id="sug" hidden></ul>
+    </form>
     <div class="end">
       <button class="link" type="button" data-open="guia">Guia de onças</button>
       <button class="link" type="button" data-go="compra">Como comprar</button>
@@ -350,7 +410,7 @@ input[type=range] { width: 100%; height: 44px; margin: 0; accent-color: var(--go
   </main>
 
   <footer class="foot">
-    <span>Pré-venda aberta. Originais importados dos EUA, com chegada em novembro.</span>
+    <span>Pré-venda aberta. Originais importados dos EUA.</span>
     <span class="r">
       <span class="keys" aria-hidden="true"><span><kbd>←</kbd><kbd>→</kbd>cor</span><span><kbd>↑</kbd><kbd>↓</kbd>modelo</span></span>
       <button class="cue" type="button" data-go="colecao">Ver a coleção<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v15M6 13l6 6 6-6"/></svg></button>
@@ -375,13 +435,13 @@ input[type=range] { width: 100%; height: 44px; margin: 0; accent-color: var(--go
   <p class="say" id="say">Material de luta original, importado dos Estados Unidos em lotes pequenos, para quem leva o treino a sério.</p>
   <div class="steps-h" id="compra">
     <h2>Como funciona a compra</h2>
-    <p>Pré-venda aberta. Seu número e sua cor ficam garantidos no lote de novembro.</p>
+    <p>Pré-venda aberta. Seu número e sua cor ficam garantidos no próximo lote.</p>
   </div>
   <div class="rule" aria-hidden="true"><i></i></div>
   <ol class="steps">
     <li><h3>Conversa</h3><p>Conte pelo WhatsApp como você treina e o que já usa. A loja indica o modelo e o número certos.</p></li>
     <li><h3>Reserva</h3><p>As importações chegam em lotes pequenos. Na pré-venda, seu número e sua cor ficam guardados.</p></li>
-    <li><h3>Entrega</h3><p>Produto original importado dos Estados Unidos, entregue a você em novembro.</p></li>
+    <li><h3>Entrega</h3><p>Produto original importado dos Estados Unidos, entregue direto a você.</p></li>
   </ol>
 </section>
 
@@ -396,11 +456,23 @@ input[type=range] { width: 100%; height: 44px; margin: 0; accent-color: var(--go
   </div>
   <footer class="end-foot">
     <span class="mark" translate="no"><b>CLINCH</b><i>SUPPLY</i></span>
-    <span>Originais importados dos EUA. Pré-venda com chegada em novembro.</span>
+    <span>Originais importados dos EUA. Pré-venda aberta.</span>
   </footer>
 </section>
 
 <div class="veil" id="veil"></div>
+
+<aside class="sheet" id="sheet-busca" role="dialog" aria-modal="true" aria-labelledby="buscaTitle">
+  <div class="top"><h2 id="buscaTitle">Disponibilidade</h2><button class="x" type="button" data-close aria-label="Fechar"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <p class="kick">Você procurou</p>
+  <p class="qbig" id="qShow"></p>
+  <ol class="checks" id="checks" aria-live="polite">
+    <li><span class="ic"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span>Vitrine da Clinch</span><span class="st"></span></li>
+    <li><span class="ic"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span>Lote da pré-venda</span><span class="st"></span></li>
+    <li><span class="ic"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span>Encomenda dos EUA</span><span class="st"></span></li>
+  </ol>
+  <div class="res" id="res" aria-live="polite"></div>
+</aside>
 
 <aside class="sheet" id="sheet-guia" role="dialog" aria-modal="true" aria-labelledby="guiaTitle">
   <div class="top"><h2 id="guiaTitle">Qual peso de luva?</h2><button class="x" type="button" data-close aria-label="Fechar"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
